@@ -29,4 +29,5 @@ Create a Github account to interact with the remote repository.
 
 ## Contributing
 We use the [GitHub Flow workflow](https://guides.github.com/introduction/flow/).  
-We also use [GitHub's project boards](https://github.com/michiganhackers/photo-assassin-android-app/projects/1) to manage this project.
+We also use [GitHub's project boards](https://github.com/michiganhackers/photo-assassin-android-app/projects/1) to manage this project.  
+If you are looking for resources to learn Android or Java, visit the [Michigan Hackers knowledge base](https://github.com/michiganhackers/knowledgebase/blob/master/Technologies/Android.md).
