@@ -20,13 +20,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         camHan = new CameraHandler(this,this);
 
-        mCamera = camHan.openCamera();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        showCameraPreview(mCamera);
+        mCamera = camHan.openCamera();
+        camHan.showCameraPreview(mCamera);
     }
 
     @Override
@@ -43,9 +43,5 @@ public class MainActivity extends AppCompatActivity
 
        }
     }
-    private void showCameraPreview(Camera camera) {
-        CameraPreview mPreview = new CameraPreview(this, camera);
-        FrameLayout preview = findViewById(R.id.camera_preview);
-        preview.addView(mPreview);
-    }
+
 }
