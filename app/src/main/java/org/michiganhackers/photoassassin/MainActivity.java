@@ -6,6 +6,8 @@ import androidx.core.app.ActivityCompat;
 
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 @SuppressWarnings("deprecation")
 public class MainActivity extends AppCompatActivity
@@ -20,12 +22,21 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         camHan = new CameraHandler(this,this);
 
+        final Button switchCameraButton = findViewById(R.id.switch_camera_button);
+
+        switchCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                camHan.switchCamera();
+            }
+        });
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mCamera = camHan.openCamera();
+        mCamera = camHan.openCamera(0);
         camHan.showCameraPreview(mCamera);
     }
 
@@ -39,9 +50,12 @@ public class MainActivity extends AppCompatActivity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults){
        if(requestCode == CAMERA_PERMISSION_REQUESTS) {
-           camHan.openCamera();
+           camHan.openCamera(0);
+           camHan.showCameraPreview(mCamera);
 
        }
     }
+
+
 
 }

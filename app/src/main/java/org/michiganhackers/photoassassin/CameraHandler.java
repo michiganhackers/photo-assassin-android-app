@@ -20,10 +20,9 @@ class CameraHandler {
     private static final String TAG = "CameraHandler";
     //rear camera is 0, front is 1
     private static int openedCamera = -1;
-
     private static final int CAMERA_PERMISSION_REQUESTS = 42069;
 
-    private int numberOfCameras;
+    private static int numberOfCameras;
     private static Toast errorToast, succToast;
     @SuppressWarnings("ShowToast")
     CameraHandler(Context context, Activity activity) {
@@ -44,10 +43,10 @@ class CameraHandler {
         }
     }
     //returns a Camera set in portrait mode with autofocus mode on
-    Camera openCamera(){
+    Camera openCamera(int cameraId) {
         mCamera = null;
         try {
-            mCamera = Camera.open(0);
+            mCamera = Camera.open(cameraId);
             openedCamera = 0;
             mCamera.setDisplayOrientation(90);
             Camera.Parameters params = mCamera.getParameters();
@@ -61,14 +60,26 @@ class CameraHandler {
         return mCamera;
     }
 
-    public Camera switchCamera() {
+    void switchCamera() {
         try {
+            mCamera.stopPreview();
             mCamera.release();
-            mCamera = Camera.open(2);
+            if(openedCamera == 0) {
+                mCamera = openCamera(1);
+                openedCamera = 1;
+            } else if (openedCamera == 1){
+                mCamera = openCamera(0);
+                openedCamera = 0;
+            } else {
+                mCamera = openCamera(0);
+                Log.e(TAG,  "Something went wrong, defaulting to camera 0");
+            }
+
         } catch (Exception e) {
             Log.e(TAG, "failed to switch camera, probably only one camera");
         }
-    return mCamera;
+        mCamera.startPreview();
+        showCameraPreview(mCamera);
     }
 
     void showCameraPreview(Camera camera) {
