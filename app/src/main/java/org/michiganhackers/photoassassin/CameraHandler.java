@@ -9,6 +9,10 @@ import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -34,7 +38,7 @@ class CameraHandler {
         this.context = context;
 
         numberOfCameras = Camera.getNumberOfCameras();
-        Log.v(TAG, Integer.toString(numberOfCameras));
+        Log.v(TAG, "Number of Cameras: " + Integer.toString(numberOfCameras));
         //request permissions if not already granted
         if (ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -86,5 +90,32 @@ class CameraHandler {
         CameraPreview mPreview = new CameraPreview(activity, camera);
         FrameLayout preview = activity.findViewById(R.id.camera_preview);
         preview.addView(mPreview);
+    }
+    void takePicture() {
+        mCamera.takePicture(null, null, picture);
+    }
+
+    private Camera.PictureCallback picture = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            File pictureFile = getOutputMediaFile();
+            if(pictureFile == null) {
+                return;
+            }
+            try {
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                fos.write(data);
+                fos.close();
+            } catch (FileNotFoundException e) {
+
+            } catch (Exception e) {
+
+            }
+        }
+    };
+    private static File getOutputMediaFile() {
+        File mediaFile;
+        mediaFile = new File("/sdcard/PhotoAssassin/" + "IMAGE.jpg");
+        return mediaFile;
     }
 }

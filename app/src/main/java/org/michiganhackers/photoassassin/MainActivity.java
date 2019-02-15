@@ -23,14 +23,19 @@ public class MainActivity extends AppCompatActivity
         camHan = new CameraHandler(this,this);
 
         final Button switchCameraButton = findViewById(R.id.switch_camera_button);
-
+        final Button takePictureButton = findViewById(R.id.button);
         switchCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 camHan.switchCamera();
             }
         });
-
+        takePictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                camHan.takePicture();
+            }
+        });
     }
 
     @Override
