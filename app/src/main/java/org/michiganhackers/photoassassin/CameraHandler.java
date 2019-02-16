@@ -55,6 +55,7 @@ class CameraHandler {
             mCamera.setDisplayOrientation(90);
             Camera.Parameters params = mCamera.getParameters();
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            params.setRotation(90);
             mCamera.setParameters(params);
             succToast.show();
 
@@ -93,6 +94,7 @@ class CameraHandler {
     }
     void takePicture() {
         mCamera.takePicture(null, null, picture);
+
     }
 
     private Camera.PictureCallback picture = new Camera.PictureCallback() {
@@ -111,11 +113,12 @@ class CameraHandler {
             } catch (Exception e) {
 
             }
+            showCameraPreview(camera);
         }
     };
     private static File getOutputMediaFile() {
         File mediaFile;
-        mediaFile = new File("/sdcard/PhotoAssassin/" + "IMAGE.jpg");
+        mediaFile = new File("/sdcard/PhotoAssassin" + "IMAGE.jpg");
         return mediaFile;
     }
 }
