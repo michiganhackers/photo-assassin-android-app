@@ -53,10 +53,13 @@ class CameraHandler {
             mCamera = Camera.open(cameraId);
             openedCamera = 0;
             mCamera.setDisplayOrientation(90);
+
             Camera.Parameters params = mCamera.getParameters();
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             params.setRotation(90);
+            
             mCamera.setParameters(params);
+
             succToast.show();
 
         } catch (Exception e) {
