@@ -22,7 +22,7 @@ Create a Github account to interact with the remote repository.
 2. Select File > New > Project from Version Control > Git
 3. Skip to step 6
 4. Select "Check out project from Version Control"
-5. Select "Github"
+5. Select "Git"
 6. Paste the link to this Github repository (https://github.com/michiganhackers/photo-assassin-android-app) and select "Clone"
 7. Get the MichiganHackers.jks file from an Android team leader and place it in the the "app" directory.
 8. Get the keystore.properties file from an Android team leader and place it in the root project directory.  
