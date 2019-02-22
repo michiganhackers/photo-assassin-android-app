@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +15,7 @@ import android.widget.FrameLayout;
 public class MainActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final int CAMERA_PERMISSION_REQUESTS = 42069;
-    public static CameraHandler camHan;
+    public CameraHandler camHan;
     Camera mCamera;
     ScaleGestureDetector gestureDetector;
 
@@ -28,12 +29,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
                 camHan.zoom(detector.getPreviousSpan(), detector.getCurrentSpan());
-                return false;
+                return true;
             }
 
             @Override
             public boolean onScaleBegin(ScaleGestureDetector detector) {
-                return false;
+                return true;
             }
 
             @Override
@@ -86,7 +87,11 @@ public class MainActivity extends AppCompatActivity
 
        }
     }
-
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        gestureDetector.onTouchEvent(ev);
+        return true;
+    }
 
 
 }
