@@ -52,5 +52,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         }
     }
-
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        MainActivity.gestureDetector.onTouchEvent(ev);
+        return true;
+    }
 }

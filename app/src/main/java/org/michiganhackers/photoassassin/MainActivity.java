@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity
     private static final int CAMERA_PERMISSION_REQUESTS = 42069;
     public CameraHandler camHan;
     Camera mCamera;
-    ScaleGestureDetector gestureDetector;
+    static ScaleGestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +87,7 @@ public class MainActivity extends AppCompatActivity
 
        }
     }
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        gestureDetector.onTouchEvent(ev);
-        return true;
-    }
+
 
 
 }
