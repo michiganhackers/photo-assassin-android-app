@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -13,17 +14,36 @@ import android.widget.FrameLayout;
 public class MainActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final int CAMERA_PERMISSION_REQUESTS = 42069;
-    CameraHandler camHan;
+    public static CameraHandler camHan;
     Camera mCamera;
+    ScaleGestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         camHan = new CameraHandler(this,this);
+        gestureDetector = new ScaleGestureDetector(this,
+                new ScaleGestureDetector.OnScaleGestureListener() {
+            @Override
+            public boolean onScale(ScaleGestureDetector detector) {
+                camHan.zoom(detector.getPreviousSpan(), detector.getCurrentSpan());
+                return false;
+            }
 
+            @Override
+            public boolean onScaleBegin(ScaleGestureDetector detector) {
+                return false;
+            }
+
+            @Override
+            public void onScaleEnd(ScaleGestureDetector detector) {
+                camHan.zoom(detector.getPreviousSpan(), detector.getCurrentSpan());
+            }
+        });
         final Button switchCameraButton = findViewById(R.id.switch_camera_button);
         final Button takePictureButton = findViewById(R.id.button);
+        final Button testButton = findViewById(R.id.test_button);
         switchCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,6 +54,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 camHan.takePicture();
+            }
+        });
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                camHan.zoom(0, 1);
             }
         });
     }

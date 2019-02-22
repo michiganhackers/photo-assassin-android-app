@@ -2,6 +2,7 @@ package org.michiganhackers.photoassassin;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -51,5 +52,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         }
     }
-
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        final int action = ev.getAction();
+        if(action == MotionEvent.ACTION_POINTER_DOWN) {
+            MainActivity.camHan.zoom(1,0);
+        }
+        return false;
+    }
 }

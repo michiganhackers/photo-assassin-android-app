@@ -57,7 +57,7 @@ class CameraHandler {
             Camera.Parameters params = mCamera.getParameters();
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             params.setRotation(90);
-            
+
             mCamera.setParameters(params);
 
             succToast.show();
@@ -100,6 +100,19 @@ class CameraHandler {
 
     }
 
+    void zoom( float prevSpan, float currentSpan) {
+        Camera.Parameters params = mCamera.getParameters();
+        //zooming in
+        if (currentSpan > prevSpan) {
+            params.setZoom(params.getMaxZoom());
+        } else if (currentSpan < prevSpan) { //zoom out
+            params.setZoom(0);
+        } else {
+            //do nothing
+        }
+        mCamera.setParameters(params);
+    }
+
     private Camera.PictureCallback picture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
@@ -124,4 +137,6 @@ class CameraHandler {
         mediaFile = new File("/sdcard/PhotoAssassin" + "IMAGE.jpg");
         return mediaFile;
     }
+
+
 }
