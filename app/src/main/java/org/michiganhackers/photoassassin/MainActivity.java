@@ -28,7 +28,11 @@ public class MainActivity extends AppCompatActivity
                 new ScaleGestureDetector.OnScaleGestureListener() {
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
-                camHan.zoom(detector.getPreviousSpan(), detector.getCurrentSpan());
+                if(detector.getPreviousSpan() < detector.getCurrentSpan()) {
+                    camHan.zoom(camHan.getCurrentZoom() + 5);
+                } else if (detector.getPreviousSpan() > detector.getCurrentSpan()) {
+                    camHan.zoom(0);
+                }
                 return true;
             }
 
@@ -39,9 +43,9 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onScaleEnd(ScaleGestureDetector detector) {
-                camHan.zoom(detector.getPreviousSpan(), detector.getCurrentSpan());
             }
         });
+
         final Button switchCameraButton = findViewById(R.id.switch_camera_button);
         final Button takePictureButton = findViewById(R.id.button);
         final Button testButton = findViewById(R.id.test_button);
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                camHan.zoom(0, 1);
+                camHan.zoom(100);
             }
         });
     }
