@@ -26,18 +26,25 @@ public class MainActivity extends AppCompatActivity
         camHan = new CameraHandler(this,this);
         gestureDetector = new ScaleGestureDetector(this,
                 new ScaleGestureDetector.OnScaleGestureListener() {
+            float initialSpan;
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
+                
+                camHan.zoom(camHan.getCurrentZoom() * detector.getScaleFactor());
+                /*
+                detector.getScaleFactor();
                 if(detector.getPreviousSpan() < detector.getCurrentSpan()) {
-                    camHan.zoom(camHan.getCurrentZoom() + 5);
+                    camHan.zoom(camHan.getCurrentZoom()*detector.getScaleFactor());
                 } else if (detector.getPreviousSpan() > detector.getCurrentSpan()) {
-                    camHan.zoom(0);
+                    camHan.zoom(camHan.getCurrentZoom()*detector.getScaleFactor());
                 }
+                */
                 return true;
             }
 
             @Override
             public boolean onScaleBegin(ScaleGestureDetector detector) {
+                initialSpan = detector.getCurrentSpan();
                 return true;
             }
 

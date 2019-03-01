@@ -58,13 +58,15 @@ class CameraHandler {
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             params.setRotation(90);
 
+            mCamera.setParameters(params);
             succToast.show();
 
         } catch (Exception e) {
-            errorToast.show();
-            }
-            return mCamera;
+                errorToast.show();
         }
+
+        return mCamera;
+    }
 
         void switchCamera() {
             try {
