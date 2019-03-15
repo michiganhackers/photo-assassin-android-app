@@ -72,23 +72,23 @@ class CameraHandler {
             params.setRotation(90);
 
             mCamera.setParameters(params);
-
             succToast.show();
             //if there's any error or exception that occurs in try, the catch is executed and the
             // error message shows
         } catch (Exception e) {
-            errorToast.show();
+                errorToast.show();
         }
+
         return mCamera;
     }
 
-    void switchCamera() {
-        try {
-            mCamera.stopPreview();
-            mCamera.release();
-            if(openedCamera == 0) {
-                mCamera = openCamera(1);
-                openedCamera = 1;
+        void switchCamera() {
+            try {
+                mCamera.stopPreview();
+                mCamera.release();
+                if(openedCamera == 0) {
+                    mCamera = openCamera(1);
+                    openedCamera = 1;
             } else if (openedCamera == 1){
                 mCamera = openCamera(0);
                 openedCamera = 0;
@@ -108,7 +108,7 @@ class CameraHandler {
 
     void showCameraPreview(Camera camera) {
         //CameraPreview deals with the live video that's shown when the camera app is open
-        CameraPreview mPreview = new CameraPreview(activity, camera);
+        CameraPreview mPreview = new CameraPreview(activity, camera, this);
         FrameLayout preview = activity.findViewById(R.id.camera_preview);
         preview.addView(mPreview);
     }
@@ -118,17 +118,21 @@ class CameraHandler {
 
     }
 
-    void zoom( float prevSpan, float currentSpan) {
-        Camera.Parameters params = mCamera.getParameters();
-        //zooming in
-        if (currentSpan > prevSpan) {
-            params.setZoom(params.getMaxZoom());
-        } else if (currentSpan < prevSpan) { //zoom out
-            params.setZoom(0);
-        } else {
-            //do nothing
+    void zoom(float zoomPercentage) {
+        if(zoomPercentage < 0 || zoomPercentage > 100) {
+            return;
         }
-        mCamera.setParameters(params);
+        Camera.Parameters params = mCamera.getParameters();
+        if(params.isSmoothZoomSupported()) {
+            mCamera.startSmoothZoom((int) (zoomPercentage/100 * params.getMaxZoom()));
+        } else if (params.isZoomSupported()) {
+            params.setZoom((int) (zoomPercentage/100 * params.getMaxZoom()));
+            mCamera.setParameters(params);
+        }
+    }
+
+    int getCurrentZoom() {
+        return mCamera.getParameters().getZoom();
     }
 
     private Camera.PictureCallback picture = new Camera.PictureCallback() {
