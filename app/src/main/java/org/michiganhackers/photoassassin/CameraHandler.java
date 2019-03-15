@@ -91,7 +91,7 @@ class CameraHandler {
     }
 
     void showCameraPreview(Camera camera) {
-        CameraPreview mPreview = new CameraPreview(activity, camera);
+        CameraPreview mPreview = new CameraPreview(activity, camera, this);
         FrameLayout preview = activity.findViewById(R.id.camera_preview);
         preview.addView(mPreview);
     }

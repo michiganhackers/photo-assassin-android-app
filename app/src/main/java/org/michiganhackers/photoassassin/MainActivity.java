@@ -17,41 +17,13 @@ public class MainActivity extends AppCompatActivity
     private static final int CAMERA_PERMISSION_REQUESTS = 42069;
     public CameraHandler camHan;
     Camera mCamera;
-    static ScaleGestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         camHan = new CameraHandler(this,this);
-        gestureDetector = new ScaleGestureDetector(this,
-                new ScaleGestureDetector.OnScaleGestureListener() {
-            float initialSpan;
-            @Override
-            public boolean onScale(ScaleGestureDetector detector) {
-                
-                camHan.zoom(camHan.getCurrentZoom() * detector.getScaleFactor());
-                /*
-                detector.getScaleFactor();
-                if(detector.getPreviousSpan() < detector.getCurrentSpan()) {
-                    camHan.zoom(camHan.getCurrentZoom()*detector.getScaleFactor());
-                } else if (detector.getPreviousSpan() > detector.getCurrentSpan()) {
-                    camHan.zoom(camHan.getCurrentZoom()*detector.getScaleFactor());
-                }
-                */
-                return true;
-            }
 
-            @Override
-            public boolean onScaleBegin(ScaleGestureDetector detector) {
-                initialSpan = detector.getCurrentSpan();
-                return true;
-            }
-
-            @Override
-            public void onScaleEnd(ScaleGestureDetector detector) {
-            }
-        });
 
         final Button switchCameraButton = findViewById(R.id.switch_camera_button);
         final Button takePictureButton = findViewById(R.id.button);

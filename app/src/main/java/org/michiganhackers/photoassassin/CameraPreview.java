@@ -3,6 +3,7 @@ package org.michiganhackers.photoassassin;
 import android.content.Context;
 import android.hardware.Camera;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -12,12 +13,33 @@ import java.util.concurrent.ExecutionException;
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mHolder;
     private Camera mCamera;
+    private CameraHandler camHan;
+    ScaleGestureDetector gestureDetector;
 
-    public CameraPreview(Context context, Camera camera){
+    public CameraPreview(Context context, Camera camera, CameraHandler camHan_in){
         super(context);
         mCamera = camera;
+        camHan = camHan_in;
         mHolder = getHolder();
         mHolder.addCallback(this);
+        gestureDetector = new ScaleGestureDetector(context,
+                new ScaleGestureDetector.OnScaleGestureListener() {
+                    @Override
+                    public boolean onScale(ScaleGestureDetector detector) {
+
+                        camHan.zoom(camHan.getCurrentZoom());
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onScaleBegin(ScaleGestureDetector detector) {
+                        return true;
+                    }
+
+                    @Override
+                    public void onScaleEnd(ScaleGestureDetector detector) {
+                    }
+                });
     }
 
     public void surfaceCreated(SurfaceHolder holder){
@@ -54,8 +76,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        MainActivity.gestureDetector.onTouchEvent(ev);
+        gestureDetector.onTouchEvent(ev);
         return true;
 
     }
+
 }
