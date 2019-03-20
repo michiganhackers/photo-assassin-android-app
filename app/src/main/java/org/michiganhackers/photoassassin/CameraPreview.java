@@ -26,8 +26,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 new ScaleGestureDetector.OnScaleGestureListener() {
                     @Override
                     public boolean onScale(ScaleGestureDetector detector) {
-
-                        camHan.zoom(camHan.getCurrentZoom());
+                        //getCurrentZoom()
+                        camHan.zoom(camHan.getCurrentZoom() * detector.getScaleFactor());
                         return true;
                     }
 

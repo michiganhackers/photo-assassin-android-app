@@ -124,6 +124,7 @@ class CameraHandler {
         }
         Camera.Parameters params = mCamera.getParameters();
         if(params.isSmoothZoomSupported()) {
+            //zooms from current to the passed percentage
             mCamera.startSmoothZoom((int) (zoomPercentage/100 * params.getMaxZoom()));
         } else if (params.isZoomSupported()) {
             params.setZoom((int) (zoomPercentage/100 * params.getMaxZoom()));
@@ -140,6 +141,7 @@ class CameraHandler {
         public void onPictureTaken(byte[] data, Camera camera) {
             File pictureFile = getOutputMediaFile();
             if(pictureFile == null) {
+                Log.e(TAG,  "Error onPictureTaken. pictureFile was null");
                 return;
             }
             try {
@@ -147,9 +149,10 @@ class CameraHandler {
                 fos.write(data);
                 fos.close();
             } catch (FileNotFoundException e) {
+                Log.e(TAG,  "FileNotFoundException error in onPictureTaken function");
 
             } catch (Exception e) {
-
+                Log.e(TAG,  "General exception error in onPictureTaken function");
             }
             showCameraPreview(camera);
         }
