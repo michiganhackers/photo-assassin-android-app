@@ -27,10 +27,38 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     @Override
                     public boolean onScale(ScaleGestureDetector detector) {
                         //getCurrentZoom()
-                        camHan.zoom(camHan.getCurrentZoom() * detector.getScaleFactor());
+                        if(detector.getScaleFactor() > 1) {
+                            camHan.zoom(camHan.getCurrentZoom()
+                                    + 2/detector.getScaleFactor());
+                        } else if(detector.getScaleFactor() < 1) {
+                            camHan.zoom(camHan.getCurrentZoom()
+                                    - 2*(detector.getScaleFactor()));
+                        }
+                        //camHan.zoom(camHan.getCurrentZoom() * detector.getScaleFactor());
                         return true;
                     }
+                    /*
 
+    public void setZoom(int index) {
+        mCircleSize = (int) (mMinCircle + index * (mMaxCircle - mMinCircle) / (mMaxZoom - mMinZoom));
+    }
+    mMinCircle = res.getDimensionPixelSize(R.dimen.zoom_ring_min);
+    public boolean onScale(ScaleGestureDetector detector) {
+        final float sf = detector.getScaleFactor();
+        float circle = (int) (mCircleSize * sf * sf);
+        circle = Math.max(mMinCircle, circle);
+        circle = Math.min(mMaxCircle, circle);
+        if (mListener != null && (int) circle != mCircleSize) {
+            mCircleSize = (int) circle;
+            int zoom = mMinZoom + (int) ((mCircleSize - mMinCircle) * (mMaxZoom - mMinZoom) / (mMaxCircle - mMinCircle));
+            mListener.onZoomValueChanged(zoom);
+        }
+        return true;
+    }
+    mMaxCircle = Math.min(getWidth(), getHeight());
+        mMaxCircle = (mMaxCircle - mMinCircle) / 2;
+        mMinCircle = res.getDimensionPixelSize(R.dimen.zoom_ring_min);
+                    */
                     @Override
                     public boolean onScaleBegin(ScaleGestureDetector detector) {
                         return true;
