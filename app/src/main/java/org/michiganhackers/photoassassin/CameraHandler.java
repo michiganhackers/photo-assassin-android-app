@@ -68,6 +68,8 @@ class CameraHandler {
             mCamera.setDisplayOrientation(90);
 
             Camera.Parameters params = mCamera.getParameters();
+            Camera.Size size = params.getPreferredPreviewSizeForVideo();
+            params.setPreviewSize(size.width, size.height);
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             params.setRotation(90);
 
