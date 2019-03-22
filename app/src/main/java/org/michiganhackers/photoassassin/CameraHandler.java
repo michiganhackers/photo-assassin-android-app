@@ -79,6 +79,7 @@ class CameraHandler {
                 mCamera = openCamera(0);
                 openedCamera = 0;
             } else {
+
                 mCamera = openCamera(0);
                 Log.e(TAG,  "Something went wrong, defaulting to camera 0");
             }

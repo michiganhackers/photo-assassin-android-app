@@ -5,6 +5,10 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
+    lintOptions {
+        warningsAsErrors false
+        abortOnError true
+    }
     signingConfigs {
         debug {
             keyAlias keystoreProperties['photoAssassinKeyAliasDebug']
@@ -39,6 +43,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
 }
 
 dependencies {
@@ -49,3 +54,4 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
+
