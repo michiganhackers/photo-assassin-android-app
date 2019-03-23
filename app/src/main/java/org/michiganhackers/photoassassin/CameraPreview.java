@@ -8,7 +8,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mHolder;
@@ -24,17 +23,16 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder.addCallback(this);
         gestureDetector = new ScaleGestureDetector(context,
                 new ScaleGestureDetector.OnScaleGestureListener() {
+
                     @Override
                     public boolean onScale(ScaleGestureDetector detector) {
-                        //getCurrentZoom()
-                        if(detector.getScaleFactor() > 1) {
-                            camHan.zoom(camHan.getCurrentZoom()
-                                    + 2/detector.getScaleFactor());
-                        } else if(detector.getScaleFactor() < 1) {
-                            camHan.zoom(camHan.getCurrentZoom()
-                                    - 2*(detector.getScaleFactor()));
-                        }
-                        //camHan.zoom(camHan.getCurrentZoom() * detector.getScaleFactor());
+                        final int maxSpan = getWidth();
+                        final int minSpan = maxSpan/10;
+                        int currentSpan = minSpan + camHan.getCurrentZoom() * (maxSpan - minSpan) /100;
+                        final float scaleFactor = detector.getScaleFactor();
+                        float scaledSpan = currentSpan * scaleFactor * scaleFactor;
+                        scaledSpan = Math.max(Math.min(maxSpan, scaledSpan), minSpan);
+                        camHan.zoom((scaledSpan - minSpan) * 100/(maxSpan-minSpan));
                         return true;
                     }
                     /*
@@ -58,6 +56,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     mMaxCircle = Math.min(getWidth(), getHeight());
         mMaxCircle = (mMaxCircle - mMinCircle) / 2;
         mMinCircle = res.getDimensionPixelSize(R.dimen.zoom_ring_min);
+
                     */
                     @Override
                     public boolean onScaleBegin(ScaleGestureDetector detector) {
