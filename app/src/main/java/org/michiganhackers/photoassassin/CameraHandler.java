@@ -137,6 +137,7 @@ class CameraHandler {
     }
 
     int getCurrentZoom() {
+        Log.v(TAG, "Zoom is set to " + mCamera.getParameters().getZoom() + "%");
         return mCamera.getParameters().getZoom();
     }
 

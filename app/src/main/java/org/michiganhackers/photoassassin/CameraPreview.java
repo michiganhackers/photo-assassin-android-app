@@ -20,6 +20,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private ScaleGestureDetector gestureDetector;
     private final String TAG = "CameraPreview";
 
+    int initialZoomSpan;
+    float initialSpan;
+
+
+
     public CameraPreview(Context context_in, Camera camera, CameraHandler camHan_in) {
         super(context_in);
         mCamera = camera;
@@ -28,17 +33,23 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder.addCallback(this);
         gestureDetector = new ScaleGestureDetector(context_in, this);
     }
-
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
         int maxSpan = getWidth();
         int minSpan = maxSpan/2;
-
-        camHan.zoom(100 * (detector.getCurrentSpan()-minSpan)/(maxSpan-minSpan));
+        //converts the actual span based on initial span and initial zoom span
+        int currentZoomSpan = initialZoomSpan - (int)(initialSpan - detector.getCurrentSpan());
+        camHan.zoom(100 * (float)(currentZoomSpan-minSpan)/(maxSpan-minSpan));
         return true;
     }
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
+        int maxSpan = getWidth();
+        int minSpan = maxSpan/2;
+        //converts currentZoom to the equivelant span when gesture begins, zoom/100 was an int
+        //division so it was only ever 1 or 0, needed to have decimal places
+        initialZoomSpan = (int)(((camHan.getCurrentZoom()/100.0) *(maxSpan-minSpan)) +minSpan);
+        initialSpan = detector.getCurrentSpan();
         return true;
     }
 
