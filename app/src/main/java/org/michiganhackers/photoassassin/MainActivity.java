@@ -6,17 +6,15 @@ import androidx.core.app.ActivityCompat;
 
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
+
 @SuppressWarnings("deprecation")
 public class MainActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final int CAMERA_PERMISSION_REQUESTS = 42069;
-    public CameraHandler camHan;
-    Camera mCamera;
+    private CameraHandler camHan;
+    private Camera mCamera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,27 +1,25 @@
 package org.michiganhackers.photoassassin;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Button;
 
 import java.io.IOException;
 
+@SuppressWarnings("ALL")
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback,
         ScaleGestureDetector.OnScaleGestureListener  {
-    private SurfaceHolder mHolder;
-    private Camera mCamera;
-    private CameraHandler camHan;
-    private ScaleGestureDetector gestureDetector;
+    private final SurfaceHolder mHolder;
+    private final Camera mCamera;
+    private final CameraHandler camHan;
+    private final ScaleGestureDetector gestureDetector;
     private final String TAG = "CameraPreview";
 
-    int initialZoomSpan;
-    float initialSpan;
+    private int initialZoomSpan;
+    private float initialSpan;
 
 
 
@@ -46,7 +44,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public boolean onScaleBegin(ScaleGestureDetector detector) {
         int maxSpan = getWidth();
         int minSpan = maxSpan/2;
-        //converts currentZoom to the equivelant span when gesture begins, zoom/100 was an int
+        //converts currentZoom to the equivalent span when gesture begins, zoom/100 was an int
         //division so it was only ever 1 or 0, needed to have decimal places
         initialZoomSpan = (int)(((camHan.getCurrentZoom()/100.0) *(maxSpan-minSpan)) +minSpan);
         initialSpan = detector.getCurrentSpan();
@@ -62,7 +60,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera.startPreview();
         }
         catch(IOException e){
-
+        //TODO
         }
     }
 
@@ -78,14 +76,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         try{
             mCamera.stopPreview();
         }catch( Exception e){
-
+        //TODO
         }
 
         try{
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
         }catch(Exception e){
-
+        //TODO
         }
     }
     @Override

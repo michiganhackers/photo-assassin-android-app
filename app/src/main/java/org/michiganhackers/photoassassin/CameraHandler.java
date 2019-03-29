@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -21,9 +20,9 @@ import androidx.core.content.ContextCompat;
 class CameraHandler {
     //Activity deals with what is running in the app
     //Camera activity,
-    private Activity activity;
+    private final Activity activity;
     //Deals with the "context" of the activity
-    private Context context;
+    private final Context context;
     //Camera class, deals with the functions for zoom, taking a picture --> camera functionality
     private Camera mCamera;
     private static final String TAG = "CameraHandler";
@@ -31,7 +30,6 @@ class CameraHandler {
     private static int openedCamera = -1;
     private static final int CAMERA_PERMISSION_REQUESTS = 42069;
 
-    private static int numberOfCameras;
     private static Toast errorToast, succToast;
     //if you have egregious code, it'll create a red squiggly
     @SuppressWarnings("ShowToast")
@@ -45,14 +43,14 @@ class CameraHandler {
         this.activity = activity;
         this.context = context;
 
-        numberOfCameras = Camera.getNumberOfCameras();
+        int numberOfCameras = Camera.getNumberOfCameras();
         Log.v(TAG, "Number of Cameras: " + Integer.toString(numberOfCameras));
         //request permissions if not already granted
         //If permission not granted, request Permission to ActivityCompat
         if (ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity,
-                    //using new to create a string in dyanmic memory?
+                    //using new to create a string in dynamic memory?
                     //automatically deletes it at the end because it has garbage collection
                     new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUESTS);
         }
@@ -99,7 +97,7 @@ class CameraHandler {
 
                 mCamera = openCamera(0);
                 //log e deals with printing to the Logcat
-                //not viewable by the user, but can be used for error checkign
+                //not viewable by the user, but can be used for error checking
                 Log.e(TAG,  "Something went wrong, defaulting to camera 0");
             }
             //if exception e is to catch any possible error that occurs
@@ -126,9 +124,9 @@ class CameraHandler {
 
     }
 
-    boolean zoom(float zoomPercentage) {
+    void zoom(float zoomPercentage) {
         if(zoomPercentage < 0 || zoomPercentage > 100 || zoomPercentage == getCurrentZoom()) {
-            return false;
+            return;
         }
         Camera.Parameters params = mCamera.getParameters();
         if(params.isSmoothZoomSupported()) {
@@ -138,7 +136,6 @@ class CameraHandler {
             params.setZoom((int) (zoomPercentage/100 * params.getMaxZoom()));
             mCamera.setParameters(params);
         }
-        return true;
     }
 
     int getCurrentZoom() {
@@ -146,7 +143,7 @@ class CameraHandler {
         return mCamera.getParameters().getZoom();
     }
 
-    private Camera.PictureCallback picture = new Camera.PictureCallback() {
+    private final Camera.PictureCallback picture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             File pictureFile = getOutputMediaFile();
