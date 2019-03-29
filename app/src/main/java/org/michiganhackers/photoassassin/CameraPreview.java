@@ -1,74 +1,50 @@
 package org.michiganhackers.photoassassin;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
 
 import java.io.IOException;
 
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback,
+        ScaleGestureDetector.OnScaleGestureListener  {
     private SurfaceHolder mHolder;
     private Camera mCamera;
     private CameraHandler camHan;
-    ScaleGestureDetector gestureDetector;
+    private ScaleGestureDetector gestureDetector;
+    private final String TAG = "CameraPreview";
 
-    public CameraPreview(Context context, Camera camera, CameraHandler camHan_in){
-        super(context);
+    public CameraPreview(Context context_in, Camera camera, CameraHandler camHan_in) {
+        super(context_in);
         mCamera = camera;
         camHan = camHan_in;
         mHolder = getHolder();
         mHolder.addCallback(this);
-        gestureDetector = new ScaleGestureDetector(context,
-                new ScaleGestureDetector.OnScaleGestureListener() {
-
-                    @Override
-                    public boolean onScale(ScaleGestureDetector detector) {
-                        final int maxSpan = getWidth();
-                        final int minSpan = maxSpan/10;
-                        int currentSpan = minSpan + camHan.getCurrentZoom() * (maxSpan - minSpan) /100;
-                        final float scaleFactor = detector.getScaleFactor();
-                        float scaledSpan = currentSpan * scaleFactor * scaleFactor;
-                        scaledSpan = Math.max(Math.min(maxSpan, scaledSpan), minSpan);
-                        camHan.zoom((scaledSpan - minSpan) * 100/(maxSpan-minSpan));
-                        return true;
-                    }
-                    /*
-
-    public void setZoom(int index) {
-        mCircleSize = (int) (mMinCircle + index * (mMaxCircle - mMinCircle) / (mMaxZoom - mMinZoom));
+        gestureDetector = new ScaleGestureDetector(context_in, this);
     }
-    mMinCircle = res.getDimensionPixelSize(R.dimen.zoom_ring_min);
+
+    @Override
     public boolean onScale(ScaleGestureDetector detector) {
-        final float sf = detector.getScaleFactor();
-        float circle = (int) (mCircleSize * sf * sf);
-        circle = Math.max(mMinCircle, circle);
-        circle = Math.min(mMaxCircle, circle);
-        if (mListener != null && (int) circle != mCircleSize) {
-            mCircleSize = (int) circle;
-            int zoom = mMinZoom + (int) ((mCircleSize - mMinCircle) * (mMaxZoom - mMinZoom) / (mMaxCircle - mMinCircle));
-            mListener.onZoomValueChanged(zoom);
-        }
+        int maxSpan = getWidth();
+        int minSpan = maxSpan/2;
+
+        camHan.zoom(100 * (detector.getCurrentSpan()-minSpan)/(maxSpan-minSpan));
         return true;
     }
-    mMaxCircle = Math.min(getWidth(), getHeight());
-        mMaxCircle = (mMaxCircle - mMinCircle) / 2;
-        mMinCircle = res.getDimensionPixelSize(R.dimen.zoom_ring_min);
-
-                    */
-                    @Override
-                    public boolean onScaleBegin(ScaleGestureDetector detector) {
-                        return true;
-                    }
-
-                    @Override
-                    public void onScaleEnd(ScaleGestureDetector detector) {
-                    }
-                });
+    @Override
+    public boolean onScaleBegin(ScaleGestureDetector detector) {
+        return true;
     }
 
+    @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+    }
     public void surfaceCreated(SurfaceHolder holder){
         try{
             mCamera.setPreviewDisplay(holder);

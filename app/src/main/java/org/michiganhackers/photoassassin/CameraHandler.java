@@ -121,9 +121,9 @@ class CameraHandler {
 
     }
 
-    void zoom(float zoomPercentage) {
-        if(zoomPercentage < 0 || zoomPercentage > 100) {
-            return;
+    boolean zoom(float zoomPercentage) {
+        if(zoomPercentage < 0 || zoomPercentage > 100 || zoomPercentage == getCurrentZoom()) {
+            return false;
         }
         Camera.Parameters params = mCamera.getParameters();
         if(params.isSmoothZoomSupported()) {
@@ -133,6 +133,7 @@ class CameraHandler {
             params.setZoom((int) (zoomPercentage/100 * params.getMaxZoom()));
             mCamera.setParameters(params);
         }
+        return true;
     }
 
     int getCurrentZoom() {
