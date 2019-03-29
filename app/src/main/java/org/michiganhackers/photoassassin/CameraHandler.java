@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -69,7 +70,7 @@ class CameraHandler {
 
             Camera.Parameters params = mCamera.getParameters();
             Camera.Size size = params.getPreferredPreviewSizeForVideo();
-            params.setPreviewSize(size.width, size.height);
+            params.setPictureSize(size.width, size.height);
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             params.setRotation(90);
 
@@ -117,7 +118,11 @@ class CameraHandler {
     }
     //takes a picture from mCamera and saves it to /sdcard
     void takePicture() {
-        mCamera.takePicture(null, null, picture);
+        try {
+            mCamera.takePicture(null, null, picture);
+        } catch (Exception e) {
+            //TODO
+        }
 
     }
 
@@ -162,9 +167,10 @@ class CameraHandler {
             showCameraPreview(camera);
         }
     };
-    private static File getOutputMediaFile() {
+    private File getOutputMediaFile() {
         File mediaFile;
-        mediaFile = new File("/sdcard/PhotoAssassin" + "IMAGE.jpg");
+        mediaFile = new File(context.getExternalFilesDir(null) + "/IMAGE.jpg");
+        Log.v(TAG, context.getExternalFilesDir(null) + "/IMAGE.jpg");
         return mediaFile;
     }
 
