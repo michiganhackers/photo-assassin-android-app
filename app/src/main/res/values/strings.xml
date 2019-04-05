@@ -2,4 +2,11 @@
     <string name="app_name">PhotoAssassin</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="registration_already_have_account">Have an account? Log in</string>
+    <string name="register_with_google">register with google</string>
+    <string name="register_with_facebook">register with facebook</string>
+    <string name="empty_password_message">password field cannot be empty</string>
+    <string name="password_too_short_message">password must be at least 8 characters</string>
+    <string name="invalid_email_message">invalid email</string>
 </resources>

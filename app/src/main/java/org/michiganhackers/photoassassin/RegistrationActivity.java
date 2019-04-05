@@ -1,27 +1,50 @@
 package org.michiganhackers.photoassassin;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
-import org.michiganhackers.photoassassin.databinding.ActivityRegistrationBinding;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class RegistrationActivity extends AppCompatActivity {
-    private ActivityRegistrationBinding binding;
-    private RegistrationActivityViewModel viewmodel;
+
+    private TextInputEditText emailEditText;
+    private TextInputLayout emailTextInputLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_registration);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_registration);
-        binding.setLifecycleOwner(this);
-        viewmodel = ViewModelProviders.of(this).get(RegistrationActivityViewModel.class);
-        binding.setViewmodel(viewmodel);
+        emailEditText = findViewById(R.id.text_input_edit_text_email);
+        emailTextInputLayout = findViewById(R.id.text_input_layout_email);
+    }
 
-        viewmodel.getEmail().setValue("TEST");
+    public void onRegisterButtonClick(android.view.View view) {
+        if (emailEditText.getText() == null) {
+            return;
+        }
+        Email email = new Email(emailEditText.getText().toString(), this);
+        String errorMsg = email.getError();
+        emailTextInputLayout.setError(errorMsg);
+        if (errorMsg == null) {
+            return;
+        }
+
+    }
+
+    private void onLoginButtonClick() {
+
+    }
+
+    private void onRegisterGoogleButtonClick() {
+
+    }
+
+    private void onRegisterFacebookButtonClick() {
+
     }
 }

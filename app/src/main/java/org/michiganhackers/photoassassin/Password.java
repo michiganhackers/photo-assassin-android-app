@@ -1,18 +1,16 @@
 package org.michiganhackers.photoassassin;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 public class Password {
     private String password;
+    private Context context;
 
-    // TODO: Get these strings from string resource file
-    private static final String EMPTY_PASSWORD_MESSAGE = "Password field cannot be empty";
-    private static final String PASSWORD_TOO_SHORT_MESSAGE = "Password must be at least 8 characters";
-
-
-    public Password(String password) {
+    public Password(String password, Context context) {
         // TODO: trim whitespace?
         this.password = password;
+        this.context = context;
     }
 
     public String getPassword() {
@@ -23,10 +21,10 @@ public class Password {
     // Useful for TextInputLayout.setError(password.getError())
     public String getError() {
         if (TextUtils.isEmpty(password)) {
-            return EMPTY_PASSWORD_MESSAGE;
+            return context.getString(R.string.empty_password_message);
         }
         if (password.length() < 8) {
-            return PASSWORD_TOO_SHORT_MESSAGE;
+            return context.getString(R.string.password_too_short_message);
         }
         return null;
     }

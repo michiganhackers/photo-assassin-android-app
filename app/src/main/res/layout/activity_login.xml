@@ -14,51 +14,51 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textViewAppName"
+            android:id="@+id/text_view_app_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name" />
 
         <EditText
-            android:id="@+id/editTextEmail"
+            android:id="@+id/edit_text_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/edit_text_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/buttonLogin"
+            android:id="@+id/button_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button" />
 
         <Button
-            android:id="@+id/buttonForgotPassword"
+            android:id="@+id/button_forgot_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button" />
 
         <Button
-            android:id="@+id/buttonRegister"
+            android:id="@+id/button_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button" />
 
         <Button
-            android:id="@+id/buttonGoogleLogin"
+            android:id="@+id/button_google_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button" />
 
         <Button
-            android:id="@+id/buttonFacebookLogin"
+            android:id="@+id/button_facebook_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button" />
