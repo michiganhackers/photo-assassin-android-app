@@ -114,7 +114,7 @@ class CameraHandler {
         FrameLayout preview = activity.findViewById(R.id.camera_preview);
         preview.addView(mPreview);
     }
-    //takes a picture from mCamera and saves it to /sdcard
+    //takes a picture from mCamera and returns it
     void takePicture() {
         try {
             mCamera.takePicture(null, null, picture);
