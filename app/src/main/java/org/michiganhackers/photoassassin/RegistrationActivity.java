@@ -113,7 +113,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    private void onLoginButtonClick() {
+    public void onLoginButtonClick(android.view.View view) {
         finish();
     }
 
@@ -124,7 +124,7 @@ public class RegistrationActivity extends AppCompatActivity {
         startActivityForResult(googleSignInClientSignInIntent, REQUEST_CODE_GOOGLE_SIGN_IN);
     }
 
-    private void onRegisterFacebookButtonClick() {
+    public void onRegisterFacebookButtonClick(android.view.View view) {
 
     }
 
