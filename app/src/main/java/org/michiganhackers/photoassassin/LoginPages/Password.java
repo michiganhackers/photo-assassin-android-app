@@ -1,7 +1,9 @@
-package org.michiganhackers.photoassassin;
+package org.michiganhackers.photoassassin.LoginPages;
 
 import android.content.Context;
 import android.text.TextUtils;
+
+import org.michiganhackers.photoassassin.R;
 
 public class Password {
     private String password;

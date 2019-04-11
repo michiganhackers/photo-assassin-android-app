@@ -1,8 +1,10 @@
-package org.michiganhackers.photoassassin;
+package org.michiganhackers.photoassassin.LoginPages;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import org.michiganhackers.photoassassin.R;
 
 public class LoginActivity extends AppCompatActivity {
 
