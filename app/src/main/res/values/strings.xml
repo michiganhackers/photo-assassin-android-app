@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">PhotoAssassin</string>
+    <string name="Photo">Photo</string>
+    <string name="Assassin">Assassin</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_up">Sign Up</string>
