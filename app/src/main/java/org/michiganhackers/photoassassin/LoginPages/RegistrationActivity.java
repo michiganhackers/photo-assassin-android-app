@@ -47,14 +47,14 @@ public class RegistrationActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private FirebaseAuth auth;
     private final String TAG = getClass().getCanonicalName();
-    ServiceLoginHandler serviceLoginHandler;
+    private ServiceLoginHandler serviceLoginHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         auth = FirebaseAuth.getInstance();
-
+        coordinatorLayout = findViewById(R.id.coordinator_layout);
         serviceLoginHandler = new ServiceLoginHandler(this, auth, coordinatorLayout);
 
         setContentView(R.layout.activity_registration);
@@ -65,7 +65,6 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.text_input_edit_text_password);
         passwordTextInputLayout = findViewById(R.id.text_input_layout_password);
 
-        coordinatorLayout = findViewById(R.id.coordinator_layout);
 
     }
 
@@ -99,8 +98,8 @@ public class RegistrationActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
-                            finish();
                             Log.d(TAG, "Account successfully created");
                         } else {
                             Exception exception = task.getException();

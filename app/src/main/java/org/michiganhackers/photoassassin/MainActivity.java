@@ -18,6 +18,6 @@ public class MainActivity extends FirebaseAuthActivity {
             Toast.makeText(this, "null user", Toast.LENGTH_LONG).show();
 
         }
-        auth.signOut();
+        signOut();
     }
 }

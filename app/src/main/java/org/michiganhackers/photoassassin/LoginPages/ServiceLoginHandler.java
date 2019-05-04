@@ -1,22 +1,17 @@
 package org.michiganhackers.photoassassin.LoginPages;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,13 +34,10 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 // Instance of this class must be created in onCreate
 // onActivityResult must be called in activity's onActivityResult
 
-class ServiceLoginHandler {
-    private GoogleSignInClient googleSignInClient;
+public class ServiceLoginHandler extends ServiceLogoutHandler {
     private CallbackManager facebookCallbackManager;
-    private Activity activity;
     private final String TAG = getClass().getCanonicalName();
     private final static int REQUEST_CODE_GOOGLE_SIGN_IN = 1;
-    private FirebaseAuth auth;
     private CoordinatorLayout coordinatorLayout;
 
 
@@ -54,13 +46,7 @@ class ServiceLoginHandler {
         this.auth = auth;
         this.coordinatorLayout = coordinatorLayout;
 
-        FacebookSdk.sdkInitialize(activity.getApplicationContext());
-
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(activity.getString(R.string.web_client_id))
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(activity, googleSignInOptions);
+        setupServices();
 
         facebookCallbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(facebookCallbackManager,
@@ -80,8 +66,8 @@ class ServiceLoginHandler {
                         Log.d(TAG, "facebook login error");
                     }
                 });
-
     }
+
 
     // TODO: link google, fb, and email accounts to same user: https://firebase.google.com/docs/auth/android/account-linking?authuser=0
     void onRegisterGoogleButtonClick(android.view.View view) {
@@ -107,8 +93,8 @@ class ServiceLoginHandler {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Intent intent = new Intent(activity, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             activity.startActivity(intent);
-                            activity.finish();
                             Log.d(TAG, "Google sign in successful");
                         } else {
                             Exception exception = task.getException();
@@ -128,8 +114,8 @@ class ServiceLoginHandler {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Intent intent = new Intent(activity, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             activity.startActivity(intent);
-                            activity.finish();
                             Log.d(TAG, "Facebook sign in successful");
                         } else {
                             Exception exception = task.getException();
@@ -159,5 +145,5 @@ class ServiceLoginHandler {
             }
         }
     }
-    
+
 }

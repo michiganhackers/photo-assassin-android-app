@@ -10,6 +10,6 @@
         android:id="@+id/signout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onSignoutButtonlick"
+        android:onClick="onSignoutButtonClick"
         android:text="sign out" />
 </androidx.constraintlayout.widget.ConstraintLayout>

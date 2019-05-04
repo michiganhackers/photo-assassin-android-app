@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginPages.LoginActivity">
@@ -31,6 +32,7 @@
         <org.michiganhackers.photoassassin.CustomViews.CustomButton
             android:id="@+id/button_login"
             style="@style/ButtonLoginPages"
+            android:onClick="onLoginButtonClick"
             android:text="@string/log_in"
             android:textSize="25sp" />
 
@@ -50,7 +52,8 @@
 
                 <LinearLayout
                     android:id="@+id/linear_layout_google_login"
-                    style="@style/ContinueWithServiceFakeButton">
+                    style="@style/ContinueWithServiceFakeButton"
+                    android:onClick="onContinueWithGoogleButtonClick">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -99,7 +102,8 @@
 
                 <LinearLayout
                     android:id="@+id/linear_layout_facebook_login"
-                    style="@style/ContinueWithServiceFakeButton">
+                    style="@style/ContinueWithServiceFakeButton"
+                    android:onClick="onContinueWithFacebookButtonClick">
 
                     <ImageView
                         android:layout_width="wrap_content"

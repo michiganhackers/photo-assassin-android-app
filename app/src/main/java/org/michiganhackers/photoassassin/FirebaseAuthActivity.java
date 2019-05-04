@@ -4,10 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.michiganhackers.photoassassin.LoginPages.LoginActivity;
+import org.michiganhackers.photoassassin.LoginPages.ServiceLoginHandler;
+import org.michiganhackers.photoassassin.LoginPages.ServiceLogoutHandler;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,16 +20,17 @@ public abstract class FirebaseAuthActivity extends AppCompatActivity {
     protected FirebaseAuth auth;
     protected FirebaseAuth.AuthStateListener authListener;
     private final String TAG = getClass().getCanonicalName();
+    private ServiceLogoutHandler serviceLogoutHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         auth = FirebaseAuth.getInstance();
+        serviceLogoutHandler = new ServiceLogoutHandler(this, auth);
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                requireUserSignedIn(user);
+                requireUserSignedIn(firebaseAuth);
             }
         };
     }
@@ -42,17 +47,16 @@ public abstract class FirebaseAuthActivity extends AppCompatActivity {
         auth.removeAuthStateListener(authListener);
     }
 
-    protected void requireUserSignedIn(FirebaseUser user) {
-        if (user == null) {
+    protected void requireUserSignedIn(FirebaseAuth firebaseAuth) {
+        if (firebaseAuth.getCurrentUser() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            finish();
         }
     }
 
     public void signOut() {
-        auth.removeAuthStateListener(authListener);
-        finish();
+        serviceLogoutHandler.signOut();
         auth.signOut();
     }
 }
