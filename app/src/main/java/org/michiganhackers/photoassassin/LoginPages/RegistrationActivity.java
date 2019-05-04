@@ -34,6 +34,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import org.michiganhackers.photoassassin.MainActivity;
 import org.michiganhackers.photoassassin.R;
 
 import java.util.Arrays;
@@ -45,17 +46,16 @@ public class RegistrationActivity extends AppCompatActivity {
     private TextInputLayout emailTextInputLayout, passwordTextInputLayout;
     private CoordinatorLayout coordinatorLayout;
     private FirebaseAuth auth;
-    private GoogleSignInClient googleSignInClient;
-    private final static int REQUEST_CODE_GOOGLE_SIGN_IN = 1;
     private final String TAG = getClass().getCanonicalName();
-    private CallbackManager facebookCallbackManager;
+    ServiceLoginHandler serviceLoginHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
+        auth = FirebaseAuth.getInstance();
+
+        serviceLoginHandler = new ServiceLoginHandler(this, auth, coordinatorLayout);
 
         setContentView(R.layout.activity_registration);
 
@@ -67,43 +67,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         coordinatorLayout = findViewById(R.id.coordinator_layout);
 
-        auth = FirebaseAuth.getInstance();
-
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.web_client_id))
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-
-        facebookCallbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(facebookCallbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        handleFacebookAccessToken(loginResult.getAccessToken());
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        Log.d(TAG, "facebook login cancelled");
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Log.d(TAG, "facebook login error");
-                    }
-                });
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //TODO: Not sure if this check should be here or just in login activity. Would also need to check firebase auth and fb login.
-        if (GoogleSignIn.getLastSignedInAccount(this) != null) {
-            Log.w(TAG, "User already signed in with google");
-            googleSignInClient.signOut(); // TODO: this is just for debugging
-        }
     }
 
     public void onRegisterButtonClick(android.view.View view) {
@@ -135,7 +98,9 @@ public class RegistrationActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(RegistrationActivity.this, "Account successfully created", Toast.LENGTH_LONG).show(); //TODO: remove
+                            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
                             Log.d(TAG, "Account successfully created");
                         } else {
                             Exception exception = task.getException();
@@ -146,87 +111,24 @@ public class RegistrationActivity extends AppCompatActivity {
                     }
                 });
 
-
     }
 
     public void onLoginButtonClick(android.view.View view) {
         finish();
     }
 
-    // TODO: link google, fb, and email accounts to same user: https://firebase.google.com/docs/auth/android/account-linking?authuser=0
-    // TODO: move google sign in stuff to another file so login page can use it
     public void onRegisterGoogleButtonClick(android.view.View view) {
-        Intent googleSignInClientSignInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(googleSignInClientSignInIntent, REQUEST_CODE_GOOGLE_SIGN_IN);
+        serviceLoginHandler.onRegisterGoogleButtonClick(view);
     }
 
     public void onRegisterFacebookButtonClick(android.view.View view) {
-        LoginManager
-                .getInstance()
-                .logInWithReadPermissions(
-                        RegistrationActivity.this,
-                        Collections.singletonList("email")
-                );
+        serviceLoginHandler.onRegisterFacebookButtonClick(view);
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                if (account == null) {
-                    Snackbar.make(coordinatorLayout, getString(R.string.failed_google_sign_in_message), Snackbar.LENGTH_LONG).show();
-                    Log.d(TAG, "null GoogleSignInAccount");
-                } else {
-                    authenticateWithGoogle(account);
-                }
-            } catch (ApiException e) {
-                Snackbar.make(coordinatorLayout, getString(R.string.failed_google_sign_in_message), Snackbar.LENGTH_LONG).show();
-                Log.d(TAG, e.getMessage());
-            }
-        }
-    }
-
-
-    private void authenticateWithGoogle(GoogleSignInAccount acct) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(RegistrationActivity.this, "Google sign in successful", Toast.LENGTH_LONG).show(); //TODO: remove
-                            Log.d(TAG, "Google sign in successful");
-                        } else {
-                            Exception exception = task.getException();
-                            String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, getString(R.string.failed_google_sign_in_message) + msg, Snackbar.LENGTH_LONG).show();
-                            Log.d(TAG, getString(R.string.failed_google_sign_in_message) + msg);
-                        }
-                    }
-                });
-    }
-
-    private void handleFacebookAccessToken(AccessToken token) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(RegistrationActivity.this, "Facebook sign in successful", Toast.LENGTH_LONG).show(); //TODO: remove
-                            Log.d(TAG, "Facebook sign in successful");
-                        } else {
-                            Exception exception = task.getException();
-                            String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, getString(R.string.failed_google_sign_in_message) + msg, Snackbar.LENGTH_LONG).show();
-                            Log.d(TAG, getString(R.string.failed_google_sign_in_facebook) + msg);
-                        }
-                    }
-                });
+        serviceLoginHandler.onActivityResult(requestCode, resultCode, data);
     }
 }

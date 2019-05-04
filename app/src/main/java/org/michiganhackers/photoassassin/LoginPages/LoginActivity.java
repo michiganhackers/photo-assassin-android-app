@@ -16,6 +16,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
+    //TODO: startActivityForResult instead and return to this activity from RegistrationActivity instead of going directly to MainActivity
     public void onRegisterButtonClick(android.view.View view) {
         Intent intent = new Intent(this, RegistrationActivity.class);
         startActivity(intent);
