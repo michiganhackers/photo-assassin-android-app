@@ -1,15 +1,22 @@
 package org.michiganhackers.photoassassin.LoginPages;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.michiganhackers.photoassassin.MainActivity;
 import org.michiganhackers.photoassassin.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -24,12 +31,18 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
         auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         serviceLoginHandler = new ServiceLoginHandler(this, auth, coordinatorLayout);
 
-        setContentView(R.layout.activity_login);
 
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
@@ -45,7 +58,46 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginButtonClick(android.view.View view) {
-        //TODO
+        // Validate email and set error message
+        if (emailEditText.getText() == null) {
+            return;
+        }
+        Email email = new Email(emailEditText.getText().toString(), this);
+        String errorMsg = email.getError();
+        emailTextInputLayout.setError(errorMsg);
+        if (errorMsg != null) {
+            return;
+        }
+
+        // Validate password and set error message
+        if (passwordEditText.getText() == null) {
+            return;
+        }
+        Password password = new Password(passwordEditText.getText().toString(), this);
+        errorMsg = password.getError();
+        passwordTextInputLayout.setError(errorMsg);
+        if (errorMsg != null) {
+            return;
+        }
+
+        // Log in
+        auth.signInWithEmailAndPassword(email.getEmail(), password.getPassword())
+                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                            Log.d(TAG, "Logged in successfully");
+                        } else {
+                            Exception exception = task.getException();
+                            String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
+                            Snackbar.make(coordinatorLayout, getString(R.string.auth_failed_login) + msg, Snackbar.LENGTH_LONG).show();
+                            Log.d(TAG, getString(R.string.auth_failed_login) + msg);
+                        }
+                    }
+                });
     }
 
     public void onContinueWithGoogleButtonClick(android.view.View view) {

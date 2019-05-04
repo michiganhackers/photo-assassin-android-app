@@ -52,12 +52,11 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_registration);
 
         auth = FirebaseAuth.getInstance();
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         serviceLoginHandler = new ServiceLoginHandler(this, auth, coordinatorLayout);
-
-        setContentView(R.layout.activity_registration);
 
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
