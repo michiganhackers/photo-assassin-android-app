@@ -9,6 +9,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,10 +30,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.michiganhackers.photoassassin.R;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -35,10 +48,15 @@ public class RegistrationActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private final static int REQUEST_CODE_GOOGLE_SIGN_IN = 1;
     private final String TAG = getClass().getCanonicalName();
+    private CallbackManager facebookCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
         setContentView(R.layout.activity_registration);
 
         emailEditText = findViewById(R.id.text_input_edit_text_email);
@@ -56,6 +74,25 @@ public class RegistrationActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+
+        facebookCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(facebookCallbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.d(TAG, "facebook login cancelled");
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Log.d(TAG, "facebook login error");
+                    }
+                });
 
     }
 
@@ -124,12 +161,19 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void onRegisterFacebookButtonClick(android.view.View view) {
-
+        LoginManager
+                .getInstance()
+                .logInWithReadPermissions(
+                        RegistrationActivity.this,
+                        Collections.singletonList("email")
+                );
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -147,6 +191,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
+
     private void authenticateWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential)
@@ -161,6 +206,25 @@ public class RegistrationActivity extends AppCompatActivity {
                             String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
                             Snackbar.make(coordinatorLayout, getString(R.string.failed_google_sign_in_message) + msg, Snackbar.LENGTH_LONG).show();
                             Log.d(TAG, getString(R.string.failed_google_sign_in_message) + msg);
+                        }
+                    }
+                });
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(RegistrationActivity.this, "Facebook sign in successful", Toast.LENGTH_LONG).show(); //TODO: remove
+                            Log.d(TAG, "Facebook sign in successful");
+                        } else {
+                            Exception exception = task.getException();
+                            String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
+                            Snackbar.make(coordinatorLayout, getString(R.string.failed_google_sign_in_message) + msg, Snackbar.LENGTH_LONG).show();
+                            Log.d(TAG, getString(R.string.failed_google_sign_in_facebook) + msg);
                         }
                     }
                 });

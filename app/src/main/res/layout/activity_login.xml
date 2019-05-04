@@ -8,7 +8,21 @@
 
     <LinearLayout style="@style/LinearLayoutLoginPages">
 
-        <include layout="@layout/linear_layout_app_name" />
+        <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/photo"
+            android:textColor="@android:color/white"
+            android:textSize="100sp" />
+
+        <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20sp"
+            android:text="@string/assassin"
+            android:textColor="@android:color/white"
+            android:textSize="100sp" />
+
 
         <include layout="@layout/edit_text_email" />
 
@@ -16,46 +30,117 @@
 
         <org.michiganhackers.photoassassin.CustomViews.CustomButton
             android:id="@+id/button_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Log In" />
+            style="@style/ButtonLoginPages"
+            android:text="@string/log_in"
+            android:textSize="25sp" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-            <org.michiganhackers.photoassassin.CustomViews.CustomButton
-                android:id="@+id/button_google_login"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Continue with facebook" />
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <org.michiganhackers.photoassassin.CustomViews.CustomButton
-                android:id="@+id/button_facebook_login"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/linear_layout_google_login"
+                    style="@style/ContinueWithServiceFakeButton">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@string/continue_with_google"
+                        android:src="@drawable/ic_google_g" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/continue_with"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp" />
+
+                        <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/google"
+                            android:textColor="@android:color/white"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <org.michiganhackers.photoassassin.CustomViews.CustomButton
+                    android:id="@+id/button_forgot_password"
+                    style="@style/ButtonLoginPages"
+                    android:layout_width="wrap_content"
+                    android:background="@null"
+                    android:text="@string/forgot_password" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Continue with google" />
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/linear_layout_facebook_login"
+                    style="@style/ContinueWithServiceFakeButton">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@string/continue_with_facebook"
+                        android:src="@drawable/ic_facebook_f" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/continue_with"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp" />
+
+                        <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/facebook"
+                            android:textColor="@android:color/white"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <org.michiganhackers.photoassassin.CustomViews.CustomButton
+                    android:id="@+id/button_register"
+                    style="@style/ButtonLoginPages"
+                    android:layout_width="wrap_content"
+                    android:background="@null"
+                    android:onClick="onRegisterButtonClick"
+                    android:text="@string/register" />
+            </LinearLayout>
+
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <org.michiganhackers.photoassassin.CustomViews.CustomButton
-                android:id="@+id/button_forgot_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Forgot Password" />
-
-            <org.michiganhackers.photoassassin.CustomViews.CustomButton
-                android:id="@+id/button_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRegisterButtonClick"
-                android:text="Register" />
-        </LinearLayout>
-
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#F22F08</color>
     <color name="colorPrimaryDark">#8D2F23</color>
-    <color name="colorAccent">#212027</color>
-
-    <color name="loginPagesButtonsStrokeColor">#000000</color>
+    <color name="colorAccent">#FFFFFF</color>
+    <color name="bgGradientStart">#AB0000</color>
+    <color name="bgGradientEnd">#00FFFFFF</color>
+    <color name="whiteTransparent">#45FFFFFF</color>
 </resources>

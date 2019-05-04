@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">PhotoAssassin</string>
-    <string name="Photo">Photo</string>
-    <string name="Assassin">Assassin</string>
+    <string name="photo">Photo</string>
+    <string name="assassin">Assassin</string>
+    <string name="registration">Registration</string>
+    <string name="reset">Reset</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_up">Sign Up</string>
-    <string name="registration_already_have_account">Have an account? Log in</string>
+    <string name="registration_already_have_account"><u>Have an account? Log in</u></string>
     <string name="register_with_google">register with google</string>
     <string name="register_with_facebook">register with facebook</string>
     <string name="empty_password_message">password field cannot be empty</string>
@@ -13,5 +15,16 @@
     <string name="invalid_email_message">invalid email</string>
     <string name="auth_failed_registration">Authentication failed</string>
     <string name="web_client_id">924416786960-2fs9idqglcoqdvj69jjj25b8golsdukr.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">306114270313529</string>
+    <string name="fb_login_protocol_scheme">fb306114270313529</string>
     <string name="failed_google_sign_in_message">Failed to sign in with google</string>
+    <string name="failed_google_sign_in_facebook">Failed to sign in with facebook</string>
+    <string name="log_in">Log In</string>
+    <string name="continue_with_facebook">Continue with facebook</string>
+    <string name="continue_with_google">Continue with google</string>
+    <string name="forgot_password"><u>Forgot Password?</u></string>
+    <string name="register"><u>Register</u></string>
+    <string name="continue_with">continue with</string>
+    <string name="google">google</string>
+    <string name="facebook">facebook</string>
 </resources>

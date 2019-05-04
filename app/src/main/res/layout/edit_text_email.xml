@@ -6,7 +6,9 @@
         android:id="@+id/text_input_layout_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:errorEnabled="true">
+        android:textColorHint="@android:color/white"
+        app:errorEnabled="true"
+        app:hintTextColor="@android:color/white">
 
         <org.michiganhackers.photoassassin.CustomViews.CustomTextInputEditText
             android:id="@+id/text_input_edit_text_email"
