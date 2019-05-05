@@ -90,6 +90,7 @@
                     style="@style/ButtonLoginPages"
                     android:layout_width="wrap_content"
                     android:background="@null"
+                    android:onClick="onForgotPasswordButtonClick"
                     android:text="@string/forgot_password" />
             </LinearLayout>
 

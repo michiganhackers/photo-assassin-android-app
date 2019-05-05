@@ -112,7 +112,9 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void onLoginButtonClick(android.view.View view) {
-        finish();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     public void onRegisterGoogleButtonClick(android.view.View view) {

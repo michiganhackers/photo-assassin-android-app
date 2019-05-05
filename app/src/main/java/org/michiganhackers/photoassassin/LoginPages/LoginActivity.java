@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private final String TAG = getClass().getCanonicalName();
     private ServiceLoginHandler serviceLoginHandler;
+    public static final int RESET_PASSWORD_REQUEST_CODE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,11 @@ public class LoginActivity extends AppCompatActivity {
     public void onRegisterButtonClick(android.view.View view) {
         Intent intent = new Intent(this, RegistrationActivity.class);
         startActivity(intent);
+    }
+
+    public void onForgotPasswordButtonClick(android.view.View view) {
+        Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+        startActivityForResult(intent, RESET_PASSWORD_REQUEST_CODE);
     }
 
     public void onLoginButtonClick(android.view.View view) {
@@ -113,5 +120,12 @@ public class LoginActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         serviceLoginHandler.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESET_PASSWORD_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Snackbar.make(coordinatorLayout, getString(R.string.pwd_reset_confirmation), Snackbar.LENGTH_LONG).show();
+            } else {
+                Log.w(TAG, "RESET_PASSWORD_REQUEST_CODE cancelled");
+            }
+        }
     }
 }

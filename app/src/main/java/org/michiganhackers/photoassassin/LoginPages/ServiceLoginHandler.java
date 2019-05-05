@@ -130,19 +130,25 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
     void onActivityResult(int requestCode, int resultCode, Intent data) {
         facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                if (account == null) {
+            if (resultCode == Activity.RESULT_OK) {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                try {
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    if (account == null) {
+                        Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_message), Snackbar.LENGTH_LONG).show();
+                        Log.d(TAG, "null GoogleSignInAccount");
+                    } else {
+                        authenticateWithGoogle(account);
+                    }
+                } catch (ApiException e) {
                     Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_message), Snackbar.LENGTH_LONG).show();
-                    Log.d(TAG, "null GoogleSignInAccount");
-                } else {
-                    authenticateWithGoogle(account);
+                    Log.d(TAG, e.getMessage());
                 }
-            } catch (ApiException e) {
-                Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_message), Snackbar.LENGTH_LONG).show();
-                Log.d(TAG, e.getMessage());
+            } else {
+                Log.w(TAG, "REQUEST_CODE_GOOGLE_SIGN_IN cancelled");
+
             }
+
         }
     }
 

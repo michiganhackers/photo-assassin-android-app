@@ -7,7 +7,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_up">Sign Up</string>
-    <string name="registration_already_have_account"><u>Have an account? Log in</u></string>
+    <string name="already_have_account"><u>Have an account? Log in</u></string>
     <string name="register_with_google">register with google</string>
     <string name="register_with_facebook">register with facebook</string>
     <string name="empty_password_message">password field cannot be empty</string>
@@ -28,4 +28,7 @@
     <string name="continue_with">continue with</string>
     <string name="google">google</string>
     <string name="facebook">facebook</string>
+    <string name="reset_password">Reset password</string>
+    <string name="no_account_register"><u>No account? Register</u></string>
+    <string name="pwd_reset_confirmation">We have sent you instructions to reset your password!</string>
 </resources>
