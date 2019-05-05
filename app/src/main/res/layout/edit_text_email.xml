@@ -8,9 +8,10 @@
         android:layout_height="wrap_content"
         android:textColorHint="@android:color/white"
         app:errorEnabled="true"
-        app:hintTextColor="@android:color/white">
+        app:hintTextColor="@android:color/white"
+        app:errorTextAppearance="@style/ErrorTextAppearanceLoginPages">
 
-        <org.michiganhackers.photoassassin.CustomViews.CustomTextInputEditText
+    <org.michiganhackers.photoassassin.CustomViews.CustomTextInputEditText
             android:id="@+id/text_input_edit_text_email"
             style="@style/EditTextLoginPages"
             android:hint="@string/email"
