@@ -38,7 +38,6 @@ public class ServiceLogoutHandler {
         googleSignInClient = GoogleSignIn.getClient(activity, googleSignInOptions);
     }
 
-
     // This only signs out of google and facebook.
     // auth.signOut might still need to be called
     public void signOut() {

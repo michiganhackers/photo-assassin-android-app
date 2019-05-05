@@ -16,6 +16,8 @@ import org.michiganhackers.photoassassin.LoginPages.ServiceLogoutHandler;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+// This activity will redirect the user to the login page if they are not logged in
+// Any activity that a user must be signed in to see should extend this class
 public abstract class FirebaseAuthActivity extends AppCompatActivity {
     protected FirebaseAuth auth;
     protected FirebaseAuth.AuthStateListener authListener;

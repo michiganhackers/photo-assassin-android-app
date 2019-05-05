@@ -40,7 +40,6 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
     private final static int REQUEST_CODE_GOOGLE_SIGN_IN = 1;
     private CoordinatorLayout coordinatorLayout;
 
-
     ServiceLoginHandler(Activity activity, FirebaseAuth auth, CoordinatorLayout coordinatorLayout) {
         this.activity = activity;
         this.auth = auth;
@@ -84,7 +83,6 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
                 );
     }
 
-
     private void authenticateWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential)
@@ -99,7 +97,7 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
                         } else {
                             Exception exception = task.getException();
                             String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_message) + msg, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_message), Snackbar.LENGTH_LONG).show();
                             Log.d(TAG, activity.getString(R.string.failed_google_sign_in_message) + msg);
                         }
                     }
@@ -120,7 +118,7 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
                         } else {
                             Exception exception = task.getException();
                             String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_message) + msg, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_facebook), Snackbar.LENGTH_LONG).show();
                             Log.d(TAG, activity.getString(R.string.failed_google_sign_in_facebook) + msg);
                         }
                     }

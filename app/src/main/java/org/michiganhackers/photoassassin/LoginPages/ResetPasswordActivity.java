@@ -36,7 +36,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
-
     }
 
     public void onResetPasswordButtonClick(android.view.View view) {
@@ -57,6 +56,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             setResult(Activity.RESULT_OK);
+                            finish();
                         } else {
                             Snackbar.make(coordinatorLayout, "Failed to send password reset email!", Snackbar.LENGTH_LONG).show();
                         }

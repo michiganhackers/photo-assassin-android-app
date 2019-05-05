@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             Exception exception = task.getException();
                             String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, getString(R.string.auth_failed_login) + msg, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(coordinatorLayout, getString(R.string.auth_failed_login), Snackbar.LENGTH_LONG).show();
                             Log.d(TAG, getString(R.string.auth_failed_login) + msg);
                         }
                     }
@@ -115,11 +115,11 @@ public class LoginActivity extends AppCompatActivity {
         serviceLoginHandler.onRegisterFacebookButtonClick(view);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         serviceLoginHandler.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == RESET_PASSWORD_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Snackbar.make(coordinatorLayout, getString(R.string.pwd_reset_confirmation), Snackbar.LENGTH_LONG).show();

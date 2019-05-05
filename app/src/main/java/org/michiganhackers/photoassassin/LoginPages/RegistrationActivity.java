@@ -63,8 +63,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         passwordEditText = findViewById(R.id.text_input_edit_text_password);
         passwordTextInputLayout = findViewById(R.id.text_input_layout_password);
-
-
     }
 
     public void onRegisterButtonClick(android.view.View view) {
@@ -103,7 +101,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         } else {
                             Exception exception = task.getException();
                             String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, getString(R.string.auth_failed_registration) + msg, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(coordinatorLayout, getString(R.string.auth_failed_registration), Snackbar.LENGTH_LONG).show();
                             Log.d(TAG, getString(R.string.auth_failed_registration) + msg);
                         }
                     }
@@ -124,7 +122,6 @@ public class RegistrationActivity extends AppCompatActivity {
     public void onRegisterFacebookButtonClick(android.view.View view) {
         serviceLoginHandler.onRegisterFacebookButtonClick(view);
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

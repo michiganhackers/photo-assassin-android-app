@@ -10,7 +10,6 @@ public class Email {
     private Context context;
 
     public Email(String email, Context context) {
-        // TODO: trim whitespace?
         this.email = email;
         this.context = context;
     }

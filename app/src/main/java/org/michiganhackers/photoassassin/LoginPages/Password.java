@@ -10,7 +10,6 @@ public class Password {
     private Context context;
 
     public Password(String password, Context context) {
-        // TODO: trim whitespace?
         this.password = password;
         this.context = context;
     }
