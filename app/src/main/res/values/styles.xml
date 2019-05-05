@@ -11,7 +11,7 @@
     <style name="EditTextLoginPages">
         <item name="android:maxLines">1</item>
         <item name="android:singleLine">true</item>
-        <item name="android:background">@drawable/rounded_corner_background</item>
+        <item name="android:background">@drawable/login_page_edit_text_background</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_marginTop">20dp</item>

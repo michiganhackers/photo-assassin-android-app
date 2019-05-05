@@ -76,24 +76,25 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginButtonClick(android.view.View view) {
         // Validate email and set error message
+        boolean errorShown = false;
         if (emailEditText.getText() == null) {
+            // TODO: IDK when this will ever happen
             return;
         }
         Email email = new Email(emailEditText.getText().toString(), this);
         String errorMsg = email.getError();
         emailTextInputLayout.setError(errorMsg);
-        if (errorMsg != null) {
-            return;
-        }
+        errorShown = errorMsg != null;
 
         // Validate password and set error message
         if (passwordEditText.getText() == null) {
+            // TODO: IDK when this will ever happen
             return;
         }
         Password password = new Password(passwordEditText.getText().toString(), this);
         errorMsg = password.getError();
         passwordTextInputLayout.setError(errorMsg);
-        if (errorMsg != null) {
+        if (errorMsg != null || errorShown) {
             return;
         }
 

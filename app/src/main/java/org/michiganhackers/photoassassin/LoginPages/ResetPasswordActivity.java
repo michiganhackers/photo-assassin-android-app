@@ -52,6 +52,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     public void onResetPasswordButtonClick(android.view.View view) {
         // Validate email and set error message
         if (emailEditText.getText() == null) {
+            // TODO: IDK when this will ever happen
             return;
         }
         Email email = new Email(emailEditText.getText().toString(), this);
