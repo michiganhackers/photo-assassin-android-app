@@ -63,57 +63,6 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/linear_layout_google_login"
-                        style="@style/ContinueWithServiceFakeButton"
-                        android:onClick="onContinueWithGoogleButtonClick">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:contentDescription="@string/continue_with_google"
-                            android:src="@drawable/ic_google_g" />
-
-                        <LinearLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="20sp"
-                            android:gravity="center_horizontal"
-                            android:orientation="vertical">
-
-                            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/continue_with"
-                                android:textColor="@android:color/white"
-                                android:textSize="12sp" />
-
-                            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/google"
-                                android:textColor="@android:color/white"
-                                android:textSize="20sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <org.michiganhackers.photoassassin.CustomViews.CustomButton
-                        android:id="@+id/button_forgot_password"
-                        style="@style/ButtonLoginPages"
-                        android:layout_width="wrap_content"
-                        android:background="@null"
-                        android:onClick="onForgotPasswordButtonClick"
-                        android:text="@string/forgot_password" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <LinearLayout
                         android:id="@+id/linear_layout_facebook_login"
                         style="@style/ContinueWithServiceFakeButton"
                         android:onClick="onContinueWithFacebookButtonClick">
@@ -143,6 +92,57 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/facebook"
+                                android:textColor="@android:color/white"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <org.michiganhackers.photoassassin.CustomViews.CustomButton
+                        android:id="@+id/button_forgot_password"
+                        style="@style/ButtonLoginPages"
+                        android:layout_width="wrap_content"
+                        android:background="@null"
+                        android:onClick="onForgotPasswordButtonClick"
+                        android:text="@string/forgot_password" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/linear_layout_google_login"
+                        style="@style/ContinueWithServiceFakeButton"
+                        android:onClick="onContinueWithGoogleButtonClick">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:contentDescription="@string/continue_with_google"
+                            android:src="@drawable/ic_google_g" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/continue_with"
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp" />
+
+                            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/google"
                                 android:textColor="@android:color/white"
                                 android:textSize="20sp" />
                         </LinearLayout>
