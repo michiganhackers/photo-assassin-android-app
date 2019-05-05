@@ -7,8 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".LoginPages.RegistrationActivity">
 
-
     <LinearLayout style="@style/LinearLayoutLoginPages">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone" />
 
         <org.michiganhackers.photoassassin.CustomViews.CustomTextView
             android:layout_width="wrap_content"

@@ -9,6 +9,14 @@
 
     <LinearLayout style="@style/LinearLayoutLoginPages">
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone" />
+
         <org.michiganhackers.photoassassin.CustomViews.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

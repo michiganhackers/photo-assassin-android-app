@@ -7,6 +7,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -48,6 +50,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private final String TAG = getClass().getCanonicalName();
     private ServiceLoginHandler serviceLoginHandler;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,14 @@ public class RegistrationActivity extends AppCompatActivity {
 
         passwordEditText = findViewById(R.id.text_input_edit_text_password);
         passwordTextInputLayout = findViewById(R.id.text_input_layout_password);
+
+        progressBar = findViewById(R.id.progress_bar);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progressBar.setVisibility(View.GONE);
     }
 
     public void onRegisterButtonClick(android.view.View view) {
@@ -89,10 +100,12 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
         // Register user
+        progressBar.setVisibility(View.VISIBLE);
         auth.createUserWithEmailAndPassword(email.getEmail(), password.getPassword())
                 .addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
                             Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = getClass().getCanonicalName();
     private ServiceLoginHandler serviceLoginHandler;
     public static final int RESET_PASSWORD_REQUEST_CODE = 2;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,13 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.text_input_edit_text_password);
         passwordTextInputLayout = findViewById(R.id.text_input_layout_password);
 
+        progressBar = findViewById(R.id.progress_bar);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progressBar.setVisibility(View.GONE);
     }
 
     public void onRegisterButtonClick(android.view.View view) {
@@ -88,10 +98,12 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Log in
+        progressBar.setVisibility(View.VISIBLE);
         auth.signInWithEmailAndPassword(email.getEmail(), password.getPassword())
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);

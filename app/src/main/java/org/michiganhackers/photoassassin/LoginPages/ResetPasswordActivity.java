@@ -7,6 +7,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +27,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private FirebaseAuth auth;
     private final String TAG = getClass().getCanonicalName();
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
+
+        progressBar = findViewById(R.id.progress_bar);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progressBar.setVisibility(View.GONE);
     }
 
     public void onResetPasswordButtonClick(android.view.View view) {
@@ -50,10 +61,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
             return;
         }
 
+        progressBar.setVisibility(View.VISIBLE);
         auth.sendPasswordResetEmail(email.getEmail())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
                             setResult(Activity.RESULT_OK);
                             finish();
