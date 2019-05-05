@@ -20,7 +20,7 @@
     </style>
 
     <style name="ButtonLoginPages">
-        <item name="android:background">@drawable/rounded_corner_with_border_background</item>
+        <item name="android:background">@drawable/login_page_button_background</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_marginTop">20dp</item>
@@ -30,7 +30,7 @@
     </style>
 
     <style name="ContinueWithServiceFakeButton">
-        <item name="android:background">@drawable/rounded_corner_with_border_background</item>
+        <item name="android:background">@drawable/login_page_button_background</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_marginTop">20dp</item>
@@ -47,7 +47,7 @@
         <item name="android:paddingLeft">40dp</item>
         <item name="android:paddingEnd">40dp</item>
         <item name="android:paddingRight">40dp</item>
-        <item name="android:background">@drawable/bg_gradient</item>
+        <item name="android:background">@drawable/gradient_background</item>
     </style>
 
     <style name="ErrorTextAppearanceLoginPages" parent="@android:style/TextAppearance">
