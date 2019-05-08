@@ -11,11 +11,11 @@
         app:hintTextColor="@android:color/white"
         app:errorTextAppearance="@style/ErrorTextAppearanceLoginPages">
 
-    <org.michiganhackers.photoassassin.CustomViews.CustomTextInputEditText
+    <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/text_input_edit_text_email"
             style="@style/EditTextLoginPages"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 </merge>

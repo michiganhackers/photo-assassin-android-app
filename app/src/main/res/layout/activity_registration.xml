@@ -21,41 +21,40 @@
                 android:layout_marginBottom="20dp"
                 android:visibility="gone" />
 
-            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <TextView
+                style="@style/TitleLoginPages"
                 android:layout_marginBottom="20sp"
                 android:text="@string/registration"
-                android:textColor="@android:color/white"
                 android:textSize="80sp" />
 
             <include layout="@layout/edit_text_email" />
 
             <include layout="@layout/edit_text_password" />
 
-            <org.michiganhackers.photoassassin.CustomViews.CustomButton
+            <Button
                 android:id="@+id/button_register"
                 style="@style/ButtonLoginPages"
                 android:onClick="onRegisterButtonClick"
                 android:text="@string/sign_up"
                 android:textSize="25sp" />
 
-            <org.michiganhackers.photoassassin.CustomViews.CustomButton
+            <Button
                 android:id="@+id/button_login"
                 style="@style/ButtonLoginPages"
                 android:layout_marginTop="0dp"
                 android:background="@null"
+                android:fontFamily="@font/economica"
                 android:onClick="onLoginButtonClick"
                 android:text="@string/already_have_account" />
 
-            <org.michiganhackers.photoassassin.CustomViews.CustomButton
+            <Button
                 android:id="@+id/button_google_register"
                 style="@style/ButtonLoginPages"
                 android:drawableStart="@drawable/ic_google_g"
                 android:onClick="onRegisterGoogleButtonClick"
                 android:text="@string/register_with_google" />
 
-            <org.michiganhackers.photoassassin.CustomViews.CustomButton
+            <Button
                 android:id="@+id/button_facebook_register"
                 style="@style/ButtonLoginPages"
                 android:drawableStart="@drawable/ic_facebook_f"

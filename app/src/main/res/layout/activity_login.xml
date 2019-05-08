@@ -21,27 +21,21 @@
                 android:layout_marginBottom="20dp"
                 android:visibility="gone" />
 
-            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/photo"
-                android:textColor="@android:color/white"
-                android:textSize="100sp" />
+            <TextView
+                style="@style/TitleLoginPages"
+                android:text="@string/photo" />
 
-            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <TextView
+                style="@style/TitleLoginPages"
                 android:layout_marginBottom="20sp"
-                android:text="@string/assassin"
-                android:textColor="@android:color/white"
-                android:textSize="100sp" />
+                android:text="@string/assassin" />
 
 
             <include layout="@layout/edit_text_email" />
 
             <include layout="@layout/edit_text_password" />
 
-            <org.michiganhackers.photoassassin.CustomViews.CustomButton
+            <Button
                 android:id="@+id/button_login"
                 style="@style/ButtonLoginPages"
                 android:onClick="onLoginButtonClick"
@@ -51,6 +45,7 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
@@ -81,27 +76,30 @@
                             android:gravity="center_horizontal"
                             android:orientation="vertical">
 
-                            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/economica_bold"
                                 android:text="@string/continue_with"
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp" />
 
-                            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/economica_bold"
                                 android:text="@string/facebook"
                                 android:textColor="@android:color/white"
                                 android:textSize="20sp" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <org.michiganhackers.photoassassin.CustomViews.CustomButton
+                    <Button
                         android:id="@+id/button_forgot_password"
                         style="@style/ButtonLoginPages"
                         android:layout_width="wrap_content"
                         android:background="@null"
+                        android:fontFamily="@font/economica"
                         android:onClick="onForgotPasswordButtonClick"
                         android:text="@string/forgot_password" />
                 </LinearLayout>
@@ -132,27 +130,30 @@
                             android:gravity="center_horizontal"
                             android:orientation="vertical">
 
-                            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/economica_bold"
                                 android:text="@string/continue_with"
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp" />
 
-                            <org.michiganhackers.photoassassin.CustomViews.CustomTextView
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/economica_bold"
                                 android:text="@string/google"
                                 android:textColor="@android:color/white"
                                 android:textSize="20sp" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <org.michiganhackers.photoassassin.CustomViews.CustomButton
+                    <Button
                         android:id="@+id/button_register"
                         style="@style/ButtonLoginPages"
                         android:layout_width="wrap_content"
                         android:background="@null"
+                        android:fontFamily="@font/economica"
                         android:onClick="onRegisterButtonClick"
                         android:text="@string/register" />
                 </LinearLayout>
