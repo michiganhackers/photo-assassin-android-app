@@ -5,5 +5,7 @@
     <color name="colorAccent">#FFFFFF</color>
     <color name="bgGradientStart">#AB0000</color>
     <color name="bgGradientEnd">#00FFFFFF</color>
-    <color name="whiteTransparent">#45FFFFFF</color>
+    <color name="whiteTransparent01">#45FFFFFF</color>
+    <color name="whiteTransparent02">#BAFFFFFF</color>
+    <color name="whiteTransparent03">#99FFFFFF</color>
 </resources>

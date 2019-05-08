@@ -45,6 +45,7 @@
                 android:background="@null"
                 android:fontFamily="@font/economica"
                 android:onClick="onLoginButtonClick"
+                android:textColor="@color/whiteTransparent03"
                 android:text="@string/already_have_account" />
 
             <Button
@@ -52,6 +53,7 @@
                 style="@style/ButtonLoginPages"
                 android:drawableStart="@drawable/ic_google_g"
                 android:onClick="onRegisterGoogleButtonClick"
+                android:textColor="@color/whiteTransparent03"
                 android:text="@string/register_with_google" />
 
             <Button
@@ -59,6 +61,7 @@
                 style="@style/ButtonLoginPages"
                 android:drawableStart="@drawable/ic_facebook_f"
                 android:onClick="onRegisterFacebookButtonClick"
+                android:textColor="@color/whiteTransparent03"
                 android:text="@string/register_with_facebook" />
 
         </LinearLayout>

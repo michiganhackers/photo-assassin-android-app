@@ -6,16 +6,16 @@
         android:id="@+id/text_input_layout_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@android:color/white"
+        android:textColorHint="@color/whiteTransparent02"
         app:errorEnabled="true"
-        app:hintTextColor="@android:color/white"
-        app:errorTextAppearance="@style/ErrorTextAppearanceLoginPages">
+        app:errorTextAppearance="@style/ErrorTextAppearanceLoginPages"
+        app:hintTextColor="@color/whiteTransparent02">
 
-    <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/text_input_edit_text_email"
             style="@style/EditTextLoginPages"
             android:hint="@string/email"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </merge>

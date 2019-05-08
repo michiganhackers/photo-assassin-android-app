@@ -81,7 +81,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/economica_bold"
                                 android:text="@string/continue_with"
-                                android:textColor="@android:color/white"
+                                android:textColor="@color/whiteTransparent03"
                                 android:textSize="12sp" />
 
                             <TextView
@@ -89,7 +89,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/economica_bold"
                                 android:text="@string/facebook"
-                                android:textColor="@android:color/white"
+                                android:textColor="@color/whiteTransparent03"
                                 android:textSize="20sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -101,7 +101,8 @@
                         android:background="@null"
                         android:fontFamily="@font/economica"
                         android:onClick="onForgotPasswordButtonClick"
-                        android:text="@string/forgot_password" />
+                        android:text="@string/forgot_password"
+                        android:textColor="@color/whiteTransparent03" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -135,7 +136,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/economica_bold"
                                 android:text="@string/continue_with"
-                                android:textColor="@android:color/white"
+                                android:textColor="@color/whiteTransparent03"
                                 android:textSize="12sp" />
 
                             <TextView
@@ -143,7 +144,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/economica_bold"
                                 android:text="@string/google"
-                                android:textColor="@android:color/white"
+                                android:textColor="@color/whiteTransparent03"
                                 android:textSize="20sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -155,7 +156,8 @@
                         android:background="@null"
                         android:fontFamily="@font/economica"
                         android:onClick="onRegisterButtonClick"
-                        android:text="@string/register" />
+                        android:text="@string/register"
+                        android:textColor="@color/whiteTransparent03" />
                 </LinearLayout>
 
             </LinearLayout>
