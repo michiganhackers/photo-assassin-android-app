@@ -27,6 +27,7 @@
 
             <TextView
                 style="@style/TitleLoginPages"
+                android:layout_marginTop="-20dp"
                 android:layout_marginBottom="20sp"
                 android:text="@string/assassin" />
 
@@ -59,14 +60,16 @@
 
                     <LinearLayout
                         android:id="@+id/linear_layout_facebook_login"
-                        style="@style/ContinueWithServiceFakeButton"
+                        style="@style/FakeButtonLoginPages"
                         android:onClick="onContinueWithFacebookButtonClick">
 
                         <ImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
+                            android:layout_height="fill_parent"
+                            android:layout_marginEnd="5dp"
+                            android:adjustViewBounds="true"
                             android:contentDescription="@string/continue_with_facebook"
+                            android:padding="7dp"
                             android:src="@drawable/ic_facebook_f" />
 
                         <LinearLayout
@@ -82,7 +85,7 @@
                                 android:fontFamily="@font/economica_bold"
                                 android:text="@string/continue_with"
                                 android:textColor="@color/whiteTransparent03"
-                                android:textSize="12sp" />
+                                android:textSize="14sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -96,13 +99,10 @@
 
                     <Button
                         android:id="@+id/button_forgot_password"
-                        style="@style/ButtonLoginPages"
+                        style="@style/ButtonNoBackgroundLoginPages"
                         android:layout_width="wrap_content"
-                        android:background="@null"
-                        android:fontFamily="@font/economica"
                         android:onClick="onForgotPasswordButtonClick"
-                        android:text="@string/forgot_password"
-                        android:textColor="@color/whiteTransparent03" />
+                        android:text="@string/forgot_password" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -114,14 +114,16 @@
 
                     <LinearLayout
                         android:id="@+id/linear_layout_google_login"
-                        style="@style/ContinueWithServiceFakeButton"
+                        style="@style/FakeButtonLoginPages"
                         android:onClick="onContinueWithGoogleButtonClick">
 
                         <ImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
+                            android:layout_height="fill_parent"
+                            android:layout_marginEnd="5dp"
+                            android:adjustViewBounds="true"
                             android:contentDescription="@string/continue_with_google"
+                            android:padding="8dp"
                             android:src="@drawable/ic_google_g" />
 
                         <LinearLayout
@@ -137,7 +139,7 @@
                                 android:fontFamily="@font/economica_bold"
                                 android:text="@string/continue_with"
                                 android:textColor="@color/whiteTransparent03"
-                                android:textSize="12sp" />
+                                android:textSize="14sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -151,13 +153,10 @@
 
                     <Button
                         android:id="@+id/button_register"
-                        style="@style/ButtonLoginPages"
+                        style="@style/ButtonNoBackgroundLoginPages"
                         android:layout_width="wrap_content"
-                        android:background="@null"
-                        android:fontFamily="@font/economica"
                         android:onClick="onRegisterButtonClick"
-                        android:text="@string/register"
-                        android:textColor="@color/whiteTransparent03" />
+                        android:text="@string/register" />
                 </LinearLayout>
 
             </LinearLayout>

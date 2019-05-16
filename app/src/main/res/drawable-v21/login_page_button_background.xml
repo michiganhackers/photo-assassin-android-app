@@ -4,7 +4,7 @@
     <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
             <stroke
-                android:width="2dp"
+                android:width="3dp"
                 android:color="@android:color/white" />
             <solid android:color="@color/whiteTransparent01" />
             <padding
@@ -18,7 +18,7 @@
     <item>
         <shape android:shape="rectangle">
             <stroke
-                android:width="2dp"
+                android:width="3dp"
                 android:color="@color/whiteTransparent01" />
             <solid android:color="@android:color/transparent" />
             <padding

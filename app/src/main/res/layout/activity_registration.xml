@@ -23,9 +23,9 @@
 
             <TextView
                 style="@style/TitleLoginPages"
-                android:layout_marginBottom="20sp"
+                android:layout_marginBottom="40dp"
                 android:text="@string/registration"
-                android:textSize="80sp" />
+                android:textSize="64sp" />
 
             <include layout="@layout/edit_text_email" />
 
@@ -40,29 +40,41 @@
 
             <Button
                 android:id="@+id/button_login"
-                style="@style/ButtonLoginPages"
+                style="@style/ButtonNoBackgroundLoginPages"
                 android:layout_marginTop="0dp"
-                android:background="@null"
-                android:fontFamily="@font/economica"
                 android:onClick="onLoginButtonClick"
-                android:textColor="@color/whiteTransparent03"
-                android:text="@string/already_have_account" />
+                android:text="@string/already_have_account"
+                android:textSize="20sp" />
 
-            <Button
-                android:id="@+id/button_google_register"
-                style="@style/ButtonLoginPages"
-                android:drawableStart="@drawable/ic_google_g"
-                android:onClick="onRegisterGoogleButtonClick"
-                android:textColor="@color/whiteTransparent03"
-                android:text="@string/register_with_google" />
+        <LinearLayout
+            android:id="@+id/button_google_register"
+            style="@style/FakeButtonLoginPages"
+            android:layout_marginTop="25dp"
+            android:onClick="onRegisterGoogleButtonClick">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/continue_with_google"
+                android:padding="10dp"
+                android:src="@drawable/ic_google_g" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_with_google"
+                    android:textColor="@color/whiteTransparent03"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/button_facebook_register"
                 style="@style/ButtonLoginPages"
                 android:drawableStart="@drawable/ic_facebook_f"
                 android:onClick="onRegisterFacebookButtonClick"
-                android:textColor="@color/whiteTransparent03"
-                android:text="@string/register_with_facebook" />
+                android:text="@string/register_with_facebook"
+                android:textColor="@color/whiteTransparent03" />
 
         </LinearLayout>
 
