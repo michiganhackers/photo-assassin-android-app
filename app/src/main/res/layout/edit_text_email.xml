@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:textColorHint="@color/whiteTransparent02"
         app:errorTextAppearance="@style/ErrorTextAppearanceLoginPages"
+        app:hintTextAppearance="@style/HintTextAppearanceLoginPages"
         app:hintTextColor="@color/whiteTransparent02">
 
         <com.google.android.material.textfield.TextInputEditText

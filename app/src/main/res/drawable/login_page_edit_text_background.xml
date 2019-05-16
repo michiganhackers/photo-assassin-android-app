@@ -5,10 +5,10 @@
             <solid android:color="@color/whiteTransparent01" />
             <padding
                 android:bottom="0dp"
-                android:left="20dp"
+                android:left="19dp"
                 android:right="1dp"
                 android:top="1dp" />
-            <corners android:radius="10dp" />
+            <corners android:radius="15dp" />
         </shape>
     </item>
 </layer-list>

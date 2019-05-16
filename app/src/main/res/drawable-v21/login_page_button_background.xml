@@ -9,10 +9,10 @@
             <solid android:color="@color/whiteTransparent01" />
             <padding
                 android:bottom="1dp"
-                android:left="10dp"
-                android:right="10dp"
+                android:left="1dp"
+                android:right="1dp"
                 android:top="1dp" />
-            <corners android:radius="10dp" />
+            <corners android:radius="15dp" />
         </shape>
     </item>
     <item>
@@ -23,10 +23,10 @@
             <solid android:color="@android:color/transparent" />
             <padding
                 android:bottom="1dp"
-                android:left="10dp"
-                android:right="10dp"
+                android:left="1dp"
+                android:right="1dp"
                 android:top="1dp" />
-            <corners android:radius="10dp" />
+            <corners android:radius="15dp" />
         </shape>
     </item>
 </ripple>
