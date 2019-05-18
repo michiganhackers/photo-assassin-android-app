@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/economica_bold"
                     android:text="@string/register_with_google"
-                    android:textColor="@color/whiteTransparent02"
+                    android:textColor="@color/whiteSixtyPercentOpacity"
                     android:textSize="27sp" />
             </LinearLayout>
 
@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/economica_bold"
                     android:text="@string/register_with_facebook"
-                    android:textColor="@color/whiteTransparent02"
+                    android:textColor="@color/whiteSixtyPercentOpacity"
                     android:textSize="27sp" />
             </LinearLayout>
 

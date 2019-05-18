@@ -6,10 +6,10 @@
         android:id="@+id/text_input_layout_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/whiteTransparent02"
+        android:textColorHint="@color/whiteSixtyPercentOpacity"
         app:errorTextAppearance="@style/ErrorTextAppearanceLoginPages"
         app:hintTextAppearance="@style/HintTextAppearanceLoginPages"
-        app:hintTextColor="@color/whiteTransparent02">
+        app:hintTextColor="@color/whiteSixtyPercentOpacity">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/text_input_edit_text_email"

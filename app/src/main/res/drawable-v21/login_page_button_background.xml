@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/whiteTransparent01">
+    android:color="@color/whiteTwentyFivePercentOpacity">
     <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
             <stroke
                 android:width="3dp"
                 android:color="@android:color/white" />
-            <solid android:color="@color/whiteTransparent01" />
+            <solid android:color="@color/whiteTwentyFivePercentOpacity" />
             <padding
                 android:bottom="1dp"
                 android:left="1dp"
@@ -19,7 +19,7 @@
         <shape android:shape="rectangle">
             <stroke
                 android:width="3dp"
-                android:color="@color/whiteTransparent01" />
+                android:color="@color/whiteTwentyFivePercentOpacity" />
             <solid android:color="@android:color/transparent" />
             <padding
                 android:bottom="1dp"

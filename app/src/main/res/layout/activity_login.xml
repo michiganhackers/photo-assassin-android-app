@@ -81,7 +81,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/economica_bold"
                                 android:text="@string/continue_with"
-                                android:textColor="@color/whiteTransparent02"
+                                android:textColor="@color/whiteSixtyPercentOpacity"
                                 android:textSize="20sp" />
 
                             <TextView
@@ -89,7 +89,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/economica_bold"
                                 android:text="@string/facebook"
-                                android:textColor="@color/whiteTransparent02"
+                                android:textColor="@color/whiteSixtyPercentOpacity"
                                 android:textSize="27sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -135,7 +135,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/economica_bold"
                                 android:text="@string/continue_with"
-                                android:textColor="@color/whiteTransparent02"
+                                android:textColor="@color/whiteSixtyPercentOpacity"
                                 android:textSize="20sp" />
 
                             <TextView
@@ -143,7 +143,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/economica_bold"
                                 android:text="@string/google"
-                                android:textColor="@color/whiteTransparent02"
+                                android:textColor="@color/whiteSixtyPercentOpacity"
                                 android:textSize="27sp" />
                         </LinearLayout>
                     </LinearLayout>
