@@ -7,6 +7,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -35,8 +36,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reset_password);
 
         auth = FirebaseAuth.getInstance();
-
         coordinatorLayout = findViewById(R.id.coordinator_layout);
+
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
 
@@ -52,7 +53,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     public void onResetPasswordButtonClick(android.view.View view) {
         // Validate email and set error message
         if (emailEditText.getText() == null) {
-            // TODO: IDK when this will ever happen
+            Log.e(TAG, "EditText getText() returned null");
             return;
         }
         Email email = new Email(emailEditText.getText().toString(), this);

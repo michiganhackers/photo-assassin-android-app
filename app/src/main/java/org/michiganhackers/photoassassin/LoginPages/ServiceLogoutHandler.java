@@ -29,8 +29,6 @@ public class ServiceLogoutHandler {
     }
 
     void setupServices() {
-        FacebookSdk.sdkInitialize(activity.getApplicationContext());
-
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(activity.getString(R.string.web_client_id))
                 .requestEmail()

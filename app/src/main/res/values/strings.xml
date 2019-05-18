@@ -13,7 +13,7 @@
     <string name="empty_password_message">password field cannot be empty</string>
     <string name="password_too_short_message">password must be at least 8 characters</string>
     <string name="invalid_email_message">invalid email</string>
-    <string name="auth_failed_registration">Authentication failed</string>
+    <string name="auth_failed_registration">Registration failed</string>
     <string name="auth_failed_login">Login failed</string>
     <string name="web_client_id">924416786960-2fs9idqglcoqdvj69jjj25b8golsdukr.apps.googleusercontent.com</string>
     <string name="facebook_app_id">306114270313529</string>

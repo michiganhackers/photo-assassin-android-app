@@ -80,7 +80,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // Validate email and set error message
         boolean errorShown = false;
         if (emailEditText.getText() == null) {
-            // TODO: IDK when this will ever happen
+            Log.e(TAG, "EditText getText() returned null");
             return;
         }
         Email email = new Email(emailEditText.getText().toString(), this);
@@ -90,7 +90,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // Validate password and set error message
         if (passwordEditText.getText() == null) {
-            // TODO: IDK when this will ever happen
+            Log.e(TAG, "EditText getText() returned null");
             return;
         }
         Password password = new Password(passwordEditText.getText().toString(), this);

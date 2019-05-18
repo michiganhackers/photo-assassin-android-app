@@ -67,8 +67,6 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
                 });
     }
 
-
-    // TODO: link google, fb, and email accounts to same user: https://firebase.google.com/docs/auth/android/account-linking?authuser=0
     void onRegisterGoogleButtonClick(android.view.View view) {
         Intent googleSignInClientSignInIntent = googleSignInClient.getSignInIntent();
         activity.startActivityForResult(googleSignInClientSignInIntent, REQUEST_CODE_GOOGLE_SIGN_IN);
