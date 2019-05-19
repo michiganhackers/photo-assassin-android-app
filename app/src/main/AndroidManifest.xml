@@ -17,6 +17,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".ChangePasswordActivity">
+            <intent-filter>
+                <action android:name="org.michiganhackers.photoassassin.ChangePasswordActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

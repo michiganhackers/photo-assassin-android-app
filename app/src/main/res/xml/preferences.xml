@@ -6,7 +6,11 @@
 
     <Preference
         android:key="change_password_pref"
-        android:title="@string/pref_change_password"/>
+        android:title="@string/pref_change_password" >
+        <intent
+            android:action="org.michiganhackers.photoassassin.ChangePasswordActivity"/>
+    </Preference>
+
 
     <SwitchPreference
         android:key="change_theme_pref"
