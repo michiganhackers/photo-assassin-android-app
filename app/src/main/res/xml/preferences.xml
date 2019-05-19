@@ -2,6 +2,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
         android:key="change_email_pref"
-        android:title="@string/pref_change_email"
-        />
+        android:title="@string/pref_change_email" />
+
+    <Preference
+        android:key="change_password_pref"
+        android:title="@string/pref_change_password"/>
+
+    <SwitchPreference
+        android:key="change_theme_pref"
+        android:title="@string/pref_change_theme"/>
+
+    <Preference
+        android:key="notifications_pref"
+        android:title="@string/pref_notifications"/>
+
+    <Preference
+        android:key="logout_pref"
+        android:title="@string/pref_logout"/>
 </PreferenceScreen>

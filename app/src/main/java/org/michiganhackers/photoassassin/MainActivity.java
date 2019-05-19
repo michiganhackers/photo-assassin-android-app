@@ -9,8 +9,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
     private Button button;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +30,5 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
-
 
 }
