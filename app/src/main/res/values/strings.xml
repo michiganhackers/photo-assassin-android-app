@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PhotoAssassin</string>
+    <string name="pref_change_email">Change Email</string>
 </resources>
