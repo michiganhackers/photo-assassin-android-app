@@ -27,4 +27,11 @@ public class Email {
         return null;
     }
 
+    public String getLocalPart(){
+        if (getError() != null) {
+            throw new RuntimeException("invalid email in getLocalPart");
+        }
+        return email.substring(0, email.lastIndexOf('@'));
+    }
+
 }
