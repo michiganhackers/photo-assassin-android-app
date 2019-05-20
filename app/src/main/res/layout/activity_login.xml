@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginPages.LoginActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout style="@style/LinearLayoutLoginPages">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="20dp"
+                android:visibility="gone" />
+
+            <TextView
+                style="@style/TitleLoginPages"
+                android:text="@string/photo" />
+
+            <TextView
+                style="@style/TitleLoginPages"
+                android:layout_marginTop="-20dp"
+                android:layout_marginBottom="15sp"
+                android:text="@string/assassin" />
+
+
+            <include layout="@layout/edit_text_email" />
+
+            <include layout="@layout/edit_text_password" />
+
+            <Button
+                android:id="@+id/button_login"
+                style="@style/ButtonLoginPages"
+                android:onClick="onLoginButtonClick"
+                android:text="@string/log_in" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/linear_layout_facebook_login"
+                        style="@style/FakeButtonLoginPages"
+                        android:onClick="onContinueWithFacebookButtonClick">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="45dp"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@string/continue_with_facebook"
+                            android:src="@drawable/ic_facebook_f" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/economica_bold"
+                                android:text="@string/continue_with"
+                                android:textColor="@color/whiteSixtyPercentOpacity"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/economica_bold"
+                                android:text="@string/facebook"
+                                android:textColor="@color/whiteSixtyPercentOpacity"
+                                android:textSize="27sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/button_forgot_password"
+                        style="@style/ButtonNoBackgroundLoginPages"
+                        android:layout_width="wrap_content"
+                        android:onClick="onForgotPasswordButtonClick"
+                        android:text="@string/forgot_password" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/linear_layout_google_login"
+                        style="@style/FakeButtonLoginPages"
+                        android:onClick="onContinueWithGoogleButtonClick">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@string/continue_with_google"
+                            android:src="@drawable/ic_google_g" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/economica_bold"
+                                android:text="@string/continue_with"
+                                android:textColor="@color/whiteSixtyPercentOpacity"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/economica_bold"
+                                android:text="@string/google"
+                                android:textColor="@color/whiteSixtyPercentOpacity"
+                                android:textSize="27sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/button_register"
+                        style="@style/ButtonNoBackgroundLoginPages"
+                        android:layout_width="wrap_content"
+                        android:onClick="onRegisterButtonClick"
+                        android:text="@string/register" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

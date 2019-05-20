@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_layout_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/whiteSixtyPercentOpacity"
+        app:errorTextAppearance="@style/ErrorTextAppearanceLoginPages"
+        app:hintTextAppearance="@style/HintTextAppearanceLoginPages"
+        app:hintTextColor="@color/whiteSixtyPercentOpacity">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_input_edit_text_email"
+            style="@style/EditTextLoginPages"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</merge>
