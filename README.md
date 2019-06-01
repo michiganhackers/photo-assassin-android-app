@@ -1,5 +1,5 @@
 # Photo Assassin
-A game based off the [Assassin game](https://en.wikipedia.org/wiki/Assassin_(game)) where the user takes a picture of their target and facial recognition immediately registers it.
+A game based off the [Assassin game](https://en.wikipedia.org/wiki/Assassin_(game)) where the user takes a picture of their target without their target noticing.
 
 ## Getting Started
 
@@ -26,6 +26,7 @@ Create a Github account to interact with the remote repository.
 6. Paste the link to this Github repository (https://github.com/michiganhackers/photo-assassin-android-app) and select "Clone"
 7. Get the MichiganHackers.jks file from the Android google drive folder and place it in the the "app" directory.
 8. Get the keystore.properties file from the Android google drive folder and place it in the root project directory.  
+9. Get the google-services.json file from the Android google drive folder and place it in the "app" directory.  
 
 ## Contributing
 We use the [GitHub Flow workflow](https://guides.github.com/introduction/flow/).  
