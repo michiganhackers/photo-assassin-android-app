@@ -15,20 +15,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import org.michiganhackers.photoassassin.MainActivity;
 import org.michiganhackers.photoassassin.R;
+import org.michiganhackers.photoassassin.Util;
 
 import java.util.Collections;
 
 import androidx.annotation.NonNull;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 // Handles login logic for google and facebook
 // Instance of this class must be created in onCreate
@@ -38,12 +36,19 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
     private CallbackManager facebookCallbackManager;
     private final String TAG = getClass().getCanonicalName();
     private final static int REQUEST_CODE_GOOGLE_SIGN_IN = 1;
-    private CoordinatorLayout coordinatorLayout;
 
-    ServiceLoginHandler(Activity activity, FirebaseAuth auth, CoordinatorLayout coordinatorLayout) {
+    public interface Callback {
+        void onSuccess();
+        void onFailure(RuntimeException exception);
+        void onCancel();
+    }
+
+    private Callback callback;
+
+    ServiceLoginHandler(Activity activity, FirebaseAuth auth, Callback callback) {
         this.activity = activity;
         this.auth = auth;
-        this.coordinatorLayout = coordinatorLayout;
+        this.callback = callback;
 
         setupServices();
 
@@ -57,22 +62,25 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
 
                     @Override
                     public void onCancel() {
-                        Log.d(TAG, "facebook login cancelled");
+                        Log.i(TAG, "facebook login cancelled");
+                        ServiceLoginHandler.this.callback.onCancel();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
-                        Log.d(TAG, "facebook login error");
+                        RuntimeException e = Util.prependToException("facebook login error", exception);
+                        Log.d(TAG, "", e);
+                        ServiceLoginHandler.this.callback.onFailure(e);
                     }
                 });
     }
 
-    void onRegisterGoogleButtonClick(android.view.View view) {
+    void onLoginGoogleButtonClick(android.view.View view) {
         Intent googleSignInClientSignInIntent = googleSignInClient.getSignInIntent();
         activity.startActivityForResult(googleSignInClientSignInIntent, REQUEST_CODE_GOOGLE_SIGN_IN);
     }
 
-    void onRegisterFacebookButtonClick(android.view.View view) {
+    void onLoginFacebookButtonClick(android.view.View view) {
         LoginManager
                 .getInstance()
                 .logInWithReadPermissions(
@@ -88,15 +96,12 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Intent intent = new Intent(activity, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            activity.startActivity(intent);
-                            Log.d(TAG, "Google sign in successful");
+                            Log.i(TAG, "Google sign in successful");
+                            callback.onSuccess();
                         } else {
-                            Exception exception = task.getException();
-                            String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_message), Snackbar.LENGTH_LONG).show();
-                            Log.d(TAG, activity.getString(R.string.failed_google_sign_in_message) + msg);
+                            RuntimeException e = Util.prependToException(activity.getString(R.string.failed_google_sign_in_message), task.getException());
+                            Log.d(TAG, "", e);
+                            callback.onFailure(e);
                         }
                     }
                 });
@@ -109,15 +114,12 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Intent intent = new Intent(activity, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            activity.startActivity(intent);
-                            Log.d(TAG, "Facebook sign in successful");
+                            Log.i(TAG, "Facebook sign in successful");
+                            callback.onSuccess();
                         } else {
-                            Exception exception = task.getException();
-                            String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_facebook), Snackbar.LENGTH_LONG).show();
-                            Log.d(TAG, activity.getString(R.string.failed_google_sign_in_facebook) + msg);
+                            RuntimeException e = Util.prependToException(activity.getString(R.string.failed_google_sign_in_facebook), task.getException());
+                            Log.d(TAG, "", e);
+                            callback.onFailure(e);
                         }
                     }
                 });
@@ -131,18 +133,20 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
                 try {
                     GoogleSignInAccount account = task.getResult(ApiException.class);
                     if (account == null) {
-                        Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_message), Snackbar.LENGTH_LONG).show();
-                        Log.d(TAG, "null GoogleSignInAccount");
+                        RuntimeException e = Util.prependToException(activity.getString(R.string.failed_google_sign_in_message), new RuntimeException("null GoogleSignInAccount"));
+                        Log.d(TAG, "", e);
+                        callback.onFailure(e);
                     } else {
                         authenticateWithGoogle(account);
                     }
                 } catch (ApiException e) {
-                    Snackbar.make(coordinatorLayout, activity.getString(R.string.failed_google_sign_in_message), Snackbar.LENGTH_LONG).show();
-                    Log.d(TAG, e.getMessage());
+                    RuntimeException exc = Util.prependToException(activity.getString(R.string.failed_google_sign_in_message), e);
+                    Log.d(TAG, "", exc);
+                    callback.onFailure(exc);
                 }
             } else {
-                Log.w(TAG, "REQUEST_CODE_GOOGLE_SIGN_IN cancelled");
-
+                Log.i(TAG, "REQUEST_CODE_GOOGLE_SIGN_IN cancelled");
+                callback.onCancel();
             }
 
         }

@@ -46,7 +46,30 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         coordinatorLayout = findViewById(R.id.coordinator_layout);
-        serviceLoginHandler = new ServiceLoginHandler(this, auth, coordinatorLayout);
+
+        ServiceLoginHandler.Callback callback = new ServiceLoginHandler.Callback() {
+            @Override
+            public void onSuccess() {
+                if(auth.getCurrentUser() == null){
+                    Log.e(TAG, "Null user in successful registration");
+                    return;
+                }
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(RuntimeException exception) {
+                Snackbar.make(coordinatorLayout, R.string.login_failed, Snackbar.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancel() {
+                Log.i(TAG, "login cancelled");
+            }
+        };
+        serviceLoginHandler = new ServiceLoginHandler(this, auth, callback);
 
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
@@ -64,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onRegisterButtonClick(android.view.View view) {
-        Intent intent = new Intent(this, RegistrationActivity.class);
+        Intent intent = new Intent(this, SetupProfileActivity.class);
         startActivity(intent);
     }
 
@@ -108,11 +131,11 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
-                            Log.d(TAG, "Logged in successfully");
+                            Log.i(TAG, "Logged in successfully");
                         } else {
                             Exception exception = task.getException();
                             String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, getString(R.string.auth_failed_login), Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(coordinatorLayout, R.string.auth_failed_login, Snackbar.LENGTH_LONG).show();
                             Log.d(TAG, getString(R.string.auth_failed_login) + msg);
                         }
                     }
@@ -120,11 +143,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onContinueWithGoogleButtonClick(android.view.View view) {
-        serviceLoginHandler.onRegisterGoogleButtonClick(view);
+        serviceLoginHandler.onLoginGoogleButtonClick(view);
     }
 
     public void onContinueWithFacebookButtonClick(android.view.View view) {
-        serviceLoginHandler.onRegisterFacebookButtonClick(view);
+        serviceLoginHandler.onLoginFacebookButtonClick(view);
     }
 
     @Override
@@ -134,9 +157,9 @@ public class LoginActivity extends AppCompatActivity {
 
         if (requestCode == RESET_PASSWORD_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Snackbar.make(coordinatorLayout, getString(R.string.pwd_reset_confirmation), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(coordinatorLayout, R.string.pwd_reset_confirmation, Snackbar.LENGTH_LONG).show();
             } else {
-                Log.w(TAG, "RESET_PASSWORD_REQUEST_CODE cancelled");
+                Log.i(TAG, "RESET_PASSWORD_REQUEST_CODE cancelled");
             }
         }
     }

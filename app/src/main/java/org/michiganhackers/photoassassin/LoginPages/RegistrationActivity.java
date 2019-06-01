@@ -5,42 +5,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.michiganhackers.photoassassin.MainActivity;
 import org.michiganhackers.photoassassin.R;
+import org.michiganhackers.photoassassin.User;
+import org.michiganhackers.photoassassin.Util;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.Map;
+
+import static org.michiganhackers.photoassassin.LoginPages.SetupProfileActivity.DISPLAY_NAME;
+import static org.michiganhackers.photoassassin.LoginPages.SetupProfileActivity.PROFILE_PIC_URI;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -59,7 +50,31 @@ public class RegistrationActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         coordinatorLayout = findViewById(R.id.coordinator_layout);
-        serviceLoginHandler = new ServiceLoginHandler(this, auth, coordinatorLayout);
+
+        ServiceLoginHandler.Callback callback = new ServiceLoginHandler.Callback() {
+            @Override
+            public void onSuccess() {
+                if (auth.getCurrentUser() == null) {
+                    Log.e(TAG, "Null user in successful registration");
+                    return;
+                }
+                initializeUser(auth.getCurrentUser().getUid());
+                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(RuntimeException exception) {
+                Snackbar.make(coordinatorLayout, R.string.login_failed, Snackbar.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancel() {
+                Log.i(TAG, "login cancelled");
+            }
+        };
+        serviceLoginHandler = new ServiceLoginHandler(this, auth, callback);
 
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
@@ -108,14 +123,15 @@ public class RegistrationActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
+                            initializeUser(auth.getCurrentUser().getUid());
                             Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
-                            Log.d(TAG, "Account successfully created");
+                            Log.i(TAG, "Account successfully created");
                         } else {
                             Exception exception = task.getException();
                             String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, getString(R.string.auth_failed_registration), Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(coordinatorLayout, R.string.auth_failed_registration, Snackbar.LENGTH_LONG).show();
                             Log.d(TAG, getString(R.string.auth_failed_registration) + msg);
                         }
                     }
@@ -123,23 +139,64 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    public void onLoginButtonClick(android.view.View view) {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
     public void onRegisterGoogleButtonClick(android.view.View view) {
-        serviceLoginHandler.onRegisterGoogleButtonClick(view);
+        serviceLoginHandler.onLoginGoogleButtonClick(view);
     }
 
     public void onRegisterFacebookButtonClick(android.view.View view) {
-        serviceLoginHandler.onRegisterFacebookButtonClick(view);
+        serviceLoginHandler.onLoginFacebookButtonClick(view);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         serviceLoginHandler.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void initializeUser(final String userId) {
+
+        if (userId == null) {
+            Log.e(TAG, "null userId in initializeUser");
+            return;
+        }
+
+        if (getIntent() == null) {
+            Log.e(TAG, "getIntent() == null");
+            return;
+        }
+
+
+        final Uri profilePicUri = getIntent().getParcelableExtra(PROFILE_PIC_URI);
+        final String displayName = getIntent().getStringExtra(DISPLAY_NAME);
+
+        User.getProfilePicRef(userId).putFile(profilePicUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        taskSnapshot.getStorage().getDownloadUrl()
+                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        User newUser = new User(userId, displayName, uri.getPath());
+                                        Map<String, Object> newUserMap = Util.pojoToMap(newUser);
+                                        User.getUserRef(userId).set(newUserMap);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e(TAG, "Failed to get download url from profile pic ref", e);
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Failed to add user profile pic to storage", e);
+                    }
+                });
+
+
     }
 }

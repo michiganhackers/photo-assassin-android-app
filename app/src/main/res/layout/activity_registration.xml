@@ -32,21 +32,11 @@
             <include layout="@layout/edit_text_password" />
 
             <Button
-                android:id="@+id/button_register"
                 style="@style/ButtonLoginPages"
                 android:onClick="onRegisterButtonClick"
                 android:text="@string/sign_up" />
 
-            <Button
-                android:id="@+id/button_login"
-                style="@style/ButtonNoBackgroundLoginPages"
-                android:layout_marginTop="0dp"
-                android:onClick="onLoginButtonClick"
-                android:text="@string/already_have_account"
-                android:textSize="24sp" />
-
             <LinearLayout
-                android:id="@+id/button_google_register"
                 style="@style/FakeButtonLoginPages"
                 android:layout_height="57dp"
                 android:layout_marginTop="25dp"
@@ -58,7 +48,7 @@
                     android:layout_marginStart="-20dp"
                     android:layout_marginEnd="20dp"
                     android:adjustViewBounds="true"
-                    android:contentDescription="@string/continue_with_google"
+                    android:contentDescription="@string/register_with_google"
                     android:padding="10dp"
                     android:src="@drawable/ic_google_g" />
 
@@ -72,7 +62,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/button_facebook_register"
                 style="@style/FakeButtonLoginPages"
                 android:layout_height="57dp"
                 android:layout_marginTop="25dp"
@@ -83,7 +72,7 @@
                     android:layout_height="fill_parent"
                     android:layout_marginEnd="20dp"
                     android:adjustViewBounds="true"
-                    android:contentDescription="@string/continue_with_facebook"
+                    android:contentDescription="@string/register_with_facebook"
                     android:padding="10dp"
                     android:src="@drawable/ic_facebook_f" />
 
