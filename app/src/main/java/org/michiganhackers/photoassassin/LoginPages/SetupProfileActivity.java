@@ -35,6 +35,8 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Map;
 
+import static org.michiganhackers.photoassassin.LoginPages.ServiceLoginHandler.ACCT_NOT_REGISTERED_YET;
+
 public class SetupProfileActivity extends AppCompatActivity implements RequestImageDialog.ImageUriHandler {
 
     private CoordinatorLayout coordinatorLayout;
@@ -59,6 +61,10 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
         displayNameEditText = findViewById(R.id.text_input_edit_text_display_name);
         displayNameTextInputLayout = findViewById(R.id.text_input_layout_display_name);
         profilePicImageView = findViewById(R.id.image_profile_pic);
+
+        if (getIntent().getBooleanExtra(ACCT_NOT_REGISTERED_YET, false)) {
+            Snackbar.make(coordinatorLayout, R.string.acct_not_yet_registered_msg, Snackbar.LENGTH_LONG).show();
+        }
 
         if (savedInstanceState != null) {
             profilePicUri = savedInstanceState.getParcelable(PROFILE_PIC_URI);

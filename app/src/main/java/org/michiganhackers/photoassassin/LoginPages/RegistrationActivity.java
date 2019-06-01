@@ -93,7 +93,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void onRegisterButtonClick(android.view.View view) {
         // Validate email and set error message
-        boolean errorShown = false;
         if (emailEditText.getText() == null) {
             Log.e(TAG, "EditText getText() returned null");
             return;
@@ -101,7 +100,7 @@ public class RegistrationActivity extends AppCompatActivity {
         Email email = new Email(emailEditText.getText().toString(), this);
         String errorMsg = email.getError();
         emailTextInputLayout.setError(errorMsg);
-        errorShown = errorMsg != null;
+        boolean errorShown = errorMsg != null;
 
         // Validate password and set error message
         if (passwordEditText.getText() == null) {
@@ -157,11 +156,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         if (userId == null) {
             Log.e(TAG, "null userId in initializeUser");
-            return;
-        }
-
-        if (getIntent() == null) {
-            Log.e(TAG, "getIntent() == null");
             return;
         }
 
