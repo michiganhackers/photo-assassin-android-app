@@ -53,12 +53,14 @@ public class RegistrationActivity extends AppCompatActivity {
 
         ServiceLoginHandler.Callback callback = new ServiceLoginHandler.Callback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(@NonNull Task<AuthResult> task) {
                 if (auth.getCurrentUser() == null) {
                     Log.e(TAG, "Null user in successful registration");
                     return;
                 }
-                initializeUser(auth.getCurrentUser().getUid());
+                if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser()) {
+                    initializeUser(auth.getCurrentUser().getUid());
+                }
                 Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

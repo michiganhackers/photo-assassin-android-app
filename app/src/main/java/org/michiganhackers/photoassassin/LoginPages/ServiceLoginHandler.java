@@ -38,10 +38,9 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
     private CallbackManager facebookCallbackManager;
     private final String TAG = getClass().getCanonicalName();
     private final static int REQUEST_CODE_GOOGLE_SIGN_IN = 1;
-    static final String ACCT_NOT_REGISTERED_YET = "account not registered yet";
 
     public interface Callback {
-        void onSuccess();
+        void onSuccess(@NonNull Task<AuthResult> task);
 
         void onFailure(RuntimeException exception);
 
@@ -102,13 +101,7 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.i(TAG, "Google sign in successful");
-                            if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser() && activity instanceof LoginActivity) {
-                                Log.i(TAG, "New google sign in in LoginActivity");
-                                callback.onCancel();
-                                deleteAccountAndGotoSetupProfile();
-                            } else {
-                                callback.onSuccess();
-                            }
+                            callback.onSuccess(task);
                         } else {
                             RuntimeException e = Util.prependToException(activity.getString(R.string.failed_google_sign_in_message), task.getException());
                             Log.d(TAG, "", e);
@@ -126,13 +119,7 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.i(TAG, "Facebook sign in successful");
-                            if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser() && activity instanceof LoginActivity) {
-                                Log.i(TAG, "New facebook sign in in LoginActivity");
-                                callback.onCancel();
-                                deleteAccountAndGotoSetupProfile();
-                            } else {
-                                callback.onSuccess();
-                            }
+                            callback.onSuccess(task);
                         } else {
                             RuntimeException e = Util.prependToException(activity.getString(R.string.failed_google_sign_in_facebook), task.getException());
                             Log.d(TAG, "", e);
@@ -168,29 +155,4 @@ public class ServiceLoginHandler extends ServiceLogoutHandler {
 
         }
     }
-
-    private void deleteAccountAndGotoSetupProfile() {
-        if (auth.getCurrentUser() == null) {
-            Log.e(TAG, "Null user in deleteAccountAndGotoSetupProfile");
-            return;
-        }
-        auth.getCurrentUser().delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        signOut();
-                        Intent intent = new Intent(activity, SetupProfileActivity.class);
-                        intent.putExtra(ACCT_NOT_REGISTERED_YET, true);
-                        activity.startActivity(intent);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Failed to delete account in deleteAccountAndGotoSetupProfile", e);
-                    }
-                });
-
-    }
-
 }

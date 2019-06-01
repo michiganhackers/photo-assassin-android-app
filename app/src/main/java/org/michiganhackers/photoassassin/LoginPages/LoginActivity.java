@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -33,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     public static final int RESET_PASSWORD_REQUEST_CODE = 2;
     private ProgressBar progressBar;
 
+    static final String ACCT_NOT_REGISTERED_YET = "account not registered yet";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +53,16 @@ public class LoginActivity extends AppCompatActivity {
 
         ServiceLoginHandler.Callback callback = new ServiceLoginHandler.Callback() {
             @Override
-            public void onSuccess() {
-                if(auth.getCurrentUser() == null){
-                    Log.e(TAG, "Null user in successful registration");
-                    return;
+            public void onSuccess(@NonNull Task<AuthResult> task) {
+
+                if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser()) {
+                    Log.i(TAG, "New service sign in");
+                    deleteAccountAndGotoSetupProfile();
+                } else {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
             }
 
             @Override
@@ -162,5 +168,29 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i(TAG, "RESET_PASSWORD_REQUEST_CODE cancelled");
             }
         }
+    }
+
+    private void deleteAccountAndGotoSetupProfile() {
+        if (auth.getCurrentUser() == null) {
+            Log.e(TAG, "Null user in deleteAccountAndGotoSetupProfile");
+            return;
+        }
+        auth.getCurrentUser().delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        serviceLoginHandler.signOut();
+                        Intent intent = new Intent(LoginActivity.this, SetupProfileActivity.class);
+                        intent.putExtra(ACCT_NOT_REGISTERED_YET, true);
+                        startActivity(intent);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Failed to delete account in deleteAccountAndGotoSetupProfile", e);
+                    }
+                });
+
     }
 }

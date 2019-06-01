@@ -35,7 +35,7 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Map;
 
-import static org.michiganhackers.photoassassin.LoginPages.ServiceLoginHandler.ACCT_NOT_REGISTERED_YET;
+import static org.michiganhackers.photoassassin.LoginPages.LoginActivity.ACCT_NOT_REGISTERED_YET;
 
 public class SetupProfileActivity extends AppCompatActivity implements RequestImageDialog.ImageUriHandler {
 
