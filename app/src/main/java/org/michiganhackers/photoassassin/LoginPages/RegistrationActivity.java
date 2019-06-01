@@ -67,7 +67,7 @@ public class RegistrationActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(RuntimeException exception) {
+            public void onFailure(Exception exception) {
                 Snackbar.make(coordinatorLayout, R.string.login_failed, Snackbar.LENGTH_LONG).show();
             }
 

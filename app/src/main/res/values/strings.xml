@@ -17,8 +17,6 @@
     <string name="web_client_id">924416786960-2fs9idqglcoqdvj69jjj25b8golsdukr.apps.googleusercontent.com</string>
     <string name="facebook_app_id">306114270313529</string>
     <string name="fb_login_protocol_scheme">fb306114270313529</string>
-    <string name="failed_google_sign_in_message">Failed to sign in with google</string>
-    <string name="failed_google_sign_in_facebook">Failed to sign in with facebook</string>
     <string name="log_in">Log In</string>
     <string name="continue_with_facebook">Continue with facebook</string>
     <string name="continue_with_google">Continue with google</string>

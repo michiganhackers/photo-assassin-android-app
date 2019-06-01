@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final int RESET_PASSWORD_REQUEST_CODE = 2;
     private ProgressBar progressBar;
 
-    static final String ACCT_NOT_REGISTERED_YET = "account not registered yet";
+    static final String ACCOUNT_NOT_REGISTERED_YET = "account not registered yet";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(RuntimeException exception) {
+            public void onFailure(Exception exception) {
                 Snackbar.make(coordinatorLayout, R.string.login_failed, Snackbar.LENGTH_LONG).show();
             }
 
@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         serviceLoginHandler.signOut();
                         Intent intent = new Intent(LoginActivity.this, SetupProfileActivity.class);
-                        intent.putExtra(ACCT_NOT_REGISTERED_YET, true);
+                        intent.putExtra(ACCOUNT_NOT_REGISTERED_YET, true);
                         startActivity(intent);
                     }
                 })

@@ -1,41 +1,27 @@
 package org.michiganhackers.photoassassin.LoginPages;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.google.zxing.common.StringUtils;
 
 import org.michiganhackers.photoassassin.RequestImageDialog;
 import org.michiganhackers.photoassassin.R;
-import org.michiganhackers.photoassassin.User;
-import org.michiganhackers.photoassassin.Util;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Map;
 
-import static org.michiganhackers.photoassassin.LoginPages.LoginActivity.ACCT_NOT_REGISTERED_YET;
+import static org.michiganhackers.photoassassin.LoginPages.LoginActivity.ACCOUNT_NOT_REGISTERED_YET;
 
 public class SetupProfileActivity extends AppCompatActivity implements RequestImageDialog.ImageUriHandler {
 
@@ -62,7 +48,7 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
         displayNameTextInputLayout = findViewById(R.id.text_input_layout_display_name);
         profilePicImageView = findViewById(R.id.image_profile_pic);
 
-        if (getIntent().getBooleanExtra(ACCT_NOT_REGISTERED_YET, false)) {
+        if (getIntent().getBooleanExtra(ACCOUNT_NOT_REGISTERED_YET, false)) {
             Snackbar.make(coordinatorLayout, R.string.acct_not_yet_registered_msg, Snackbar.LENGTH_LONG).show();
         }
 

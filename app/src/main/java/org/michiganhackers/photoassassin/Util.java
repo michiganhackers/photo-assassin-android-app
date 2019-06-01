@@ -22,9 +22,4 @@ public final class Util {
         Type mapStringObjType = new TypeToken<Map<String, Object>>(){}.getType();
         return new Gson().fromJson(json, mapStringObjType);
     }
-
-    public static RuntimeException prependToException(String prefix, Exception e){
-        String msg = e == null ? prefix : prefix + ": " + e.getLocalizedMessage();
-        return new RuntimeException(msg);
-    }
 }
