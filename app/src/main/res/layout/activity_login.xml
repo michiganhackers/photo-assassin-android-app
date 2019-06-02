@@ -37,7 +37,6 @@
             <include layout="@layout/edit_text_password" />
 
             <Button
-                android:id="@+id/button_login"
                 style="@style/ButtonLoginPages"
                 android:onClick="onLoginButtonClick"
                 android:text="@string/log_in" />
@@ -95,7 +94,6 @@
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/button_forgot_password"
                         style="@style/ButtonNoBackgroundLoginPages"
                         android:layout_width="wrap_content"
                         android:onClick="onForgotPasswordButtonClick"
@@ -149,7 +147,6 @@
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/button_register"
                         style="@style/ButtonNoBackgroundLoginPages"
                         android:layout_width="wrap_content"
                         android:onClick="onRegisterButtonClick"

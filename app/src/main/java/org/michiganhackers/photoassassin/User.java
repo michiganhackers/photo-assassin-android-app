@@ -1,60 +1,64 @@
 package org.michiganhackers.photoassassin;
 
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firestore.v1beta1.StructuredQuery;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.michiganhackers.photoassassin.LoginPages.Email;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.grpc.Context;
+
 public class User {
-    private List<DocumentReference> currentGames;
-    private int deaths;
-    private String displayName;
-    private List<DocumentReference> friends;
     private String id;
-    private int kills;
-    private int longestLifeSeconds;
-    private List<DocumentReference> pastGames;
+    private String displayName;
     private String profilePicUrl;
 
+    private List<DocumentReference> currentGames;
+    private List<DocumentReference> friends;
+    private List<DocumentReference> pastGames;
+
+    private int deaths;
+    private int kills;
+    private int longestLifeSeconds;
+
     public User() {
+        id = null;
+        displayName = null;
+        profilePicUrl = null;
+
         currentGames = new ArrayList<>();
-        deaths = 0;
-        this.displayName = null;
         friends = new ArrayList<>();
-        this.id = null;
+        pastGames = new ArrayList<>();
+
+        deaths = 0;
         kills = 0;
         longestLifeSeconds = 0;
-        pastGames = new ArrayList<>();
     }
 
-    public User(String displayName, String id) {
-        currentGames = new ArrayList<>();
-        deaths = 0;
-        this.displayName = displayName;
-        friends = new ArrayList<>();
+    public User(String id, String displayName, String profilePicUrl) {
         this.id = id;
+        this.displayName = displayName;
+        this.profilePicUrl = profilePicUrl;
+
+        currentGames = new ArrayList<>();
+        friends = new ArrayList<>();
+        pastGames = new ArrayList<>();
+
+        deaths = 0;
         kills = 0;
         longestLifeSeconds = 0;
-        pastGames = new ArrayList<>();
     }
 
-    public List<DocumentReference> getCurrentGames() {
-        return currentGames;
+    public String getId() {
+        return id;
     }
 
-    public void setCurrentGames(List<DocumentReference> currentGames) {
-        this.currentGames = currentGames;
-    }
-
-    public int getDeaths() {
-        return deaths;
-    }
-
-    public void setDeaths(int deaths) {
-        this.deaths = deaths;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getDisplayName() {
@@ -65,6 +69,22 @@ public class User {
         this.displayName = displayName;
     }
 
+    public String getProfilePicUrl() {
+        return profilePicUrl;
+    }
+
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
+    }
+
+    public List<DocumentReference> getCurrentGames() {
+        return currentGames;
+    }
+
+    public void setCurrentGames(List<DocumentReference> currentGames) {
+        this.currentGames = currentGames;
+    }
+
     public List<DocumentReference> getFriends() {
         return friends;
     }
@@ -73,12 +93,20 @@ public class User {
         this.friends = friends;
     }
 
-    public String getId() {
-        return id;
+    public List<DocumentReference> getPastGames() {
+        return pastGames;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPastGames(List<DocumentReference> pastGames) {
+        this.pastGames = pastGames;
+    }
+
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public void setDeaths(int deaths) {
+        this.deaths = deaths;
     }
 
     public int getKills() {
@@ -97,19 +125,11 @@ public class User {
         this.longestLifeSeconds = longestLifeSeconds;
     }
 
-    public List<DocumentReference> getPastGames() {
-        return pastGames;
+    public static StorageReference getProfilePicRef(String userId) {
+        return FirebaseStorage.getInstance().getReference().child("images/profile_pictures/" + userId);
     }
 
-    public void setPastGames(List<DocumentReference> pastGames) {
-        this.pastGames = pastGames;
-    }
-
-    public String getProfilePicUrl() {
-        return profilePicUrl;
-    }
-
-    public void setProfilePicUrl(String profilePicUrl) {
-        this.profilePicUrl = profilePicUrl;
+    public static DocumentReference getUserRef(String userId) {
+        return FirebaseFirestore.getInstance().collection("users").document(userId);
     }
 }

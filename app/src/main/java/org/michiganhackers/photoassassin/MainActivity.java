@@ -9,7 +9,7 @@ import android.widget.Toast;
 public class MainActivity extends FirebaseAuthActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
@@ -25,4 +25,6 @@ public class MainActivity extends FirebaseAuthActivity {
     public void onProfileClick(android.view.View view) {
         startActivity(new Intent(this, ProfileActivity.class));
     }
+
+
 }

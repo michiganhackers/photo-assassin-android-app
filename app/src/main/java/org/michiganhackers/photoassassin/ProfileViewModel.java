@@ -68,34 +68,6 @@ public class ProfileViewModel extends ViewModel {
         return user;
     }
 
-    private void initializeDefaultUser(Context context, FirebaseUser firebaseUser) {
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(context);
-        if (acct != null) {
-            String displayName = acct.getGivenName() + " " + acct.getFamilyName();
-            updateUser(new User(displayName, userId), null);
-            return;
-        }
-
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if (accessToken != null) {
-            GraphRequest request = GraphRequest.newMeRequest(
-                    accessToken, new GraphRequest.GraphJSONObjectCallback() {
-                        @Override
-                        public void onCompleted(JSONObject json, GraphResponse response) {
-                            updateUser(new User(json.optString("name"), userId), null);
-                        }
-                    });
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "name");
-            request.setParameters(parameters);
-            request.executeAsync();
-            return;
-        }
-
-        Email email = new Email(firebaseUser.getEmail(), context);
-        updateUser(new User(email.getLocalPart(), userId), null);
-    }
-
     public void updateUser(User newUser, Uri newProfilePicFilepath) {
         if (newUser.getId().equals(userId)) {
             if (newProfilePicFilepath != null) {
