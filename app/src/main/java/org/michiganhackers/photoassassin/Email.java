@@ -1,4 +1,4 @@
-package org.michiganhackers.photoassassin.LoginPages;
+package org.michiganhackers.photoassassin;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -25,13 +25,6 @@ public class Email {
             return context.getString(R.string.invalid_email_message);
         }
         return null;
-    }
-
-    public String getLocalPart(){
-        if (getError() != null) {
-            throw new RuntimeException("invalid email in getLocalPart");
-        }
-        return email.substring(0, email.lastIndexOf('@'));
     }
 
 }

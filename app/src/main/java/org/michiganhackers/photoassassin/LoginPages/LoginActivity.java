@@ -21,7 +21,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.michiganhackers.photoassassin.Email;
 import org.michiganhackers.photoassassin.MainActivity;
+import org.michiganhackers.photoassassin.Password;
 import org.michiganhackers.photoassassin.R;
 
 public class LoginActivity extends AppCompatActivity {

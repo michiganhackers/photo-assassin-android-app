@@ -20,10 +20,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.michiganhackers.photoassassin.Email;
 import org.michiganhackers.photoassassin.MainActivity;
+import org.michiganhackers.photoassassin.Password;
 import org.michiganhackers.photoassassin.R;
 import org.michiganhackers.photoassassin.User;
 import org.michiganhackers.photoassassin.Util;
@@ -173,7 +174,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        User newUser = new User(userId, displayName, uri.getPath());
+                                        User newUser = new User(userId, displayName, uri.toString());
                                         Map<String, Object> newUserMap = Util.pojoToMap(newUser);
                                         User.getUserRef(userId).set(newUserMap);
                                     }

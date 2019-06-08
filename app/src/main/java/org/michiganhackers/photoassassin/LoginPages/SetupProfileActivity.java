@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.michiganhackers.photoassassin.DisplayName;
 import org.michiganhackers.photoassassin.RequestImageDialog;
 import org.michiganhackers.photoassassin.R;
 
@@ -55,13 +56,13 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
         if (savedInstanceState != null) {
             profilePicUri = savedInstanceState.getParcelable(PROFILE_PIC_URI);
             if (profilePicUri != null) {
-                handleImageUrl(profilePicUri);
+                handleImageUri(profilePicUri);
             }
         }
     }
 
     @Override
-    public void handleImageUrl(Uri uri) {
+    public void handleImageUri(Uri uri) {
         profilePicUri = uri;
         // Add signature to cached image because RequestImageDialog always uses same filename to
         // store image
@@ -92,25 +93,10 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
             return;
         }
 
-        String displayName = displayNameEditText.getText().toString();
-        boolean errorShown = false;
-
-        // Reference https://regex101.com/r/gY7rO4/348 for the regex
-        if (displayName.isEmpty()) {
-            displayNameTextInputLayout.setError(getString(R.string.display_name_too_short_msg));
-            errorShown = true;
-        } else if (!displayName.matches("(?i)^(?![- '])(?![×Þß÷þø])[- '0-9a-zÀ-ÿ]+(?<![- '])$")) {
-            displayNameTextInputLayout.setError(getString(R.string.invalid_characters_in_display_name_msg));
-            errorShown = true;
-        } else if (displayName.length() < 5) {
-            displayNameTextInputLayout.setError(getString(R.string.display_name_too_short_msg));
-            errorShown = true;
-        } else if (displayName.length() > 20) {
-            displayNameTextInputLayout.setError(getString(R.string.display_name_too_long_msg));
-            errorShown = true;
-        } else {
-            displayNameTextInputLayout.setError(null);
-        }
+        DisplayName displayName = new DisplayName(displayNameEditText.getText().toString(), this);
+        String errorMsg = displayName.getError();
+        displayNameTextInputLayout.setError(errorMsg);
+        boolean errorShown = errorMsg != null;
 
         if (profilePicUri == null) {
             Snackbar.make(coordinatorLayout, R.string.profile_pic_required, Snackbar.LENGTH_LONG).show();
@@ -122,7 +108,7 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
         }
 
         Intent intent = new Intent(this, RegistrationActivity.class);
-        intent.putExtra(DISPLAY_NAME, displayName);
+        intent.putExtra(DISPLAY_NAME, displayName.getDisplayName());
         intent.putExtra(PROFILE_PIC_URI, profilePicUri);
         startActivity(intent);
     }

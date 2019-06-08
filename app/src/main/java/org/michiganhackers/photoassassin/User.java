@@ -5,12 +5,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.michiganhackers.photoassassin.LoginPages.Email;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import io.grpc.Context;
 
 public class User {
     private String id;

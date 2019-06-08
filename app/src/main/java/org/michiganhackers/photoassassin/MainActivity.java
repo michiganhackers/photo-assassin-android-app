@@ -1,10 +1,10 @@
 package org.michiganhackers.photoassassin;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import org.michiganhackers.photoassassin.Profile.ProfileActivity;
 
 public class MainActivity extends FirebaseAuthActivity {
 

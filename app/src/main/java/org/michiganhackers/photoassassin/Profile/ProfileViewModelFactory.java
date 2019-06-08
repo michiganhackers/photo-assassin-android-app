@@ -1,20 +1,14 @@
-package org.michiganhackers.photoassassin;
-
-import android.content.Context;
+package org.michiganhackers.photoassassin.Profile;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.auth.FirebaseUser;
-
 public class ProfileViewModelFactory implements ViewModelProvider.Factory {
-    private FirebaseUser firebaseUser;
-    private Context context;
+    private String userId;
 
-    public ProfileViewModelFactory(FirebaseUser firebaseUser, Context context) {
-        this.firebaseUser = firebaseUser;
-        this.context = context;
+    public ProfileViewModelFactory(String userId) {
+        this.userId = userId;
     }
 
     @NonNull
@@ -22,7 +16,7 @@ public class ProfileViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(ProfileViewModel.class)) {
-            return (T) new ProfileViewModel(firebaseUser, context);
+            return (T) new ProfileViewModel(userId);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

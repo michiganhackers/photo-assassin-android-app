@@ -18,7 +18,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.michiganhackers.photoassassin.MainActivity;
+import org.michiganhackers.photoassassin.Email;
 import org.michiganhackers.photoassassin.R;
 
 public class ResetPasswordActivity extends AppCompatActivity {
