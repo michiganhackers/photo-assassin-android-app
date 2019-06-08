@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Profile.ProfileActivity">
 
+    <!--Scrollview allows snackbar to be displayed above keyboard-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,6 +16,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/ic_left_arrow" />
+
+                <TextView
+                    style="@style/TitleLoginPages"
+                    android:text="@string/profile"
+                    android:textSize="64sp" />
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
