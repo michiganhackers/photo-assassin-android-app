@@ -12,4 +12,6 @@
     <color name="whiteSeventyFivePercentOpacity">#BFFFFFFF</color>
 
     <color name="blackShadow">#80000000</color>
+    <color name="colorSchemeBrown">#594346</color>
+
 </resources>

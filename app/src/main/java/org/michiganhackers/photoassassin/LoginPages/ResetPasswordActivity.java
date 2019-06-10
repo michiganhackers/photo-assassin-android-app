@@ -73,14 +73,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
                             setResult(Activity.RESULT_OK);
                             finish();
                         } else {
-                            Snackbar.make(coordinatorLayout, "Failed to send password reset email!", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(coordinatorLayout, R.string.failed_send_pwd_reset_email, Snackbar.LENGTH_LONG).show();
                         }
                     }
                 });
     }
 
     public void onRegisterButtonClick(android.view.View view) {
-        Intent intent = new Intent(this, RegistrationActivity.class);
+        Intent intent = new Intent(this, SetupProfileActivity.class);
         startActivity(intent);
     }
 

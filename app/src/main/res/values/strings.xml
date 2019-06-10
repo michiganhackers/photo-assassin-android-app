@@ -10,7 +10,6 @@
     <string name="already_have_account"><u>Have an account? Log in</u></string>
     <string name="register_with_google">register with google</string>
     <string name="register_with_facebook">register with facebook</string>
-    <string name="empty_password_message">password field cannot be empty</string>
     <string name="password_too_short_message">password must be at least 8 characters</string>
     <string name="invalid_email_message">invalid email</string>
     <string name="auth_failed_registration">Registration failed</string>
@@ -18,8 +17,6 @@
     <string name="web_client_id">924416786960-2fs9idqglcoqdvj69jjj25b8golsdukr.apps.googleusercontent.com</string>
     <string name="facebook_app_id">306114270313529</string>
     <string name="fb_login_protocol_scheme">fb306114270313529</string>
-    <string name="failed_google_sign_in_message">Failed to sign in with google</string>
-    <string name="failed_google_sign_in_facebook">Failed to sign in with facebook</string>
     <string name="log_in">Log In</string>
     <string name="continue_with_facebook">Continue with facebook</string>
     <string name="continue_with_google">Continue with google</string>
@@ -31,4 +28,19 @@
     <string name="reset_password">Reset password</string>
     <string name="no_account_register"><u>No account? Register</u></string>
     <string name="pwd_reset_confirmation">We have sent you instructions to reset your password!</string>
+    <string name="full_name">Full Name</string>
+    <string name="registration_continue">Continue</string>
+    <string name="profile_picture">profile picture</string>
+    <string name="select_profile_picture">select profile picture</string>
+    <string name="take_new_photo">Take new photo</string>
+    <string name="select_from_gallery">Select from gallery</string>
+    <string name="no_photo_app_found">No photo-taking app found</string>
+    <string name="no_gallery_app_found">No gallery app found</string>
+    <string name="invalid_characters_in_display_name_msg">display name can contain only alphanumeric characters, hyphens, apostrophes, and spaces</string>
+    <string name="display_name_too_short_msg">display name must be at least 5 characters</string>
+    <string name="display_name_too_long_msg">display name must be at most 20 characters</string>
+    <string name="profile_pic_required">profile picture is required</string>
+    <string name="failed_send_pwd_reset_email">Failed to send password reset email!</string>
+    <string name="login_failed">login failed</string>
+    <string name="acct_not_yet_registered_msg">Please complete account registration</string>
 </resources>
