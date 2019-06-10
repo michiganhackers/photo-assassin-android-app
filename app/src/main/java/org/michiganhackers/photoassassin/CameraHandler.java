@@ -12,9 +12,14 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Calendar;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 @SuppressWarnings("deprecation")
 class CameraHandler {
@@ -25,6 +30,8 @@ class CameraHandler {
     private final Context context;
     //Camera class, deals with the functions for zoom, taking a picture --> camera functionality
     private Camera mCamera;
+
+    private FirebaseStorage storage = FirebaseStorage.getInstance("gs://photo-assassin.appspot.com/");
     private static final String TAG = "CameraHandler";
     //rear camera is 0, front is 1
     private static int openedCamera = -1;
@@ -44,7 +51,7 @@ class CameraHandler {
         this.context = context;
 
         int numberOfCameras = Camera.getNumberOfCameras();
-        Log.v(TAG, "Number of Cameras: " + Integer.toString(numberOfCameras));
+        Log.v(TAG, "Number of Cameras: " + numberOfCameras);
         //request permissions if not already granted
         //If permission not granted, request Permission to ActivityCompat
         if (ContextCompat.checkSelfPermission(activity,
@@ -63,15 +70,24 @@ class CameraHandler {
         mCamera = null;
         try {
             mCamera = Camera.open(cameraId);
-            openedCamera = 0;
+            openedCamera = cameraId;
             mCamera.setDisplayOrientation(90);
 
             Camera.Parameters params = mCamera.getParameters();
-            Camera.Size size = params.getPreferredPreviewSizeForVideo();
+            Camera.Size size = params.getSupportedPreviewSizes().get(0);
+            params.setPreviewSize(size.width, size.height);
             params.setPictureSize(size.width, size.height);
-            params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-            params.setRotation(90);
+            if(params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            } else {
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_FIXED);
+            }
+            if(openedCamera == 0) {
+                params.setRotation(90);
+            } else if (openedCamera == 1) {
 
+                params.setRotation(270);
+            }
             mCamera.setParameters(params);
             succToast.show();
             //if there's any error or exception that occurs in try, the catch is executed and the
@@ -146,7 +162,22 @@ class CameraHandler {
     private final Camera.PictureCallback picture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
+            try {
+                StorageReference storageRef = storage.getReference();
+                //this might be bullshit
+                StorageReference imageRef = storageRef.child(Calendar.getInstance().getTime().toString());
+                UploadTask uploadTask = imageRef.putBytes(data);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+
+
+
+
+
+
             File pictureFile = getOutputMediaFile();
+
             if(pictureFile == null) {
                 Log.e(TAG,  "Error onPictureTaken. pictureFile was null");
                 return;

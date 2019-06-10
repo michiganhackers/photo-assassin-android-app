@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+        //TODO save opened camera to shared preferences when it actually exists
         mCamera = camHan.openCamera(0);
         camHan.showCameraPreview(mCamera);
     }
