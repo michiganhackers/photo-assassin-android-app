@@ -12,15 +12,9 @@ public class MainActivity extends FirebaseAuthActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        print("Hello World!");
-        print("Testing");
-
     }
 
-    private void print(String s) {
 
-        print(s);
-    }
 
     public void onSignoutButtonClick(android.view.View view) {
         if (auth.getCurrentUser() == null) {
