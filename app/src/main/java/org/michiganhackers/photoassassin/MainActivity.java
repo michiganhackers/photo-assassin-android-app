@@ -11,6 +11,14 @@ public class MainActivity extends FirebaseAuthActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        print("Hello World!");
+
+    }
+
+    private void print(String s) {
+
+        print(s);
     }
 
     public void onSignoutButtonClick(android.view.View view) {
