@@ -13,6 +13,7 @@ public class MainActivity extends FirebaseAuthActivity {
         setContentView(R.layout.activity_main);
 
         print("Hello World!");
+        print("Testing");
 
     }
 
