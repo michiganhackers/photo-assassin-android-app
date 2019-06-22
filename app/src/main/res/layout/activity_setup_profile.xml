@@ -16,7 +16,7 @@
         <LinearLayout style="@style/LinearLayoutLoginPages">
 
             <TextView
-                style="@style/TitleLoginPages"
+                style="@style/PageTitle"
                 android:layout_marginBottom="40dp"
                 android:text="@string/registration"
                 android:textSize="64sp" />
@@ -52,20 +52,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textColorHint="@color/whiteSixtyPercentOpacity"
-                app:errorTextAppearance="@style/ErrorTextAppearanceLoginPages"
-                app:hintTextAppearance="@style/HintTextAppearanceLoginPages"
+                app:errorTextAppearance="@style/ErrorTextAppearance"
+                app:hintTextAppearance="@style/HintTextAppearance"
                 app:hintTextColor="@color/whiteSixtyPercentOpacity">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_input_edit_text_display_name"
-                    style="@style/EditTextLoginPages"
+                    style="@style/TransparentWhiteEditText"
                     android:hint="@string/full_name"
                     android:inputType="textPersonName" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                style="@style/ButtonLoginPages"
+                style="@style/TransparentWhiteBorderButton"
                 android:onClick="onContinueButtonClick"
                 android:text="@string/registration_continue" />
 

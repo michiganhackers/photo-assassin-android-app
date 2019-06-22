@@ -29,7 +29,7 @@
                     android:src="@drawable/ic_left_arrow" />
 
                 <TextView
-                    style="@style/TitleLoginPages"
+                    style="@style/PageTitle"
                     android:text="@string/profile"
                     android:textSize="64sp" />
 
@@ -221,6 +221,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/game_history" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@android:color/white"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/friends"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="friend"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="friend"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="friend"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="friend"/>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 

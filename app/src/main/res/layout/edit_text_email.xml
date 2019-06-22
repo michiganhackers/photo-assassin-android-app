@@ -7,13 +7,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColorHint="@color/whiteSixtyPercentOpacity"
-        app:errorTextAppearance="@style/ErrorTextAppearanceLoginPages"
-        app:hintTextAppearance="@style/HintTextAppearanceLoginPages"
+        app:errorTextAppearance="@style/ErrorTextAppearance"
+        app:hintTextAppearance="@style/HintTextAppearance"
         app:hintTextColor="@color/whiteSixtyPercentOpacity">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/text_input_edit_text_email"
-            style="@style/EditTextLoginPages"
+            style="@style/TransparentWhiteEditText"
             android:hint="@string/email"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>

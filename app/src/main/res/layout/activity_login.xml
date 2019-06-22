@@ -22,11 +22,11 @@
                 android:visibility="gone" />
 
             <TextView
-                style="@style/TitleLoginPages"
+                style="@style/PageTitle"
                 android:text="@string/photo" />
 
             <TextView
-                style="@style/TitleLoginPages"
+                style="@style/PageTitle"
                 android:layout_marginTop="-20dp"
                 android:layout_marginBottom="15sp"
                 android:text="@string/assassin" />
@@ -37,7 +37,7 @@
             <include layout="@layout/edit_text_password" />
 
             <Button
-                style="@style/ButtonLoginPages"
+                style="@style/TransparentWhiteBorderButton"
                 android:onClick="onLoginButtonClick"
                 android:text="@string/log_in" />
 
