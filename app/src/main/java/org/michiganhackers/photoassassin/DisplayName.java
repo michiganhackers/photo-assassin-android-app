@@ -3,6 +3,8 @@ package org.michiganhackers.photoassassin;
 import android.content.Context;
 
 public class DisplayName {
+    public static final int MIN_LENGTH = 5;
+    public static final int MAX_LENGTH = 20;
     private String displayName;
     private Context context;
 
@@ -23,9 +25,9 @@ public class DisplayName {
             return context.getString(R.string.display_name_too_short_msg);
         } else if (!displayName.matches("(?i)^(?![- '])(?![×Þß÷þø])[- '0-9a-zÀ-ÿ]+(?<![- '])$")) {
             return context.getString(R.string.invalid_characters_in_display_name_msg);
-        } else if (displayName.length() < 5) {
+        } else if (displayName.length() < MIN_LENGTH) {
             return context.getString(R.string.display_name_too_short_msg);
-        } else if (displayName.length() > 20) {
+        } else if (displayName.length() > MAX_LENGTH) {
             return context.getString(R.string.display_name_too_long_msg);
         }
         return null;

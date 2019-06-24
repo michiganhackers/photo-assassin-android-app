@@ -50,4 +50,6 @@
     <string name="acct_not_yet_registered_msg">Please complete account registration</string>
     <string name="profile">Profile</string>
     <string name="friends">Friends</string>
+    <string name="back_button">back button</string>
+    <string name="edit_display_name">Edit display name</string>
 </resources>

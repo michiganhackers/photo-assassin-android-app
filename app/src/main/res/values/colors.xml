@@ -8,10 +8,12 @@
     <color name="bgGradientEnd">#00FFFFFF</color>
 
     <color name="whiteTwentyFivePercentOpacity">#40FFFFFF</color>
+    <color name="whiteFiftyPercentOpacity">#80FFFFFF</color>
     <color name="whiteSixtyPercentOpacity">#99FFFFFF</color>
     <color name="whiteSeventyFivePercentOpacity">#BFFFFFFF</color>
+    <color name="whiteEightyPercentOpacity">#CCFFFFFF</color>
+    <color name="whiteNinetyPercentOpacity">#E6FFFFFF</color>
 
     <color name="blackShadow">#80000000</color>
     <color name="colorSchemeBrown">#594346</color>
-
 </resources>

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_layout"
+    style="@style/OutermostLayoutPadding"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Profile.ProfileActivity">
@@ -14,26 +15,29 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:gravity="center_vertical">
 
-                <ImageView
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
-                    android:src="@drawable/ic_left_arrow" />
+                <Button
+                    style="@style/BackButton"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="-15dp"
+                    android:onClick="onBackButtonClick" />
+
 
                 <TextView
                     style="@style/PageTitle"
+                    android:layout_centerHorizontal="true"
                     android:text="@string/profile"
                     android:textSize="64sp" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
 
             <LinearLayout
@@ -41,31 +45,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                <include layout="@layout/profile_picture_image_and_fab" />
 
-                    <ImageView
-                        android:id="@+id/image_profile_pic"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:contentDescription="@string/profile_picture"
-                        app:srcCompat="@drawable/ic_profile" />
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/floatingActionButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/image_profile_pic"
-                        android:layout_alignEnd="@+id/image_profile_pic"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="onAddProfilePicButtonClick"
-                        android:tint="@color/colorPrimary"
-                        app:srcCompat="@drawable/ic_add_photo" />
-                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="188dp"
@@ -79,26 +60,34 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <EditText
-                            android:id="@+id/edit_text_display_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ems="8"
-                            android:enabled="false"
-                            android:focusable="false"
-                            android:imeOptions="actionDone"
-                            android:inputType="textPersonName" />
 
-                        <Space
+                        <me.grantland.widget.AutofitLayout
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/edit_text_display_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:enabled="false"
+                                android:focusable="false"
+                                android:fontFamily="@font/economica_bold"
+                                android:imeOptions="actionDone"
+                                android:inputType="textPersonName"
+                                android:textColor="@android:color/white"
+                                android:textSize="36sp" />
+                        </me.grantland.widget.AutofitLayout>
+
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:contentDescription="@string/edit_display_name"
                             android:onClick="onEditDisplayNameClick"
-                            app:srcCompat="@drawable/ic_pencil" />
+                            app:srcCompat="@drawable/ic_pencil"
+                            android:layout_marginStart="5dp"/>
 
                     </LinearLayout>
 
@@ -114,6 +103,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            style="@style/ProfileScreenStatistics"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/games_won" />
@@ -125,6 +115,7 @@
 
                         <TextView
                             android:id="@+id/text_view_num_games_won"
+                            style="@style/ProfileScreenStatistics"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -141,6 +132,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            style="@style/ProfileScreenStatistics"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/win_percent" />
@@ -152,6 +144,7 @@
 
                         <TextView
                             android:id="@+id/text_view_percent_games_won"
+                            style="@style/ProfileScreenStatistics"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -168,6 +161,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            style="@style/ProfileScreenStatistics"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/percentile" />
@@ -179,6 +173,7 @@
 
                         <TextView
                             android:id="@+id/text_view_percentile"
+                            style="@style/ProfileScreenStatistics"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 
@@ -196,6 +191,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            style="@style/ProfileScreenStatistics"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/kill_death_ratio" />
@@ -207,6 +203,7 @@
 
                         <TextView
                             android:id="@+id/text_view_kd_ratio"
+                            style="@style/ProfileScreenStatistics"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 
@@ -218,38 +215,43 @@
 
             <Button
                 android:id="@+id/button_game_history"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/TransparentWhiteButton"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
                 android:text="@string/game_history" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="@android:color/white"/>
+            <include layout="@layout/horizontal_divider" />
+
             <TextView
+                style="@style/Header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/friends"/>
+                android:text="@string/friends" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="friend"/>
+                    android:text="friend" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="friend"/>
+                    android:text="friend" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="friend"/>
+                    android:text="friend" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="friend"/>
+                    android:text="friend" />
             </LinearLayout>
 
         </LinearLayout>

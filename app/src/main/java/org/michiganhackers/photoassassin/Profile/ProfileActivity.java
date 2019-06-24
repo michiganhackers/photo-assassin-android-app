@@ -1,6 +1,7 @@
 package org.michiganhackers.photoassassin.Profile;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -10,7 +11,10 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +22,10 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
@@ -56,7 +63,6 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
         setContentView(R.layout.activity_profile);
 
         displayNameEditText = findViewById(R.id.edit_text_display_name);
-
         displayNameEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -70,7 +76,6 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
                 return false;
             }
         });
-
 
         profilePicImageView = findViewById(R.id.image_profile_pic);
         coordinatorLayout = findViewById(R.id.coordinator_layout);
@@ -107,7 +112,6 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
         };
         profileViewModel.getUser().observe(this, userObserver);
 
-
     }
 
     @Override
@@ -128,6 +132,10 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
     public void onAddProfilePicButtonClick(android.view.View view) {
         requestImageDialog = new RequestImageDialog();
         requestImageDialog.show(getSupportFragmentManager(), "requestImageDialog");
+    }
+
+    public void onBackButtonClick(android.view.View view) {
+        finish();
     }
 
     @Override

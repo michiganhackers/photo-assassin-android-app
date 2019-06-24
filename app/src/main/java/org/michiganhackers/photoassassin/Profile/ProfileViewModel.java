@@ -34,7 +34,6 @@ public class ProfileViewModel extends ViewModel {
         user = new MutableLiveData<>();
         userRef = FirebaseFirestore.getInstance().collection("users").document(userId);
         storageReference = FirebaseStorage.getInstance().getReference();
-
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -80,8 +79,8 @@ public class ProfileViewModel extends ViewModel {
                                                     }
                                                 });
                                     }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
+                                }).addOnFailureListener(new OnFailureListener() {
+
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.e(TAG, "Failed to get download url from profile pic ref", e);
