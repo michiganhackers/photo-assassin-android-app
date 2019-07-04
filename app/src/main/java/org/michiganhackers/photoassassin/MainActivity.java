@@ -2,9 +2,12 @@ package org.michiganhackers.photoassassin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.widget.Toast;
 
 import org.michiganhackers.photoassassin.Profile.ProfileActivity;
+
+import static org.michiganhackers.photoassassin.Profile.ProfileActivity.PROFILE_USER_ID;
 
 public class MainActivity extends FirebaseAuthActivity {
 
@@ -22,8 +25,16 @@ public class MainActivity extends FirebaseAuthActivity {
         signOut();
     }
 
-    public void onProfileClick(android.view.View view) {
-        startActivity(new Intent(this, ProfileActivity.class));
+    public void onCurrentProfileClick(android.view.View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(PROFILE_USER_ID, auth.getCurrentUser().getUid());
+        startActivity(intent);
+    }
+
+    public void onOtherProfileClick(android.view.View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(PROFILE_USER_ID, "PBkztTsSyZbpGmznxoRkbltFR203");
+        startActivity(intent);
     }
 
 

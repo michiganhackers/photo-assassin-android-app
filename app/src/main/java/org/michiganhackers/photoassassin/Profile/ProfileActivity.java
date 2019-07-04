@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,15 +21,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.michiganhackers.photoassassin.DisplayName;
@@ -42,7 +46,9 @@ import java.io.File;
 public class ProfileActivity extends FirebaseAuthActivity implements RequestImageDialog.ImageUriHandler {
 
     public static final String USER_CURRENTLY_EDITING_DISPLAY_NAME = "userCurrentlyEditingDisplayName";
+    public static final String PROFILE_USER_ID = "Profile User ID";
     private ProfileViewModel profileViewModel;
+    private String profileUserId;
 
     private boolean userCurrentlyEditingDisplayName = false;
     private EditText displayNameEditText;
@@ -80,8 +86,6 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
         profilePicImageView = findViewById(R.id.image_profile_pic);
         coordinatorLayout = findViewById(R.id.coordinator_layout);
 
-        final ProfileViewModelFactory profileViewModelFactory = new ProfileViewModelFactory(auth.getCurrentUser().getUid());
-        profileViewModel = ViewModelProviders.of(this, profileViewModelFactory).get(ProfileViewModel.class);
 
         if (savedInstanceState != null) {
             userCurrentlyEditingDisplayName = savedInstanceState.getBoolean(USER_CURRENTLY_EDITING_DISPLAY_NAME);
@@ -92,7 +96,17 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             if (profilePicUri != null) {
                 handleImageUri(profilePicUri);
             }
+            profileUserId = savedInstanceState.getString(PROFILE_USER_ID);
+        } else {
+            profileUserId = getIntent().getStringExtra(PROFILE_USER_ID);
+            if (profileUserId == null) {
+                Log.e(TAG, "no profile user ID provided to intent");
+            }
         }
+
+
+        final ProfileViewModelFactory profileViewModelFactory = new ProfileViewModelFactory(profileUserId);
+        profileViewModel = ViewModelProviders.of(this, profileViewModelFactory).get(ProfileViewModel.class);
 
         Observer<User> userObserver = new Observer<User>() {
             @Override
@@ -111,6 +125,20 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             }
         };
         profileViewModel.getUser().observe(this, userObserver);
+
+        if (!profileUserId.equals(auth.getCurrentUser().getUid())) {
+            FloatingActionButton addImageFAB = findViewById(R.id.fab_add_image);
+            addImageFAB.setVisibility(View.INVISIBLE);
+
+            ImageView editDisplayNameImage = findViewById(R.id.image_edit_display_name);
+            editDisplayNameImage.setVisibility(View.INVISIBLE);
+
+            LinearLayout addFriendBlockLinearLayout = findViewById(R.id.linear_layout_add_friend_block);
+            addFriendBlockLinearLayout.setVisibility(View.VISIBLE);
+            Button gameHistoryButton = findViewById(R.id.button_game_history);
+            gameHistoryButton.setVisibility(View.GONE);
+
+        }
 
     }
 

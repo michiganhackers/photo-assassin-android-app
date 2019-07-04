@@ -7,9 +7,9 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/signout"
@@ -21,8 +21,14 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onProfileClick"
-            android:text="profile" />
+            android:onClick="onCurrentProfileClick"
+            android:text="current profile" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onOtherProfileClick"
+            android:text="other profile" />
 
     </LinearLayout>
 

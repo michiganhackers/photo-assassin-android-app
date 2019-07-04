@@ -52,4 +52,6 @@
     <string name="friends">Friends</string>
     <string name="back_button">back button</string>
     <string name="edit_display_name">Edit display name</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="block">Block</string>
 </resources>

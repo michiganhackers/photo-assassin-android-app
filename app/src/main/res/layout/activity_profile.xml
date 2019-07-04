@@ -82,12 +82,13 @@
 
 
                         <ImageView
+                            android:id="@+id/image_edit_display_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
                             android:contentDescription="@string/edit_display_name"
                             android:onClick="onEditDisplayNameClick"
-                            app:srcCompat="@drawable/ic_pencil"
-                            android:layout_marginStart="5dp"/>
+                            app:srcCompat="@drawable/ic_pencil" />
 
                     </LinearLayout>
 
@@ -219,6 +220,33 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="25dp"
                 android:text="@string/game_history" />
+
+            <LinearLayout
+                android:id="@+id/linear_layout_add_friend_block"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    style="@style/TransparentWhiteButton"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_weight="220"
+                    android:text="@string/add_friend" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="10" />
+
+                <Button
+                    style="@style/TransparentWhiteButton"
+                    android:layout_width="0dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_weight="150"
+                    android:text="@string/block" />
+            </LinearLayout>
 
             <include layout="@layout/horizontal_divider" />
 
