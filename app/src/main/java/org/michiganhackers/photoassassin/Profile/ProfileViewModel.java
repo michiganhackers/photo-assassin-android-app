@@ -2,61 +2,55 @@ package org.michiganhackers.photoassassin.Profile;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import android.net.Uri;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.storage.UploadTask;
+
 import org.michiganhackers.photoassassin.User;
 
-public class ProfileViewModel extends ViewModel {
-    // Note that user is only set once
-    private MutableLiveData<User> user;
-    private DocumentReference userRef;
-    private String userId;
-    private final String TAG = getClass().getCanonicalName();
-    private StorageReference storageReference;
+import java.util.List;
 
-    ProfileViewModel(String userId) {
-        this.userId = userId;
-        user = new MutableLiveData<>();
-        userRef = FirebaseFirestore.getInstance().collection("users").document(userId);
-        storageReference = FirebaseStorage.getInstance().getReference();
-        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
-                        user.setValue(documentSnapshot.toObject(User.class));
-                    } else {
-                        Log.e(TAG, "user document doesn't exist");
-                    }
-                } else {
-                    Log.e(TAG, "Failed to get user document", task.getException());
-                }
-            }
-        });
+public class ProfileViewModel extends ViewModel {
+    private final String profileUserId, loggedInUserId;
+    private final UserLiveDataWrapper profileUserLiveDataWrapper, loggedInUserLiveDataWrapper;
+    private final String TAG = getClass().getCanonicalName();
+
+    ProfileViewModel(String profileUserId, String loggedInUserId) {
+        this.profileUserId = profileUserId;
+        this.loggedInUserId = loggedInUserId;
+        profileUserLiveDataWrapper = new UserLiveDataWrapper(profileUserId);
+        loggedInUserLiveDataWrapper = new UserLiveDataWrapper(loggedInUserId);
     }
 
-    LiveData<User> getUser() {
-        return user;
+    LiveData<User> getProfileUser() {
+        return profileUserLiveDataWrapper.getUser();
+    }
+
+    LiveData<List<User>> getProfileUserFriends() {
+        return profileUserLiveDataWrapper.getFriends();
+    }
+
+    LiveData<User> getLoggedInUser() {
+        return loggedInUserLiveDataWrapper.getUser();
+    }
+
+    LiveData<List<User>> getLoggedInUserFriends() {
+        return loggedInUserLiveDataWrapper.getFriends();
     }
 
     public void updateProfilePic(final Uri newProfilePicUri) {
-        User.getProfilePicRef(userId).putFile(newProfilePicUri)
+        if (!profileUserId.equals(loggedInUserId)) {
+            Log.e(TAG, "Logged in user attempted to update profile pic of another user");
+            return;
+        }
+        User.getProfilePicRef(profileUserId).putFile(newProfilePicUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -64,14 +58,7 @@ public class ProfileViewModel extends ViewModel {
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(final Uri uri) {
-                                        userRef.update("profilePicUrl", uri.toString())
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        // Note that this will not notify any observers
-                                                        user.getValue().setProfilePicUrl(uri.toString());
-                                                    }
-                                                })
+                                        User.getUserRef(profileUserId).update("profilePicUrl", uri.toString())
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
@@ -81,11 +68,11 @@ public class ProfileViewModel extends ViewModel {
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
 
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.e(TAG, "Failed to get download url from profile pic ref", e);
-                                    }
-                                });
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "Failed to get download url from profile pic ref", e);
+                            }
+                        });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -96,16 +83,12 @@ public class ProfileViewModel extends ViewModel {
                 });
     }
 
-
     public void updateDisplayName(final String displayName) {
-        userRef.update("displayName", displayName)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // Note that this will not notify any observers
-                        user.getValue().setDisplayName(displayName);
-                    }
-                })
+        if (!profileUserId.equals(loggedInUserId)) {
+            Log.e(TAG, "Logged in user attempted to update display name of another user");
+            return;
+        }
+        User.getUserRef(profileUserId).update("displayName", displayName)
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -114,4 +97,21 @@ public class ProfileViewModel extends ViewModel {
                 });
     }
 
+    public void addFriend(String friendId) {
+        if (friendId.equals(loggedInUserId)) {
+            Log.e(TAG, "Logged in user attempted to add themself as a friend");
+            return;
+        }
+        User.getUserRef(friendId).update("friends", FieldValue.arrayUnion(loggedInUserId));
+        User.getUserRef(loggedInUserId).update("friends", FieldValue.arrayUnion(friendId));
+    }
+
+    public void removeFriend(String friendId) {
+        if (friendId.equals(loggedInUserId)) {
+            Log.e(TAG, "Logged in user attempted to removed themself as a friend");
+            return;
+        }
+        User.getUserRef(friendId).update("friends", FieldValue.arrayRemove(loggedInUserId));
+        User.getUserRef(loggedInUserId).update("friends", FieldValue.arrayRemove(friendId));
+    }
 }

@@ -8,282 +8,253 @@
     android:layout_height="match_parent"
     tools:context=".Profile.ProfileActivity">
 
-    <!--Scrollview allows snackbar to be displayed above keyboard-->
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <Button
+                style="@style/BackButton"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="-15dp"
+                android:onClick="onBackButtonClick" />
+
+
+            <TextView
+                style="@style/PageTitle"
+                android:layout_centerHorizontal="true"
+                android:text="@string/profile"
+                android:textSize="64sp" />
+
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
-
-                <Button
-                    style="@style/BackButton"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="-15dp"
-                    android:onClick="onBackButtonClick" />
-
-
-                <TextView
-                    style="@style/PageTitle"
-                    android:layout_centerHorizontal="true"
-                    android:text="@string/profile"
-                    android:textSize="64sp" />
-
-            </RelativeLayout>
+            <include layout="@layout/profile_picture_image_and_fab" />
 
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <include layout="@layout/profile_picture_image_and_fab" />
-
+                android:layout_width="188dp"
+                android:layout_height="150dp"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="188dp"
-                    android:layout_height="150dp"
-                    android:layout_marginStart="16dp"
-                    android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
+
+                    <me.grantland.widget.AutofitLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <EditText
+                            android:id="@+id/edit_text_display_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="false"
+                            android:fontFamily="@font/economica_bold"
+                            android:imeOptions="actionDone"
+                            android:inputType="textPersonName"
+                            android:textColor="@android:color/white"
+                            android:textSize="36sp" />
+                    </me.grantland.widget.AutofitLayout>
+
+
+                    <ImageView
+                        android:id="@+id/image_edit_display_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:contentDescription="@string/edit_display_name"
+                        android:onClick="onEditDisplayNameClick"
+                        app:srcCompat="@drawable/ic_pencil" />
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/ProfileScreenStatistics"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-
-                        <me.grantland.widget.AutofitLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <EditText
-                                android:id="@+id/edit_text_display_name"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@null"
-                                android:enabled="false"
-                                android:focusable="false"
-                                android:fontFamily="@font/economica_bold"
-                                android:imeOptions="actionDone"
-                                android:inputType="textPersonName"
-                                android:textColor="@android:color/white"
-                                android:textSize="36sp" />
-                        </me.grantland.widget.AutofitLayout>
-
-
-                        <ImageView
-                            android:id="@+id/image_edit_display_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:contentDescription="@string/edit_display_name"
-                            android:onClick="onEditDisplayNameClick"
-                            app:srcCompat="@drawable/ic_pencil" />
-
-                    </LinearLayout>
+                        android:text="@string/games_won" />
 
                     <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/text_view_num_games_won"
+                        style="@style/ProfileScreenStatistics"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/ProfileScreenStatistics"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="bottom"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            style="@style/ProfileScreenStatistics"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/games_won" />
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/text_view_num_games_won"
-                            style="@style/ProfileScreenStatistics"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
+                        android:text="@string/win_percent" />
 
                     <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/text_view_percent_games_won"
+                        style="@style/ProfileScreenStatistics"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/ProfileScreenStatistics"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="bottom"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            style="@style/ProfileScreenStatistics"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/win_percent" />
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/text_view_percent_games_won"
-                            style="@style/ProfileScreenStatistics"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
+                        android:text="@string/percentile" />
 
                     <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/text_view_percentile"
+                        style="@style/ProfileScreenStatistics"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/ProfileScreenStatistics"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="bottom"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            style="@style/ProfileScreenStatistics"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/percentile" />
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/text_view_percentile"
-                            style="@style/ProfileScreenStatistics"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
+                        android:text="@string/kill_death_ratio" />
 
                     <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/text_view_kd_ratio"
+                        style="@style/ProfileScreenStatistics"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="bottom"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            style="@style/ProfileScreenStatistics"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/kill_death_ratio" />
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/text_view_kd_ratio"
-                            style="@style/ProfileScreenStatistics"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/button_game_history"
-                style="@style/TransparentWhiteButton"
-                android:layout_marginStart="25dp"
-                android:layout_marginEnd="25dp"
-                android:text="@string/game_history" />
-
-            <LinearLayout
-                android:id="@+id/linear_layout_add_friend_block"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <Button
-                    style="@style/TransparentWhiteButton"
-                    android:layout_width="0dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_weight="220"
-                    android:text="@string/add_friend" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10" />
-
-                <Button
-                    style="@style/TransparentWhiteButton"
-                    android:layout_width="0dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_weight="150"
-                    android:text="@string/block" />
-            </LinearLayout>
-
-            <include layout="@layout/horizontal_divider" />
-
-            <TextView
-                style="@style/Header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/friends" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="friend" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="friend" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="friend" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="friend" />
-            </LinearLayout>
-
         </LinearLayout>
-    </ScrollView>
+
+        <Button
+            android:id="@+id/button_game_history_large"
+            style="@style/TransparentWhiteButton"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:text="@string/game_history" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout_add_friend_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/button_add_remove_friend"
+                style="@style/TransparentWhiteButton"
+                android:layout_width="0dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:onClick="onAddRemoveFriendClick" />
+
+            <Button
+                style="@style/TransparentWhiteButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/game_history" />
+        </LinearLayout>
+
+        <include layout="@layout/horizontal_divider" />
+
+        <TextView
+            style="@style/Header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/friends" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

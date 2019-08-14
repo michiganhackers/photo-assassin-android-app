@@ -1,5 +1,8 @@
 package org.michiganhackers.photoassassin;
 
+import androidx.annotation.Nullable;
+
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -13,9 +16,9 @@ public class User {
     private String displayName;
     private String profilePicUrl;
 
-    private List<DocumentReference> currentGames;
-    private List<DocumentReference> friends;
-    private List<DocumentReference> pastGames;
+    private List<String> currentGameIds;
+    private List<String> friendIds;
+    private List<String> pastGamesIds;
 
     private int deaths;
     private int kills;
@@ -26,9 +29,9 @@ public class User {
         displayName = null;
         profilePicUrl = null;
 
-        currentGames = new ArrayList<>();
-        friends = new ArrayList<>();
-        pastGames = new ArrayList<>();
+        currentGameIds = new ArrayList<>();
+        friendIds = new ArrayList<>();
+        pastGamesIds = new ArrayList<>();
 
         deaths = 0;
         kills = 0;
@@ -40,9 +43,9 @@ public class User {
         this.displayName = displayName;
         this.profilePicUrl = profilePicUrl;
 
-        currentGames = new ArrayList<>();
-        friends = new ArrayList<>();
-        pastGames = new ArrayList<>();
+        currentGameIds = new ArrayList<>();
+        friendIds = new ArrayList<>();
+        pastGamesIds = new ArrayList<>();
 
         deaths = 0;
         kills = 0;
@@ -73,28 +76,28 @@ public class User {
         this.profilePicUrl = profilePicUrl;
     }
 
-    public List<DocumentReference> getCurrentGames() {
-        return currentGames;
+    public List<String> getCurrentGameIds() {
+        return currentGameIds;
     }
 
-    public void setCurrentGames(List<DocumentReference> currentGames) {
-        this.currentGames = currentGames;
+    public void setCurrentGameIds(List<String> currentGameIds) {
+        this.currentGameIds = currentGameIds;
     }
 
-    public List<DocumentReference> getFriends() {
-        return friends;
+    public List<String> getFriendIds() {
+        return friendIds;
     }
 
-    public void setFriends(List<DocumentReference> friends) {
-        this.friends = friends;
+    public void setFriendIds(List<String> friendIds) {
+        this.friendIds = friendIds;
     }
 
-    public List<DocumentReference> getPastGames() {
-        return pastGames;
+    public List<String> getPastGamesIds() {
+        return pastGamesIds;
     }
 
-    public void setPastGames(List<DocumentReference> pastGames) {
-        this.pastGames = pastGames;
+    public void setPastGamesIds(List<String> pastGamesIds) {
+        this.pastGamesIds = pastGamesIds;
     }
 
     public int getDeaths() {
@@ -126,6 +129,28 @@ public class User {
     }
 
     public static DocumentReference getUserRef(String userId) {
-        return FirebaseFirestore.getInstance().collection("users").document(userId);
+        return User.getUsersRef().document(userId);
+    }
+
+    public static CollectionReference getUsersRef() {
+        return FirebaseFirestore.getInstance().collection("users");
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof User)) {
+            return false;
+        }
+
+        return this.getId().equals(((User) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
     }
 }

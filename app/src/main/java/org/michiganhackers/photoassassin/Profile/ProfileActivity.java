@@ -1,21 +1,18 @@
 package org.michiganhackers.photoassassin.Profile;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,10 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Space;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
@@ -42,8 +36,12 @@ import org.michiganhackers.photoassassin.RequestImageDialog;
 import org.michiganhackers.photoassassin.User;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class ProfileActivity extends FirebaseAuthActivity implements RequestImageDialog.ImageUriHandler {
+public class ProfileActivity extends FirebaseAuthActivity implements RequestImageDialog.ImageUriHandler, FriendRecyclerViewAdapter.AddRemoveFriendHandler {
 
     public static final String USER_CURRENTLY_EDITING_DISPLAY_NAME = "userCurrentlyEditingDisplayName";
     public static final String PROFILE_USER_ID = "Profile User ID";
@@ -86,7 +84,6 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
         profilePicImageView = findViewById(R.id.image_profile_pic);
         coordinatorLayout = findViewById(R.id.coordinator_layout);
 
-
         if (savedInstanceState != null) {
             userCurrentlyEditingDisplayName = savedInstanceState.getBoolean(USER_CURRENTLY_EDITING_DISPLAY_NAME);
             if (userCurrentlyEditingDisplayName) {
@@ -104,11 +101,15 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             }
         }
 
+        RecyclerView friendsRecyclerView = findViewById(R.id.recycler_friends);
+        friendsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        final FriendRecyclerViewAdapter friendRecyclerViewAdapter = new FriendRecyclerViewAdapter(this, new ArrayList<User>(), new ArrayList<User>(), auth.getCurrentUser().getUid());
+        friendsRecyclerView.setAdapter(friendRecyclerViewAdapter);
 
-        final ProfileViewModelFactory profileViewModelFactory = new ProfileViewModelFactory(profileUserId);
+        final ProfileViewModelFactory profileViewModelFactory = new ProfileViewModelFactory(profileUserId, auth.getCurrentUser().getUid());
         profileViewModel = ViewModelProviders.of(this, profileViewModelFactory).get(ProfileViewModel.class);
 
-        Observer<User> userObserver = new Observer<User>() {
+        Observer<User> profileUserObserver = new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 if (!userCurrentlyEditingDisplayName) {
@@ -121,10 +122,36 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
                             .centerCrop()
                             .into(profilePicImageView);
                 }
-                profileViewModel.getUser().removeObserver(this);
             }
         };
-        profileViewModel.getUser().observe(this, userObserver);
+        profileViewModel.getProfileUser().observe(this, profileUserObserver);
+
+        Observer<List<User>> profileUserFriendsObserver = new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+                friendRecyclerViewAdapter.updateFriends(users);
+            }
+        };
+        profileViewModel.getProfileUserFriends().observe(this, profileUserFriendsObserver);
+
+        final Button addRemoveFriendButton = findViewById(R.id.button_add_remove_friend);
+        Observer<List<User>> loggedInUserFriendsObserver = new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+                friendRecyclerViewAdapter.updateLoggedInUserFriends(users);
+                Set<String> friendIds = new HashSet<>();
+                for (int i = 0; i < users.size(); ++i) {
+                    friendIds.add(users.get(i).getId());
+                }
+                if (friendIds.contains(profileUserId)) {
+                    addRemoveFriendButton.setText(R.string.remove_friend);
+                } else {
+                    addRemoveFriendButton.setText(R.string.add_friend);
+                }
+            }
+        };
+        profileViewModel.getLoggedInUserFriends().observe(this, loggedInUserFriendsObserver);
+
 
         if (!profileUserId.equals(auth.getCurrentUser().getUid())) {
             FloatingActionButton addImageFAB = findViewById(R.id.fab_add_image);
@@ -133,11 +160,10 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             ImageView editDisplayNameImage = findViewById(R.id.image_edit_display_name);
             editDisplayNameImage.setVisibility(View.INVISIBLE);
 
-            LinearLayout addFriendBlockLinearLayout = findViewById(R.id.linear_layout_add_friend_block);
-            addFriendBlockLinearLayout.setVisibility(View.VISIBLE);
-            Button gameHistoryButton = findViewById(R.id.button_game_history);
-            gameHistoryButton.setVisibility(View.GONE);
-
+            LinearLayout addFriendHistoryLinearLayout = findViewById(R.id.linear_layout_add_friend_history);
+            addFriendHistoryLinearLayout.setVisibility(View.VISIBLE);
+            Button largeGameHistoryButton = findViewById(R.id.button_game_history_large);
+            largeGameHistoryButton.setVisibility(View.GONE);
         }
 
     }
@@ -157,6 +183,16 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
 
     }
 
+    @Override
+    public void Add(String userId) {
+        profileViewModel.addFriend(userId);
+    }
+
+    @Override
+    public void Remove(String userId) {
+        profileViewModel.removeFriend(userId);
+    }
+
     public void onAddProfilePicButtonClick(android.view.View view) {
         requestImageDialog = new RequestImageDialog();
         requestImageDialog.show(getSupportFragmentManager(), "requestImageDialog");
@@ -164,6 +200,15 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
 
     public void onBackButtonClick(android.view.View view) {
         finish();
+    }
+
+    public void onAddRemoveFriendClick(android.view.View view) {
+        List<String> loggedInUserFriendIds = profileViewModel.getLoggedInUser().getValue().getFriendIds();
+        if (loggedInUserFriendIds.contains(profileUserId)) {
+            profileViewModel.removeFriend(profileUserId);
+        } else {
+            profileViewModel.addFriend(profileUserId);
+        }
     }
 
     @Override
@@ -176,7 +221,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
                 if (!focusedViewRect.contains((int) event.getRawX(), (int) event.getRawY())) {
                     removeFocusFromDisplayNameEditText(focusedView);
                     if (!updateDisplayName()) {
-                        displayNameEditText.setText(profileViewModel.getUser().getValue().getDisplayName());
+                        displayNameEditText.setText(profileViewModel.getProfileUser().getValue().getDisplayName());
                     }
                 }
             }
@@ -202,7 +247,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             return false;
         } else {
             // Only update display name if it has changed
-            if (!displayName.getDisplayName().equals(profileViewModel.getUser().getValue().getDisplayName())) {
+            if (!displayName.getDisplayName().equals(profileViewModel.getProfileUser().getValue().getDisplayName())) {
                 profileViewModel.updateDisplayName(displayName.getDisplayName());
             }
         }
