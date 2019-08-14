@@ -66,7 +66,7 @@ public class UserLiveDataWrapper {
         }
 
         if (user.getValue() != null) {
-            final List<String> newFriendIds = user.getValue().getFriendIds();
+            final List<String> newFriendIds = user.getValue().getFriends();
             if (!oldFriendIds.equals(newFriendIds)) {
                 final List<User> newFriends = new ArrayList<>();
                 for (int i = 0; i < newFriendIds.size(); ++i) {

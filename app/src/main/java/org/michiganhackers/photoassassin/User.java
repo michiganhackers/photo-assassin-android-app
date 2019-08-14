@@ -16,9 +16,9 @@ public class User {
     private String displayName;
     private String profilePicUrl;
 
-    private List<String> currentGameIds;
-    private List<String> friendIds;
-    private List<String> pastGamesIds;
+    private List<String> currentGames;
+    private List<String> friends;
+    private List<String> pastGames;
 
     private int deaths;
     private int kills;
@@ -29,9 +29,9 @@ public class User {
         displayName = null;
         profilePicUrl = null;
 
-        currentGameIds = new ArrayList<>();
-        friendIds = new ArrayList<>();
-        pastGamesIds = new ArrayList<>();
+        currentGames = new ArrayList<>();
+        friends = new ArrayList<>();
+        pastGames = new ArrayList<>();
 
         deaths = 0;
         kills = 0;
@@ -43,9 +43,9 @@ public class User {
         this.displayName = displayName;
         this.profilePicUrl = profilePicUrl;
 
-        currentGameIds = new ArrayList<>();
-        friendIds = new ArrayList<>();
-        pastGamesIds = new ArrayList<>();
+        currentGames = new ArrayList<>();
+        friends = new ArrayList<>();
+        pastGames = new ArrayList<>();
 
         deaths = 0;
         kills = 0;
@@ -76,28 +76,28 @@ public class User {
         this.profilePicUrl = profilePicUrl;
     }
 
-    public List<String> getCurrentGameIds() {
-        return currentGameIds;
+    public List<String> getCurrentGames() {
+        return currentGames;
     }
 
-    public void setCurrentGameIds(List<String> currentGameIds) {
-        this.currentGameIds = currentGameIds;
+    public void setCurrentGames(List<String> currentGames) {
+        this.currentGames = currentGames;
     }
 
-    public List<String> getFriendIds() {
-        return friendIds;
+    public List<String> getFriends() {
+        return friends;
     }
 
-    public void setFriendIds(List<String> friendIds) {
-        this.friendIds = friendIds;
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
     }
 
-    public List<String> getPastGamesIds() {
-        return pastGamesIds;
+    public List<String> getPastGames() {
+        return pastGames;
     }
 
-    public void setPastGamesIds(List<String> pastGamesIds) {
-        this.pastGamesIds = pastGamesIds;
+    public void setPastGames(List<String> pastGames) {
+        this.pastGames = pastGames;
     }
 
     public int getDeaths() {

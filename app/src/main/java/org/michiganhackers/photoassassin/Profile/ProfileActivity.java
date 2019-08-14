@@ -203,7 +203,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
     }
 
     public void onAddRemoveFriendClick(android.view.View view) {
-        List<String> loggedInUserFriendIds = profileViewModel.getLoggedInUser().getValue().getFriendIds();
+        List<String> loggedInUserFriendIds = profileViewModel.getLoggedInUser().getValue().getFriends();
         if (loggedInUserFriendIds.contains(profileUserId)) {
             profileViewModel.removeFriend(profileUserId);
         } else {
