@@ -134,13 +134,14 @@
         <item name="android:paddingEnd">15dp</item>
         <item name="android:paddingRight">15dp</item>
         <item name="android:paddingTop">25dp</item>
-
+        <item name="android:paddingBottom">25dp</item>
     </style>
 
     <style name="Header">
         <item name="android:textColor">@color/whiteSixtyPercentOpacity</item>
         <item name="android:fontFamily">@font/economica_bold</item>
         <item name="android:textSize">36sp</item>
+        <item name="android:layout_marginLeft">8dp</item>
     </style>
 
     <style name="AddRemoveFriendIcon">
@@ -156,6 +157,24 @@
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily">@font/economica_bold</item>
+    </style>
+
+    <style name="ScrollArea">
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">false</item>
+        <item name="android:scrollbarStyle">insideOverlay</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:fadeScrollbars">true</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scrollbar_vertical_thumb</item>
+        <item name="android:scrollbarSize">14dp</item>
+        <item name="android:scrollbarFadeDuration">500</item>
+        <item name="android:scrollbarDefaultDelayBeforeFade">500</item>
+        <item name="android:background">@drawable/scroll_background</item>
+    </style>
+
+    <style name="ScrollAreaText">
+        <item name="android:textColor">@color/whiteSixtyPercentOpacity</item>
+        <item name="android:fontFamily">@font/economica_bold</item>
+        <item name="android:textSize">36sp</item>
     </style>
 
 

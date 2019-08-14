@@ -54,6 +54,6 @@
     <string name="edit_display_name">Edit display name</string>
     <string name="add_friend">Add Friend</string>
     <string name="remove_friend">Remove Friend</string>
-    <string name="add">add</string>
-    <string name="remove">remove</string>
+    <string name="add">Add</string>
+    <string name="remove">Remove</string>
 </resources>
