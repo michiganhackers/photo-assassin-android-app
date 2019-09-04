@@ -7,17 +7,15 @@
     android:layout_marginEnd="24dp"
     android:orientation="horizontal">
 
-    <me.grantland.widget.AutofitTextView
+    <TextView
         android:id="@+id/text_view_name"
         style="@style/ScrollAreaText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1" />
-
-    <Space
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1" />
 
     <include layout="@layout/add_remove_friend_button" />
 </LinearLayout>
