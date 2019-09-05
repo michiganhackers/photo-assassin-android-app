@@ -4,6 +4,7 @@ package org.michiganhackers.photoassassin.Profile;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.michiganhackers.photoassassin.R;
 import org.michiganhackers.photoassassin.User;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.michiganhackers.photoassassin.Profile.ProfileActivity.PROFILE_USER_ID;
@@ -31,10 +38,12 @@ public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecycl
     private final String loggedInUserId;
     private final Activity activity;
     private final AddRemoveFriendHandler addRemoveFriendHandler;
+    private final String TAG = getClass().getCanonicalName();
 
     public FriendRecyclerViewAdapter(Activity activity, List<User> friends, List<User> loggedInUserFriends, String loggedInUserId) {
         this.activity = activity;
         this.friends = friends;
+        sortFriends();
 
         this.loggedInUserFriendIds = new HashSet<String>();
         updateLoggedInUserFriends(loggedInUserFriends);
@@ -51,21 +60,64 @@ public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecycl
     }
 
     public void updateFriends(List<User> friends) {
-        if (!this.friends.equals(friends)) {
-            this.friends = friends;
-            notifyDataSetChanged();
+        Set<User> removedFriends = new HashSet<>(this.friends);
+        removedFriends.removeAll(friends);
+        for (User friend : removedFriends) {
+            int position = this.friends.indexOf(friend);
+            this.friends.remove(position);
+            notifyItemRemoved(position);
+        }
+
+        Set<User> addedFriends = new HashSet<>(friends);
+        addedFriends.removeAll(this.friends);
+        for (User friend : addedFriends) {
+            this.friends.add(friend);
+            sortFriends(); //TODO: not efficient
+            int position = this.friends.indexOf(friend);
+            notifyItemInserted(position);
         }
     }
 
+    private void sortFriends() {
+        Collections.sort(this.friends, new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                Collator collator = Collator.getInstance(Locale.getDefault());
+                return collator.compare(o1.getDisplayName(), o2.getDisplayName());
+            }
+        });
+    }
+
     public void updateLoggedInUserFriends(List<User> loggedInUserFriends) {
-        HashSet<String> newLoggedInUserFriendIds = new HashSet<>();
-        for (int i = 0; i < loggedInUserFriends.size(); ++i) {
-            newLoggedInUserFriendIds.add(loggedInUserFriends.get(i).getId());
+        Set<String> removedFriendIds = new HashSet<>(this.loggedInUserFriendIds);
+        for (User friend : loggedInUserFriends) {
+            removedFriendIds.remove(friend.getId());
+        }
+        for (String id : removedFriendIds) {
+            User removedUser = new User();
+            removedUser.setId(id);
+            // Assumes User.equals only compares user id
+            int position = this.friends.indexOf(removedUser);
+            this.loggedInUserFriendIds.remove(id);
+            if (position != -1) {
+                notifyItemChanged(position);
+            }
         }
 
-        if (!loggedInUserFriendIds.equals(newLoggedInUserFriendIds)) {
-            loggedInUserFriendIds = newLoggedInUserFriendIds;
-            notifyDataSetChanged();
+        Set<String> addedFriendIds = new HashSet<>();
+        for (User friend : loggedInUserFriends) {
+            addedFriendIds.add(friend.getId());
+        }
+        addedFriendIds.removeAll(this.loggedInUserFriendIds);
+        for (String id : addedFriendIds) {
+            User addedUser = new User();
+            addedUser.setId(id);
+            // Assumes User.equals only compares user id
+            int position = this.friends.indexOf(addedUser);
+            this.loggedInUserFriendIds.add(id);
+            if (position != -1) {
+                notifyItemChanged(position);
+            }
         }
     }
 

@@ -26,6 +26,9 @@ public class UserLiveDataWrapper {
     private final String TAG = getClass().getCanonicalName();
 
     UserLiveDataWrapper(String userId) {
+        if (userId == null) {
+            Log.e(TAG, "Null user id");
+        }
         this.userId = userId;
         user = new MutableLiveData<>();
         friends = new MutableLiveData<>();
@@ -56,7 +59,8 @@ public class UserLiveDataWrapper {
         return friends;
     }
 
-    // Note: This won't update friend display names
+    // Note: This only updates friends if a friend is added or removed. If a friend just changes
+    // their dispaly name, for example, it won't be updated
     private void updateFriends() {
         List<String> oldFriendIds = new ArrayList<>();
         if (friends.getValue() != null) {
@@ -82,7 +86,7 @@ public class UserLiveDataWrapper {
                         }
                     });
                 }
-                if (newFriends.isEmpty()) {
+                if (newFriendIds.isEmpty()) {
                     friends.setValue(newFriends);
                 }
             }
