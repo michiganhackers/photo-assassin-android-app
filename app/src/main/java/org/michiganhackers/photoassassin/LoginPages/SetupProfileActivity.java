@@ -72,8 +72,6 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
                 .centerCrop()
                 .signature(new ObjectKey(new File(profilePicUri.getPath()).lastModified()))
                 .into(profilePicImageView);
-        ;
-
     }
 
     public void onAddProfilePicButtonClick(android.view.View view) {
