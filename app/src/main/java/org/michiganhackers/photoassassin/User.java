@@ -2,39 +2,52 @@ package org.michiganhackers.photoassassin;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.internal.Logger;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.model.Document;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class User {
     private String id;
     private String displayName;
     private String profilePicUrl;
 
-    private List<String> currentGames;
-    private List<String> friends;
-    private List<String> pastGames;
+    private CollectionReference currentGames;
+    private CollectionReference friends;
+    private CollectionReference pastGames;
 
     private int deaths;
     private int kills;
     private int longestLifeSeconds;
+
+    private static final String TAG = "User";
 
     public User() {
         id = null;
         displayName = null;
         profilePicUrl = null;
 
-        currentGames = new ArrayList<>();
-        friends = new ArrayList<>();
-        pastGames = new ArrayList<>();
+        deaths = 0;
+        kills = 0;
+        longestLifeSeconds = 0;
+    }
+
+    public User(String id) {
+        this.id = id;
+        displayName = null;
+        profilePicUrl = null;
 
         deaths = 0;
         kills = 0;
@@ -45,10 +58,6 @@ public class User {
         this.id = id;
         this.displayName = displayName;
         this.profilePicUrl = profilePicUrl;
-
-        currentGames = new ArrayList<>();
-        friends = new ArrayList<>();
-        pastGames = new ArrayList<>();
 
         deaths = 0;
         kills = 0;
@@ -79,29 +88,6 @@ public class User {
         this.profilePicUrl = profilePicUrl;
     }
 
-    public List<String> getCurrentGames() {
-        return currentGames;
-    }
-
-    public void setCurrentGames(List<String> currentGames) {
-        this.currentGames = currentGames;
-    }
-
-    public List<String> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(List<String> friends) {
-        this.friends = friends;
-    }
-
-    public List<String> getPastGames() {
-        return pastGames;
-    }
-
-    public void setPastGames(List<String> pastGames) {
-        this.pastGames = pastGames;
-    }
 
     public int getDeaths() {
         return deaths;
@@ -127,6 +113,30 @@ public class User {
         this.longestLifeSeconds = longestLifeSeconds;
     }
 
+    public CollectionReference getCurrentGames() {
+        return currentGames;
+    }
+
+    public void setCurrentGames(CollectionReference currentGames) {
+        this.currentGames = currentGames;
+    }
+
+    public CollectionReference getFriends() {
+        return friends;
+    }
+
+    public void setFriends(CollectionReference friends) {
+        this.friends = friends;
+    }
+
+    public CollectionReference getPastGames() {
+        return pastGames;
+    }
+
+    public void setPastGames(CollectionReference pastGames) {
+        this.pastGames = pastGames;
+    }
+
     public static StorageReference getProfilePicRef(String userId) {
         return FirebaseStorage.getInstance().getReference().child("images/profile_pictures/" + userId);
     }
@@ -137,6 +147,38 @@ public class User {
 
     public static CollectionReference getUsersRef() {
         return FirebaseFirestore.getInstance().collection("users");
+    }
+
+    public static CollectionReference getFriendsRef(String userId) {
+        return User.getUserRef(userId).collection("friends");
+    }
+
+    public static void createFriend(String userId, String friendId) {
+        Map<String, Object> friendMap = new HashMap<>();
+        friendMap.put("friend", User.getUserRef(friendId));
+        User.getFriendsRef(userId).document(friendId).set(friendMap).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "failed to add friend document", e);
+            }
+        });
+    }
+
+    public static void deleteFriend(String userId, String friendId) {
+        User.getFriendsRef(userId).document(friendId).delete().addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "failed to remove friend document", e);
+            }
+        });
+    }
+
+    public static CollectionReference getCurrentGamesRef(String userId) {
+        return User.getUserRef(userId).collection("currentGames");
+    }
+
+    public static CollectionReference getPastGamesRef(String userId) {
+        return User.getUserRef(userId).collection("pastGames");
     }
 
     @Override

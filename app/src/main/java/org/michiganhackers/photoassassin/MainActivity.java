@@ -2,15 +2,11 @@ package org.michiganhackers.photoassassin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.michiganhackers.photoassassin.Profile.ProfileActivity;
@@ -58,10 +54,13 @@ public class MainActivity extends FirebaseAuthActivity {
                         ids.add(doc.toObject(User.class).getId());
                     }
                     for (int i = 0; i < ids.size(); ++i) {
-                        String tempId = ids.get(i);
+                        String userId = ids.get(i);
                         ids.remove(i);
-                        User.getUserRef(tempId).update("friends", ids);
-                        ids.add(i, tempId);
+                        for (String friendId : ids) {
+                            User.createFriend(userId, friendId);
+                            User.createFriend(friendId, userId);
+                        }
+                        ids.add(i, userId);
                     }
                 } else {
                     Log.e("MainActivity", "null users queryDocumentSnapshots");
@@ -75,8 +74,18 @@ public class MainActivity extends FirebaseAuthActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots != null) {
+                    List<String> ids = new ArrayList<>();
                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
-                        doc.getReference().update("friends", new ArrayList<>());
+                        ids.add(doc.toObject(User.class).getId());
+                    }
+                    for (int i = 0; i < ids.size(); ++i) {
+                        String userId = ids.get(i);
+                        ids.remove(i);
+                        for (String friendId : ids) {
+                            User.deleteFriend(userId, friendId);
+                            User.deleteFriend(friendId, userId);
+                        }
+                        ids.add(i, userId);
                     }
                 } else {
                     Log.e("MainActivity", "null users queryDocumentSnapshots");

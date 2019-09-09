@@ -2,6 +2,7 @@ package org.michiganhackers.photoassassin.Profile;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import android.net.Uri;
@@ -9,41 +10,131 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.UploadTask;
 
 import org.michiganhackers.photoassassin.User;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 public class ProfileViewModel extends ViewModel {
     private final String profileUserId, loggedInUserId;
-    private final UserLiveDataWrapper profileUserLiveDataWrapper, loggedInUserLiveDataWrapper;
+    private MutableLiveData<User> profileUser;
+    private MutableLiveData<List<User>> profileUserFriends;
+    private MutableLiveData<List<String>> loggedInUserFriendIds;
     private final String TAG = getClass().getCanonicalName();
 
     ProfileViewModel(String profileUserId, String loggedInUserId) {
         this.profileUserId = profileUserId;
         this.loggedInUserId = loggedInUserId;
-        profileUserLiveDataWrapper = new UserLiveDataWrapper(profileUserId);
-        loggedInUserLiveDataWrapper = new UserLiveDataWrapper(loggedInUserId);
+        profileUser = new MutableLiveData<>();
+        profileUserFriends = new MutableLiveData<>();
+        profileUserFriends.setValue(new ArrayList<User>());
+        loggedInUserFriendIds = new MutableLiveData<>();
+        loggedInUserFriendIds.setValue(new ArrayList<String>());
+
+        User.getUserRef(this.profileUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.e(TAG, "userRef listen error", e);
+                    return;
+                }
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    profileUser.setValue(documentSnapshot.toObject(User.class));
+                } else {
+                    Log.e(TAG, "invalid profile user document");
+                }
+            }
+        });
+        setupProfileFriendsListener();
+        setupLoggedInUserFriendIdsListener();
     }
 
-    LiveData<User> getProfileUser() {
-        return profileUserLiveDataWrapper.getUser();
+    public LiveData<User> getProfileUser() {
+        return profileUser;
     }
 
-    LiveData<List<User>> getProfileUserFriends() {
-        return profileUserLiveDataWrapper.getFriends();
+    public LiveData<List<User>> getProfileUserFriends() {
+        return profileUserFriends;
     }
 
-    LiveData<User> getLoggedInUser() {
-        return loggedInUserLiveDataWrapper.getUser();
+    public LiveData<List<String>> getLoggedInUserFriendIds() {
+        return loggedInUserFriendIds;
     }
 
-    LiveData<List<User>> getLoggedInUserFriends() {
-        return loggedInUserLiveDataWrapper.getFriends();
+    private void setupProfileFriendsListener() {
+        User.getFriendsRef(this.profileUserId).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "friends collection listen error", e);
+                    return;
+                }
+
+                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            Log.i("Friend doc", dc.getDocument().toString());
+                            DocumentReference docRef = User.getUserRef(dc.getDocument().getId());
+                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    List<User> newFriends = profileUserFriends.getValue();
+                                    newFriends.add(documentSnapshot.toObject(User.class));
+                                    profileUserFriends.setValue(newFriends);
+                                }
+                            });
+                            break;
+                        case MODIFIED:
+                            Log.e(TAG, "Friend document reference modified");
+                            break;
+                        case REMOVED:
+                            List<User> newFriends = profileUserFriends.getValue();
+                            newFriends.remove(new User(dc.getDocument().getId()));
+                            profileUserFriends.setValue(newFriends);
+                            break;
+                    }
+                }
+            }
+        });
     }
+
+    private void setupLoggedInUserFriendIdsListener() {
+        User.getFriendsRef(this.loggedInUserId).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "friends collection listen error", e);
+                    return;
+                }
+                List<String> newFriendIds = loggedInUserFriendIds.getValue();
+                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            newFriendIds.add(dc.getDocument().getId());
+                            break;
+                        case MODIFIED:
+                            Log.e(TAG, "Friend document reference modified");
+                            break;
+                        case REMOVED:
+                            newFriendIds.remove(dc.getDocument().getId());
+                            break;
+                    }
+                }
+                loggedInUserFriendIds.setValue(newFriendIds);
+            }
+        });
+    }
+
 
     public void updateProfilePic(final Uri newProfilePicUri) {
         if (!profileUserId.equals(loggedInUserId)) {
@@ -102,8 +193,9 @@ public class ProfileViewModel extends ViewModel {
             Log.e(TAG, "Logged in user attempted to add themself as a friend");
             return;
         }
-        User.getUserRef(friendId).update("friends", FieldValue.arrayUnion(loggedInUserId));
-        User.getUserRef(loggedInUserId).update("friends", FieldValue.arrayUnion(friendId));
+
+        User.createFriend(friendId, loggedInUserId);
+        User.createFriend(loggedInUserId, friendId);
     }
 
     public void removeFriend(String friendId) {
@@ -111,7 +203,7 @@ public class ProfileViewModel extends ViewModel {
             Log.e(TAG, "Logged in user attempted to removed themself as a friend");
             return;
         }
-        User.getUserRef(friendId).update("friends", FieldValue.arrayRemove(loggedInUserId));
-        User.getUserRef(loggedInUserId).update("friends", FieldValue.arrayRemove(friendId));
+        User.deleteFriend(friendId, loggedInUserId);
+        User.deleteFriend(loggedInUserId, friendId);
     }
 }

@@ -103,7 +103,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
 
         RecyclerView friendsRecyclerView = findViewById(R.id.recycler_friends);
         friendsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final FriendRecyclerViewAdapter friendRecyclerViewAdapter = new FriendRecyclerViewAdapter(this, new ArrayList<User>(), new ArrayList<User>(), auth.getCurrentUser().getUid());
+        final FriendRecyclerViewAdapter friendRecyclerViewAdapter = new FriendRecyclerViewAdapter(this, new ArrayList<User>(), new ArrayList<String>(), auth.getCurrentUser().getUid());
         friendsRecyclerView.setAdapter(friendRecyclerViewAdapter);
 
         final ProfileViewModelFactory profileViewModelFactory = new ProfileViewModelFactory(profileUserId, auth.getCurrentUser().getUid());
@@ -135,14 +135,10 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
         profileViewModel.getProfileUserFriends().observe(this, profileUserFriendsObserver);
 
         final Button addRemoveFriendButton = findViewById(R.id.button_add_remove_friend);
-        Observer<List<User>> loggedInUserFriendsObserver = new Observer<List<User>>() {
+        Observer<List<String>> loggedInUserFriendIdsObserver = new Observer<List<String>>() {
             @Override
-            public void onChanged(List<User> users) {
-                friendRecyclerViewAdapter.updateLoggedInUserFriends(users);
-                Set<String> friendIds = new HashSet<>();
-                for (int i = 0; i < users.size(); ++i) {
-                    friendIds.add(users.get(i).getId());
-                }
+            public void onChanged(List<String> friendIds) {
+                friendRecyclerViewAdapter.updateLoggedInUserFriendIds(friendIds);
                 if (friendIds.contains(profileUserId)) {
                     addRemoveFriendButton.setText(R.string.remove_friend);
                 } else {
@@ -150,7 +146,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
                 }
             }
         };
-        profileViewModel.getLoggedInUserFriends().observe(this, loggedInUserFriendsObserver);
+        profileViewModel.getLoggedInUserFriendIds().observe(this, loggedInUserFriendIdsObserver);
 
 
         if (!profileUserId.equals(auth.getCurrentUser().getUid())) {
@@ -203,7 +199,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
     }
 
     public void onAddRemoveFriendClick(android.view.View view) {
-        List<String> loggedInUserFriendIds = profileViewModel.getLoggedInUser().getValue().getFriends();
+        List<String> loggedInUserFriendIds = profileViewModel.getLoggedInUserFriendIds().getValue();
         if (loggedInUserFriendIds.contains(profileUserId)) {
             profileViewModel.removeFriend(profileUserId);
         } else {

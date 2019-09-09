@@ -40,13 +40,13 @@ public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecycl
     private final AddRemoveFriendHandler addRemoveFriendHandler;
     private final String TAG = getClass().getCanonicalName();
 
-    public FriendRecyclerViewAdapter(Activity activity, List<User> friends, List<User> loggedInUserFriends, String loggedInUserId) {
+    public FriendRecyclerViewAdapter(Activity activity, List<User> friends, List<String> loggedInUserFriendIds, String loggedInUserId) {
         this.activity = activity;
         this.friends = friends;
         sortFriends();
 
-        this.loggedInUserFriendIds = new HashSet<String>();
-        updateLoggedInUserFriends(loggedInUserFriends);
+        this.loggedInUserFriendIds = new HashSet<>();
+        updateLoggedInUserFriendIds(loggedInUserFriendIds);
 
         this.loggedInUserId = loggedInUserId;
 
@@ -88,14 +88,11 @@ public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecycl
         });
     }
 
-    public void updateLoggedInUserFriends(List<User> loggedInUserFriends) {
+    public void updateLoggedInUserFriendIds(List<String> loggedInUserFriendIds) {
         Set<String> removedFriendIds = new HashSet<>(this.loggedInUserFriendIds);
-        for (User friend : loggedInUserFriends) {
-            removedFriendIds.remove(friend.getId());
-        }
+        removedFriendIds.removeAll(loggedInUserFriendIds);
         for (String id : removedFriendIds) {
-            User removedUser = new User();
-            removedUser.setId(id);
+            User removedUser = new User(id);
             // Assumes User.equals only compares user id
             int position = this.friends.indexOf(removedUser);
             this.loggedInUserFriendIds.remove(id);
@@ -105,9 +102,7 @@ public class FriendRecyclerViewAdapter extends RecyclerView.Adapter<FriendRecycl
         }
 
         Set<String> addedFriendIds = new HashSet<>();
-        for (User friend : loggedInUserFriends) {
-            addedFriendIds.add(friend.getId());
-        }
+        addedFriendIds.addAll(loggedInUserFriendIds);
         addedFriendIds.removeAll(this.loggedInUserFriendIds);
         for (String id : addedFriendIds) {
             User addedUser = new User();
