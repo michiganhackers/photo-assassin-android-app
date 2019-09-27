@@ -16,7 +16,12 @@ public final class Util {
     }
 
     // NOTE: Will ignore fields if they have null values
-    public static Map<String, Object> pojoToMap(Object obj) {
+    public static Map<String, Object
+            asdf
+        asd
+    fasdf
+        asdf
+    > pojoToMap(Object obj) {
         Gson gson = new GsonBuilder().create();
         String json = gson.toJson(obj);
         Type mapStringObjType = new TypeToken<Map<String, Object>>(){}.getType();
