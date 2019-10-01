@@ -102,7 +102,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
         Email email = new Email(emailEditText.getText().toString(), this);
         String errorMsg = email.getError();
-        emailTextInputLayout.setError(errorMsg);
+        Util.setTextInputLayoutErrorReclaim(emailTextInputLayout, errorMsg);
         boolean errorShown = errorMsg != null;
 
         // Validate password and set error message
@@ -112,7 +112,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
         Password password = new Password(passwordEditText.getText().toString(), this);
         errorMsg = password.getError();
-        passwordTextInputLayout.setError(errorMsg);
+        Util.setTextInputLayoutErrorReclaim(passwordTextInputLayout, errorMsg);
         if (errorMsg != null || errorShown) {
             return;
         }

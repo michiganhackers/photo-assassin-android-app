@@ -238,6 +238,41 @@
 
         <include layout="@layout/horizontal_divider" />
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_bar">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/whiteSixtyPercentOpacity"
+                app:errorTextAppearance="@style/ErrorTextAppearance"
+                app:hintTextAppearance="@style/HintTextAppearance"
+                app:hintTextColor="@color/whiteSixtyPercentOpacity"
+                android:focusableInTouchMode="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_input_edit_text_search"
+                    style="@style/TransparentWhiteEditText"
+                    android:hint="@string/search_user"
+                    android:imeOptions="actionDone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:contentDescription="@string/magnifying_glass"
+                android:src="@drawable/ic_magnify_glass"
+                android:layout_alignEnd="@id/text_input_layout_search"
+                android:layout_alignTop="@id/text_input_layout_search"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="15dp"
+                android:onClick="onSearchButtonClick"/>
+
+        </RelativeLayout>
+
         <TextView
             style="@style/Header"
             android:layout_width="match_parent"

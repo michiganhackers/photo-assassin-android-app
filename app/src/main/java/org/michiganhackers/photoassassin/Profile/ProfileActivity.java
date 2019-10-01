@@ -28,18 +28,19 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.michiganhackers.photoassassin.DisplayName;
 import org.michiganhackers.photoassassin.FirebaseAuthActivity;
 import org.michiganhackers.photoassassin.R;
 import org.michiganhackers.photoassassin.RequestImageDialog;
 import org.michiganhackers.photoassassin.User;
+import org.michiganhackers.photoassassin.Util;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ProfileActivity extends FirebaseAuthActivity implements RequestImageDialog.ImageUriHandler, FriendRecyclerViewAdapter.AddRemoveFriendHandler {
 
@@ -57,6 +58,9 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
 
     private CoordinatorLayout coordinatorLayout;
 
+    private TextInputLayout searchTextInputLayout;
+    private TextInputEditText searchTextInputEditText;
+
     private final String TAG = getClass().getCanonicalName();
     public static final String PROFILE_PIC_URI = "profile pic uri";
 
@@ -72,7 +76,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     if (updateDisplayName()) {
-                        removeFocusFromDisplayNameEditText(displayNameEditText);
+                        disableDisplayNameEditText(displayNameEditText);
                     }
                     return true;
                 }
@@ -83,6 +87,18 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
 
         profilePicImageView = findViewById(R.id.image_profile_pic);
         coordinatorLayout = findViewById(R.id.coordinator_layout);
+        searchTextInputLayout = findViewById(R.id.text_input_layout_search);
+        searchTextInputEditText = findViewById(R.id.text_input_edit_text_search);
+        searchTextInputEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    onSearchButtonClick(searchTextInputEditText);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         if (savedInstanceState != null) {
             userCurrentlyEditingDisplayName = savedInstanceState.getBoolean(USER_CURRENTLY_EDITING_DISPLAY_NAME);
@@ -160,6 +176,31 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             addFriendHistoryLinearLayout.setVisibility(View.VISIBLE);
             Button largeGameHistoryButton = findViewById(R.id.button_game_history_large);
             largeGameHistoryButton.setVisibility(View.GONE);
+
+            View searchBarView = findViewById(R.id.search_bar);
+            searchBarView.setVisibility(View.GONE);
+        }
+        else
+        {
+            Observer<String> searchedUserIdObserver = new Observer<String>() {
+                @Override
+                public void onChanged(String searchedUserId) {
+                    if(searchedUserId.isEmpty()){
+                        Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, getString(R.string.display_name_doesnt_exist));
+                    }
+                    else if(searchedUserId.equals(profileUserId)){
+                        Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, getString(R.string.already_viewing_this_profile));
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
+                        intent.putExtra(PROFILE_USER_ID, searchedUserId);
+                        startActivity(intent);
+                        searchTextInputEditText.setText("");
+                    }
+                }
+            };
+            profileViewModel.getSearchedUserId().observe(this, searchedUserIdObserver);
         }
 
     }
@@ -198,6 +239,16 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
         finish();
     }
 
+    public void onSearchButtonClick(android.view.View view) {
+        DisplayName displayName = new DisplayName(searchTextInputEditText.getText().toString(), this);
+        String errorMsg = displayName.getError();
+        Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, errorMsg);
+        if(errorMsg != null){
+            return;
+        }
+        profileViewModel.searchUserId(displayName.getDisplayName());
+    }
+
     public void onAddRemoveFriendClick(android.view.View view) {
         List<String> loggedInUserFriendIds = profileViewModel.getLoggedInUserFriendIds().getValue();
         if (loggedInUserFriendIds.contains(profileUserId)) {
@@ -215,9 +266,14 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
                 Rect focusedViewRect = new Rect();
                 focusedView.getGlobalVisibleRect(focusedViewRect);
                 if (!focusedViewRect.contains((int) event.getRawX(), (int) event.getRawY())) {
-                    removeFocusFromDisplayNameEditText(focusedView);
-                    if (!updateDisplayName()) {
-                        displayNameEditText.setText(profileViewModel.getProfileUser().getValue().getDisplayName());
+                    focusedView.clearFocus();
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
+                    if(focusedView == displayNameEditText){
+                        disableDisplayNameEditText(focusedView);
+                        if (!updateDisplayName()) {
+                            displayNameEditText.setText(profileViewModel.getProfileUser().getValue().getDisplayName());
+                        }
                     }
                 }
             }
@@ -225,12 +281,9 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
         return super.dispatchTouchEvent(event);
     }
 
-    private void removeFocusFromDisplayNameEditText(View focusedView) {
-        focusedView.clearFocus();
+    private void disableDisplayNameEditText(View focusedView) {
         focusedView.setFocusable(false);
         focusedView.setEnabled(false);
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
         userCurrentlyEditingDisplayName = false;
     }
 

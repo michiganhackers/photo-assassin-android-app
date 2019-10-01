@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.michiganhackers.photoassassin.Email;
 import org.michiganhackers.photoassassin.R;
+import org.michiganhackers.photoassassin.Util;
 
 public class ResetPasswordActivity extends AppCompatActivity {
 
@@ -58,7 +59,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         }
         Email email = new Email(emailEditText.getText().toString(), this);
         String errorMsg = email.getError();
-        emailTextInputLayout.setError(errorMsg);
+        Util.setTextInputLayoutErrorReclaim(emailTextInputLayout, errorMsg);
         if (errorMsg != null) {
             return;
         }

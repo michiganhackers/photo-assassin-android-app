@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.michiganhackers.photoassassin.DisplayName;
 import org.michiganhackers.photoassassin.RequestImageDialog;
 import org.michiganhackers.photoassassin.R;
+import org.michiganhackers.photoassassin.Util;
 
 import java.io.File;
 
@@ -93,7 +94,7 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
 
         DisplayName displayName = new DisplayName(displayNameEditText.getText().toString(), this);
         String errorMsg = displayName.getError();
-        displayNameTextInputLayout.setError(errorMsg);
+        Util.setTextInputLayoutErrorReclaim(displayNameTextInputLayout, errorMsg);
         boolean errorShown = errorMsg != null;
 
         if (profilePicUri == null) {

@@ -24,12 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
+import javax.annotation.Tainted;
 
 public class ProfileViewModel extends ViewModel {
     private final String profileUserId, loggedInUserId;
     private MutableLiveData<User> profileUser;
     private MutableLiveData<List<User>> profileUserFriends;
     private MutableLiveData<List<String>> loggedInUserFriendIds;
+    private MutableLiveData<String> searchedUserId;
     private final String TAG = getClass().getCanonicalName();
 
     ProfileViewModel(String profileUserId, String loggedInUserId) {
@@ -40,21 +42,9 @@ public class ProfileViewModel extends ViewModel {
         profileUserFriends.setValue(new ArrayList<User>());
         loggedInUserFriendIds = new MutableLiveData<>();
         loggedInUserFriendIds.setValue(new ArrayList<String>());
+        searchedUserId = new MutableLiveData<>(); //TODO: does this need to be initialized?
 
-        User.getUserRef(this.profileUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e(TAG, "userRef listen error", e);
-                    return;
-                }
-                if (documentSnapshot != null && documentSnapshot.exists()) {
-                    profileUser.setValue(documentSnapshot.toObject(User.class));
-                } else {
-                    Log.e(TAG, "invalid profile user document");
-                }
-            }
-        });
+        setupProfileUserListener();
         setupProfileFriendsListener();
         setupLoggedInUserFriendIdsListener();
     }
@@ -69,6 +59,27 @@ public class ProfileViewModel extends ViewModel {
 
     public LiveData<List<String>> getLoggedInUserFriendIds() {
         return loggedInUserFriendIds;
+    }
+
+    public LiveData<String> getSearchedUserId() {
+        return searchedUserId;
+    }
+
+    private void setupProfileUserListener() {
+        User.getUserRef(this.profileUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.e(TAG, "userRef listen error", e);
+                    return;
+                }
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    profileUser.setValue(documentSnapshot.toObject(User.class));
+                } else {
+                    Log.e(TAG, "invalid profile user document");
+                }
+            }
+        });
     }
 
     private void setupProfileFriendsListener() {
@@ -134,7 +145,6 @@ public class ProfileViewModel extends ViewModel {
             }
         });
     }
-
 
     public void updateProfilePic(final Uri newProfilePicUri) {
         if (!profileUserId.equals(loggedInUserId)) {
@@ -205,5 +215,31 @@ public class ProfileViewModel extends ViewModel {
         }
         User.deleteFriend(friendId, loggedInUserId);
         User.deleteFriend(loggedInUserId, friendId);
+    }
+
+    // sets searchedUserId to the id of the user with the given displayName
+    // if the displayName doesn't exist, sets the id to the empty string
+    public void searchUserId(String displayName) {
+        User.getUsersRef()
+                .whereEqualTo("displayName", displayName)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.size() > 1) {
+                            Log.e(TAG, "multiple users have same display name");
+                        } else if (queryDocumentSnapshots.size() == 0) {
+                            searchedUserId.setValue("");
+                        } else {
+                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                            if (documentSnapshot != null && documentSnapshot.exists()) {
+                                searchedUserId.setValue(documentSnapshot.toObject(User.class).getId());
+                            } else {
+                                Log.e(TAG, "invalid user document");
+                            }
+                        }
+
+                    }
+                });
     }
 }
