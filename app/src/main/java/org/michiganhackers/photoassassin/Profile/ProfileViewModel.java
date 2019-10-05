@@ -8,20 +8,26 @@ import androidx.lifecycle.ViewModel;
 import android.net.Uri;
 import android.util.Log;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.storage.UploadTask;
 
 import org.michiganhackers.photoassassin.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.annotation.Tainted;
@@ -203,9 +209,18 @@ public class ProfileViewModel extends ViewModel {
             Log.e(TAG, "Logged in user attempted to add themself as a friend");
             return;
         }
+        Map<String, Object> friendMap = new HashMap<>();
+        friendMap.put("friendToAddId", friendId);
+        FirebaseFunctions.getInstance()
+                .getHttpsCallable("addFriend")
+                .call(friendMap)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "failed to add friend", e);
+                    }
+                });
 
-        User.createFriend(friendId, loggedInUserId);
-        User.createFriend(loggedInUserId, friendId);
     }
 
     public void removeFriend(String friendId) {
@@ -213,8 +228,18 @@ public class ProfileViewModel extends ViewModel {
             Log.e(TAG, "Logged in user attempted to removed themself as a friend");
             return;
         }
-        User.deleteFriend(friendId, loggedInUserId);
-        User.deleteFriend(loggedInUserId, friendId);
+        Map<String, Object> friendMap = new HashMap<>();
+        friendMap.put("friendToRemoveId", friendId);
+        FirebaseFunctions.getInstance()
+                .getHttpsCallable("removeFriend")
+                .call(friendMap)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "failed to remove friend", e);
+                    }
+                });
+
     }
 
     // sets searchedUserId to the id of the user with the given displayName

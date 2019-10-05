@@ -153,26 +153,6 @@ public class User {
         return User.getUserRef(userId).collection("friends");
     }
 
-    public static void createFriend(String userId, String friendId) {
-        Map<String, Object> friendMap = new HashMap<>();
-        friendMap.put("friend", User.getUserRef(friendId));
-        User.getFriendsRef(userId).document(friendId).set(friendMap).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "failed to add friend document", e);
-            }
-        });
-    }
-
-    public static void deleteFriend(String userId, String friendId) {
-        User.getFriendsRef(userId).document(friendId).delete().addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "failed to remove friend document", e);
-            }
-        });
-    }
-
     public static CollectionReference getCurrentGamesRef(String userId) {
         return User.getUserRef(userId).collection("currentGames");
     }

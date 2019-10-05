@@ -30,18 +30,6 @@
             android:onClick="onOtherProfileClick"
             android:text="other profile" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onMakeEveryoneFriendsClick"
-            android:text="make everyone friends" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onRemoveEveryoneFriendsClick"
-            android:text="remove everyone's friends" />
-
     </LinearLayout>
 
 
