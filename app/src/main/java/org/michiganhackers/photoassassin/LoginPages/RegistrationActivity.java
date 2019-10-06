@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.storage.UploadTask;
 
 import org.michiganhackers.photoassassin.Email;
@@ -29,6 +30,7 @@ import org.michiganhackers.photoassassin.R;
 import org.michiganhackers.photoassassin.User;
 import org.michiganhackers.photoassassin.Util;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.michiganhackers.photoassassin.LoginPages.SetupProfileActivity.DISPLAY_NAME;
@@ -170,19 +172,15 @@ public class RegistrationActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        taskSnapshot.getStorage().getDownloadUrl()
-                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        User newUser = new User(userId, displayName, uri.toString());
-                                        Map<String, Object> newUserMap = Util.pojoToMap(newUser);
-                                        User.getUserRef(userId).set(newUserMap);
-                                    }
-                                })
+                        Map<String, Object> displayNameMap = new HashMap<>();
+                        displayNameMap.put("displayName", displayName);
+                        FirebaseFunctions.getInstance()
+                                .getHttpsCallable("addUser")
+                                .call(displayNameMap)
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Log.e(TAG, "Failed to get download url from profile pic ref", e);
+                                        Log.e(TAG, "failed to add user", e);
                                     }
                                 });
                     }
@@ -193,7 +191,5 @@ public class RegistrationActivity extends AppCompatActivity {
                         Log.e(TAG, "Failed to add user profile pic to storage", e);
                     }
                 });
-
-
     }
 }

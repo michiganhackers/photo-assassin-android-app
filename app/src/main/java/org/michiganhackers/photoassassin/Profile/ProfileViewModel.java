@@ -158,30 +158,6 @@ public class ProfileViewModel extends ViewModel {
             return;
         }
         User.getProfilePicRef(profileUserId).putFile(newProfilePicUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        taskSnapshot.getStorage().getDownloadUrl()
-                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(final Uri uri) {
-                                        User.getUserRef(profileUserId).update("profilePicUrl", uri.toString())
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.e(TAG, "Failed to update user profilePicUrl", e);
-                                                    }
-                                                });
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e(TAG, "Failed to get download url from profile pic ref", e);
-                            }
-                        });
-                    }
-                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
