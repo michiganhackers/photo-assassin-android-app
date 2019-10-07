@@ -21,12 +21,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -46,31 +44,67 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
 
     public static final String USER_CURRENTLY_EDITING_DISPLAY_NAME = "userCurrentlyEditingDisplayName";
     public static final String PROFILE_USER_ID = "Profile User ID";
+    public static final String PROFILE_PIC_URI = "profile pic uri";
+    private final String TAG = getClass().getCanonicalName();
     private ProfileViewModel profileViewModel;
     private String profileUserId;
-
     private boolean userCurrentlyEditingDisplayName = false;
     private EditText displayNameEditText;
-
     private ImageView profilePicImageView;
     private Uri profilePicUri;
     private RequestImageDialog requestImageDialog;
-
     private CoordinatorLayout coordinatorLayout;
-
     private TextInputLayout searchTextInputLayout;
     private TextInputEditText searchTextInputEditText;
-
-    private final String TAG = getClass().getCanonicalName();
-    public static final String PROFILE_PIC_URI = "profile pic uri";
-
+    private FriendRecyclerViewAdapter friendRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        initViews();
+        setupEditDisplayNameImeAction();
+        setupSearchImeAction();
+
+        if (savedInstanceState != null) {
+            recoverInstanceState(savedInstanceState);
+        } else {
+            profileUserId = getIntent().getStringExtra(PROFILE_USER_ID);
+            if (profileUserId == null) {
+                Log.e(TAG, "no profile user ID provided to intent");
+            }
+        }
+
+        instantiateProfileViewModel();
+        setupFriendRecyclerView();
+        setupProfileUserObserver();
+        setupProfileUserFriendsObserver();
+        setupLoggedInUserFriendIdsObserver();
+
+        if (!profileUserId.equals(auth.getCurrentUser().getUid())) {
+            findViewById(R.id.button_game_history_large).setVisibility(View.GONE);
+            findViewById(R.id.search_bar).setVisibility(View.GONE);
+            findViewById(R.id.fab_add_image).setVisibility(View.INVISIBLE);
+            findViewById(R.id.image_edit_display_name).setVisibility(View.INVISIBLE);
+            findViewById(R.id.linear_layout_add_friend_history).setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            setupUserSearchObserver();
+        }
+
+    }
+
+    private void initViews (){
         displayNameEditText = findViewById(R.id.edit_text_display_name);
+        profilePicImageView = findViewById(R.id.image_profile_pic);
+        coordinatorLayout = findViewById(R.id.coordinator_layout);
+        searchTextInputLayout = findViewById(R.id.text_input_layout_search);
+        searchTextInputEditText = findViewById(R.id.text_input_edit_text_search);
+    }
+
+    private void setupEditDisplayNameImeAction() {
         displayNameEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -84,11 +118,9 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
                 return false;
             }
         });
+    }
 
-        profilePicImageView = findViewById(R.id.image_profile_pic);
-        coordinatorLayout = findViewById(R.id.coordinator_layout);
-        searchTextInputLayout = findViewById(R.id.text_input_layout_search);
-        searchTextInputEditText = findViewById(R.id.text_input_edit_text_search);
+    private void setupSearchImeAction() {
         searchTextInputEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -99,32 +131,24 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
                 return false;
             }
         });
+    }
 
-        if (savedInstanceState != null) {
-            userCurrentlyEditingDisplayName = savedInstanceState.getBoolean(USER_CURRENTLY_EDITING_DISPLAY_NAME);
-            if (userCurrentlyEditingDisplayName) {
-                onEditDisplayNameClick(displayNameEditText);
-            }
-            profilePicUri = savedInstanceState.getParcelable(PROFILE_PIC_URI);
-            if (profilePicUri != null) {
-                handleImageUri(profilePicUri);
-            }
-            profileUserId = savedInstanceState.getString(PROFILE_USER_ID);
-        } else {
-            profileUserId = getIntent().getStringExtra(PROFILE_USER_ID);
-            if (profileUserId == null) {
-                Log.e(TAG, "no profile user ID provided to intent");
-            }
-        }
-
-        RecyclerView friendsRecyclerView = findViewById(R.id.recycler_friends);
-        friendsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final FriendRecyclerViewAdapter friendRecyclerViewAdapter = new FriendRecyclerViewAdapter(this, new ArrayList<User>(), new ArrayList<String>(), auth.getCurrentUser().getUid());
-        friendsRecyclerView.setAdapter(friendRecyclerViewAdapter);
-
+    private void instantiateProfileViewModel() {
         final ProfileViewModelFactory profileViewModelFactory = new ProfileViewModelFactory(profileUserId, auth.getCurrentUser().getUid());
         profileViewModel = ViewModelProviders.of(this, profileViewModelFactory).get(ProfileViewModel.class);
+    }
 
+    private void setupProfileUserFriendsObserver() {
+        Observer<List<User>> profileUserFriendsObserver = new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+                friendRecyclerViewAdapter.updateFriends(users);
+            }
+        };
+        profileViewModel.getProfileUserFriends().observe(this, profileUserFriendsObserver);
+    }
+
+    private void setupProfileUserObserver() {
         Observer<User> profileUserObserver = new Observer<User>() {
             @Override
             public void onChanged(User user) {
@@ -141,15 +165,31 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             }
         };
         profileViewModel.getProfileUser().observe(this, profileUserObserver);
+    }
 
-        Observer<List<User>> profileUserFriendsObserver = new Observer<List<User>>() {
+    private void setupUserSearchObserver() {
+        Observer<String> searchedUserIdObserver = new Observer<String>() {
             @Override
-            public void onChanged(List<User> users) {
-                friendRecyclerViewAdapter.updateFriends(users);
+            public void onChanged(String searchedUserId) {
+                if(searchedUserId.isEmpty()){
+                    Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, getString(R.string.display_name_doesnt_exist));
+                }
+                else if(searchedUserId.equals(profileUserId)){
+                    Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, getString(R.string.already_viewing_this_profile));
+                }
+                else
+                {
+                    Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
+                    intent.putExtra(PROFILE_USER_ID, searchedUserId);
+                    startActivity(intent);
+                    searchTextInputEditText.setText("");
+                }
             }
         };
-        profileViewModel.getProfileUserFriends().observe(this, profileUserFriendsObserver);
+        profileViewModel.getSearchedUserId().observe(this, searchedUserIdObserver);
+    }
 
+    private void setupLoggedInUserFriendIdsObserver() {
         final Button addRemoveFriendButton = findViewById(R.id.button_add_remove_friend);
         Observer<List<String>> loggedInUserFriendIdsObserver = new Observer<List<String>>() {
             @Override
@@ -163,46 +203,25 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             }
         };
         profileViewModel.getLoggedInUserFriendIds().observe(this, loggedInUserFriendIdsObserver);
+    }
 
+    private void setupFriendRecyclerView() {
+        RecyclerView friendsRecyclerView = findViewById(R.id.recycler_friends);
+        friendsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        friendRecyclerViewAdapter = new FriendRecyclerViewAdapter(this, new ArrayList<User>(), new ArrayList<String>(), auth.getCurrentUser().getUid());
+        friendsRecyclerView.setAdapter(friendRecyclerViewAdapter);
+    }
 
-        if (!profileUserId.equals(auth.getCurrentUser().getUid())) {
-            FloatingActionButton addImageFAB = findViewById(R.id.fab_add_image);
-            addImageFAB.setVisibility(View.INVISIBLE);
-
-            ImageView editDisplayNameImage = findViewById(R.id.image_edit_display_name);
-            editDisplayNameImage.setVisibility(View.INVISIBLE);
-
-            LinearLayout addFriendHistoryLinearLayout = findViewById(R.id.linear_layout_add_friend_history);
-            addFriendHistoryLinearLayout.setVisibility(View.VISIBLE);
-            Button largeGameHistoryButton = findViewById(R.id.button_game_history_large);
-            largeGameHistoryButton.setVisibility(View.GONE);
-
-            View searchBarView = findViewById(R.id.search_bar);
-            searchBarView.setVisibility(View.GONE);
+    private void recoverInstanceState(Bundle savedInstanceState) {
+        userCurrentlyEditingDisplayName = savedInstanceState.getBoolean(USER_CURRENTLY_EDITING_DISPLAY_NAME);
+        if (userCurrentlyEditingDisplayName) {
+            onEditDisplayNameClick(displayNameEditText);
         }
-        else
-        {
-            Observer<String> searchedUserIdObserver = new Observer<String>() {
-                @Override
-                public void onChanged(String searchedUserId) {
-                    if(searchedUserId.isEmpty()){
-                        Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, getString(R.string.display_name_doesnt_exist));
-                    }
-                    else if(searchedUserId.equals(profileUserId)){
-                        Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, getString(R.string.already_viewing_this_profile));
-                    }
-                    else
-                    {
-                        Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
-                        intent.putExtra(PROFILE_USER_ID, searchedUserId);
-                        startActivity(intent);
-                        searchTextInputEditText.setText("");
-                    }
-                }
-            };
-            profileViewModel.getSearchedUserId().observe(this, searchedUserIdObserver);
+        profilePicUri = savedInstanceState.getParcelable(PROFILE_PIC_URI);
+        if (profilePicUri != null) {
+            handleImageUri(profilePicUri);
         }
-
+        profileUserId = savedInstanceState.getString(PROFILE_USER_ID);
     }
 
     @Override
@@ -287,7 +306,8 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
         userCurrentlyEditingDisplayName = false;
     }
 
-    // returns true if display name is valid
+    // returns true if display name is updated
+    // Note: can still error during profileViewModel.updateDisplayName()
     private boolean updateDisplayName() {
         DisplayName displayName = new DisplayName(displayNameEditText.getText().toString(), this);
         String errorMsg = displayName.getError();
@@ -322,6 +342,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             outState.putParcelable(PROFILE_PIC_URI, profilePicUri);
         }
         outState.putBoolean(USER_CURRENTLY_EDITING_DISPLAY_NAME, userCurrentlyEditingDisplayName);
+        outState.putString(PROFILE_USER_ID, profileUserId);
         super.onSaveInstanceState(outState);
     }
 

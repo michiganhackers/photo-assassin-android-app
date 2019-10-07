@@ -30,7 +30,7 @@
     <string name="pwd_reset_confirmation">We have sent you instructions to reset your password!</string>
     <string name="games_won">Games Won:</string>
     <string name="win_percent">Win %:</string>
-    <string name="percentile">Percentile</string>
+    <string name="percentile">Percentile:</string>
     <string name="kill_death_ratio">Kill/Death Ratio:</string>
     <string name="profile_picture">profile picture</string>
     <string name="game_history">Game History</string>
