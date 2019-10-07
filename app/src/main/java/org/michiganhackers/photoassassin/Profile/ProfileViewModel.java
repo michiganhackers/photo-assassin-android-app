@@ -171,11 +171,15 @@ public class ProfileViewModel extends ViewModel {
             Log.e(TAG, "Logged in user attempted to update display name of another user");
             return;
         }
-        User.getUserRef(profileUserId).update("displayName", displayName)
+        Map<String, Object> displayNameMap = new HashMap<>();
+        displayNameMap.put("displayName", displayName);
+        FirebaseFunctions.getInstance()
+                .getHttpsCallable("updateDisplayName")
+                .call(displayNameMap)
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Failed to update user displayName", e);
+                        Log.e(TAG, "failed to update user displayName", e);
                     }
                 });
     }
