@@ -1,38 +1,53 @@
 package org.michiganhackers.photoassassin;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.facebook.internal.Logger;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.model.Document;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.michiganhackers.photoassassin.LoginPages.Email;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import io.grpc.Context;
+import java.util.Map;
 
 public class User {
     private String id;
     private String displayName;
     private String profilePicUrl;
 
-    private List<DocumentReference> currentGames;
-    private List<DocumentReference> friends;
-    private List<DocumentReference> pastGames;
+    private CollectionReference currentGames;
+    private CollectionReference friends;
+    private CollectionReference pastGames;
 
     private int deaths;
     private int kills;
     private int longestLifeSeconds;
+
+    private static final String TAG = "User";
 
     public User() {
         id = null;
         displayName = null;
         profilePicUrl = null;
 
-        currentGames = new ArrayList<>();
-        friends = new ArrayList<>();
-        pastGames = new ArrayList<>();
+        deaths = 0;
+        kills = 0;
+        longestLifeSeconds = 0;
+    }
+
+    public User(String id) {
+        this.id = id;
+        displayName = null;
+        profilePicUrl = null;
 
         deaths = 0;
         kills = 0;
@@ -43,10 +58,6 @@ public class User {
         this.id = id;
         this.displayName = displayName;
         this.profilePicUrl = profilePicUrl;
-
-        currentGames = new ArrayList<>();
-        friends = new ArrayList<>();
-        pastGames = new ArrayList<>();
 
         deaths = 0;
         kills = 0;
@@ -77,29 +88,6 @@ public class User {
         this.profilePicUrl = profilePicUrl;
     }
 
-    public List<DocumentReference> getCurrentGames() {
-        return currentGames;
-    }
-
-    public void setCurrentGames(List<DocumentReference> currentGames) {
-        this.currentGames = currentGames;
-    }
-
-    public List<DocumentReference> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(List<DocumentReference> friends) {
-        this.friends = friends;
-    }
-
-    public List<DocumentReference> getPastGames() {
-        return pastGames;
-    }
-
-    public void setPastGames(List<DocumentReference> pastGames) {
-        this.pastGames = pastGames;
-    }
 
     public int getDeaths() {
         return deaths;
@@ -125,11 +113,69 @@ public class User {
         this.longestLifeSeconds = longestLifeSeconds;
     }
 
+    public CollectionReference getCurrentGames() {
+        return currentGames;
+    }
+
+    public void setCurrentGames(CollectionReference currentGames) {
+        this.currentGames = currentGames;
+    }
+
+    public CollectionReference getFriends() {
+        return friends;
+    }
+
+    public void setFriends(CollectionReference friends) {
+        this.friends = friends;
+    }
+
+    public CollectionReference getPastGames() {
+        return pastGames;
+    }
+
+    public void setPastGames(CollectionReference pastGames) {
+        this.pastGames = pastGames;
+    }
+
     public static StorageReference getProfilePicRef(String userId) {
         return FirebaseStorage.getInstance().getReference().child("images/profile_pictures/" + userId);
     }
 
     public static DocumentReference getUserRef(String userId) {
-        return FirebaseFirestore.getInstance().collection("users").document(userId);
+        return User.getUsersRef().document(userId);
+    }
+
+    public static CollectionReference getUsersRef() {
+        return FirebaseFirestore.getInstance().collection("users");
+    }
+
+    public static CollectionReference getFriendsRef(String userId) {
+        return User.getUserRef(userId).collection("friends");
+    }
+
+    public static CollectionReference getCurrentGamesRef(String userId) {
+        return User.getUserRef(userId).collection("currentGames");
+    }
+
+    public static CollectionReference getPastGamesRef(String userId) {
+        return User.getUserRef(userId).collection("pastGames");
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof User)) {
+            return false;
+        }
+
+        return this.getId().equals(((User) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
     }
 }

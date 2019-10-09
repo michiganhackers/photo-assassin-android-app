@@ -3,6 +3,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_layout"
+    style="@style/OutermostLayoutPaddingLoginPages"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginPages.RegistrationActivity">
@@ -22,7 +23,7 @@
                 android:visibility="gone" />
 
             <TextView
-                style="@style/TitleLoginPages"
+                style="@style/PageTitle"
                 android:layout_marginBottom="40dp"
                 android:text="@string/registration"
                 android:textSize="64sp" />
@@ -32,7 +33,7 @@
             <include layout="@layout/edit_text_password" />
 
             <Button
-                style="@style/ButtonLoginPages"
+                style="@style/TransparentWhiteBorderButton"
                 android:onClick="onRegisterButtonClick"
                 android:text="@string/sign_up" />
 

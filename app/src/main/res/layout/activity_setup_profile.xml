@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_layout"
+    style="@style/OutermostLayoutPaddingLoginPages"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginPages.SetupProfileActivity">
@@ -16,35 +17,12 @@
         <LinearLayout style="@style/LinearLayoutLoginPages">
 
             <TextView
-                style="@style/TitleLoginPages"
+                style="@style/PageTitle"
                 android:layout_marginBottom="40dp"
                 android:text="@string/registration"
                 android:textSize="64sp" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/image_profile_pic"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:contentDescription="@string/profile_picture"
-                    app:srcCompat="@drawable/ic_profile" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/image_profile_pic"
-                    android:layout_alignEnd="@+id/image_profile_pic"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:tint="@color/colorPrimary"
-                    android:onClick="onAddProfilePicButtonClick"
-                    app:srcCompat="@drawable/ic_add_photo" />
-            </RelativeLayout>
+            <include layout="@layout/profile_picture_image_and_fab" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_display_name"
@@ -52,20 +30,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textColorHint="@color/whiteSixtyPercentOpacity"
-                app:errorTextAppearance="@style/ErrorTextAppearanceLoginPages"
-                app:hintTextAppearance="@style/HintTextAppearanceLoginPages"
+                app:errorTextAppearance="@style/ErrorTextAppearance"
+                app:hintTextAppearance="@style/HintTextAppearance"
                 app:hintTextColor="@color/whiteSixtyPercentOpacity">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_input_edit_text_display_name"
-                    style="@style/EditTextLoginPages"
+                    style="@style/TransparentWhiteEditText"
                     android:hint="@string/full_name"
                     android:inputType="textPersonName" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                style="@style/ButtonLoginPages"
+                style="@style/TransparentWhiteBorderButton"
                 android:onClick="onContinueButtonClick"
                 android:text="@string/registration_continue" />
 
