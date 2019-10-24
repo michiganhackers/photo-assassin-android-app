@@ -13,4 +13,15 @@
         android:onClick="onSignoutButtonClick"
         android:text="sign out" />
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:onClick="lobbyButtonClick"
+        android:text="LOBBY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signout" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
