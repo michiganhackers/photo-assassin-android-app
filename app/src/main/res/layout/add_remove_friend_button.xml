@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_layout_add_remove_friend_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/image_add_friend"
+        style="@style/AddRemoveFriendIcon"
+        app:srcCompat="@drawable/ic_add_friend" />
+
+    <ImageView
+        android:id="@+id/image_remove_friend"
+        style="@style/AddRemoveFriendIcon"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_remove_friend" />
+
+    <TextView
+        android:id="@+id/text_add_remove_friend"
+        style="@style/AddRemoveFriendText" />
+</LinearLayout>

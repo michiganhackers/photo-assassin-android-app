@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
+    style="@style/OutermostLayoutPaddingLoginPages"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginPages.SetupProfileActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout style="@style/LinearLayoutLoginPages">
+
+            <TextView
+                style="@style/PageTitle"
+                android:layout_marginBottom="40dp"
+                android:text="@string/registration"
+                android:textSize="64sp" />
+
+            <include layout="@layout/profile_picture_image_and_fab" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_display_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/whiteSixtyPercentOpacity"
+                app:errorTextAppearance="@style/ErrorTextAppearance"
+                app:hintTextAppearance="@style/HintTextAppearance"
+                app:hintTextColor="@color/whiteSixtyPercentOpacity">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_input_edit_text_display_name"
+                    style="@style/TransparentWhiteEditText"
+                    android:hint="@string/full_name"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                style="@style/TransparentWhiteBorderButton"
+                android:onClick="onContinueButtonClick"
+                android:text="@string/registration_continue" />
+
+            <Button
+                style="@style/ButtonNoBackgroundLoginPages"
+                android:layout_marginTop="0dp"
+                android:onClick="onLoginButtonClick"
+                android:text="@string/already_have_account"
+                android:textSize="24sp" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
