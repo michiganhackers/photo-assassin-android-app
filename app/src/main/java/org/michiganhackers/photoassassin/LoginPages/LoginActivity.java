@@ -21,8 +21,11 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.michiganhackers.photoassassin.Email;
 import org.michiganhackers.photoassassin.MainActivity;
+import org.michiganhackers.photoassassin.Password;
 import org.michiganhackers.photoassassin.R;
+import org.michiganhackers.photoassassin.Util;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -111,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         Email email = new Email(emailEditText.getText().toString(), this);
         String errorMsg = email.getError();
-        emailTextInputLayout.setError(errorMsg);
+        Util.setTextInputLayoutErrorReclaim(emailTextInputLayout, errorMsg);
         errorShown = errorMsg != null;
 
         // Validate password and set error message
@@ -121,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         Password password = new Password(passwordEditText.getText().toString(), this);
         errorMsg = password.getError();
-        passwordTextInputLayout.setError(errorMsg);
+        Util.setTextInputLayoutErrorReclaim(passwordTextInputLayout, errorMsg);
         if (errorMsg != null || errorShown) {
             return;
         }
