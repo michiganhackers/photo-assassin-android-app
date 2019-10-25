@@ -1,6 +1,10 @@
 package org.michiganhackers.photoassassin;
 
 
+import android.util.Log;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -26,5 +30,11 @@ public final class Util {
         String json = gson.toJson(obj);
         Type mapStringObjType = new TypeToken<Map<String, Object>>(){}.getType();
         return new Gson().fromJson(json, mapStringObjType);
+    }
+
+    // ensures space is reclaimed below TextInputLayout if there is no error
+    public static void setTextInputLayoutErrorReclaim(TextInputLayout textInputLayout, String errorMsg){
+        textInputLayout.setError(errorMsg);
+        textInputLayout.setErrorEnabled(errorMsg != null);
     }
 }

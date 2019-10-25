@@ -35,7 +35,7 @@ public class RequestImageDialog extends AppCompatDialogFragment {
     private final String TAG = getClass().getCanonicalName();
 
     public interface ImageUriHandler {
-        void handleImageUrl(Uri uri);
+        void handleImageUri(Uri uri);
     }
 
     private ImageUriHandler imageUriHandler;
@@ -115,7 +115,7 @@ public class RequestImageDialog extends AppCompatDialogFragment {
 
         if (requestCode == PICK_IMAGE) {
             if (resultCode == RESULT_OK && data != null && data.getData() != null) {
-                imageUriHandler.handleImageUrl(data.getData());
+                imageUriHandler.handleImageUri(data.getData());
             } else {
                 Log.i(TAG, "PICK_IMAGE cancelled");
             }
@@ -126,7 +126,7 @@ public class RequestImageDialog extends AppCompatDialogFragment {
                     return;
                 }
                 Uri tempPhotoFileUri = Uri.parse(tempPhotoFile.toURI().toString());
-                imageUriHandler.handleImageUrl(tempPhotoFileUri);
+                imageUriHandler.handleImageUri(tempPhotoFileUri);
             } else {
                 Log.i(TAG, "TAKE_PICTURE cancelled");
             }

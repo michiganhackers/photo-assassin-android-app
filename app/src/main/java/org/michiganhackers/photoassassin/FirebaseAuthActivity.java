@@ -25,7 +25,7 @@ public abstract class FirebaseAuthActivity extends AppCompatActivity {
     private ServiceLogoutHandler serviceLogoutHandler;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         auth = FirebaseAuth.getInstance();
         serviceLogoutHandler = new ServiceLogoutHandler(this, auth);
@@ -57,7 +57,7 @@ public abstract class FirebaseAuthActivity extends AppCompatActivity {
         }
     }
 
-    public void signOut() {
+    protected void signOut() {
         serviceLogoutHandler.signOut();
         auth.signOut();
     }
