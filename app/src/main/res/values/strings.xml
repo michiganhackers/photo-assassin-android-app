@@ -60,4 +60,10 @@
     <string name="magnifying_glass">magnifying glass</string>
     <string name="display_name_doesnt_exist">display name doesn\'t exist</string>
     <string name="already_viewing_this_profile">you\'re already viewing this profile</string>
+    <string name="pref_change_email">Change Email</string>
+    <string name="pref_change_password">Change Password</string>
+    <string name="pref_change_theme">Change Theme</string>
+    <string name="pref_notifications">Notifications</string>
+    <string name="pref_logout">Logout</string>
+    <string name="settings">Settings</string>
 </resources>

@@ -20,6 +20,7 @@
         <activity android:name=".LoginPages.SetupProfileActivity"></activity>
         <activity android:name=".LoginPages.ResetPasswordActivity" />
         <activity android:name=".LoginPages.RegistrationActivity" />
+        <activity android:name=".Settings.SettingsActivity" />
         <activity android:name=".LoginPages.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

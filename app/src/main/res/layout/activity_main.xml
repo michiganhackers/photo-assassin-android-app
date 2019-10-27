@@ -12,6 +12,13 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/settings_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onSettingsButtonClick"
+            android:text="@string/settings" />
+
+        <Button
             android:id="@+id/signout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

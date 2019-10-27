@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.michiganhackers.photoassassin.Profile.ProfileActivity;
+import org.michiganhackers.photoassassin.Settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,11 @@ public class MainActivity extends FirebaseAuthActivity {
     public void onOtherProfileClick(android.view.View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(PROFILE_USER_ID, "PBkztTsSyZbpGmznxoRkbltFR203");
+        startActivity(intent);
+    }
+
+    public void onSettingsButtonClick(android.view.View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 }
