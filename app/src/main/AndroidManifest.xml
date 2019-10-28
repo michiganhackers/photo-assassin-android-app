@@ -21,6 +21,12 @@
         <activity android:name=".LoginPages.ResetPasswordActivity" />
         <activity android:name=".LoginPages.RegistrationActivity" />
         <activity android:name=".Settings.SettingsActivity" />
+        <activity android:name=".Settings.ChangeEmailActivity">
+            <intent-filter>
+                <action android:name="org.michiganhackers.photoassassin.Settings.ChangeEmailActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".LoginPages.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -5,18 +5,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
         android:key="change_email_pref"
-        android:title="@string/pref_change_email" />
+        android:title="@string/change_email" >
+    <intent
+        android:action="org.michiganhackers.photoassassin.Settings.ChangeEmailActivity"/>
+    </Preference>
 
     <Preference
         android:key="change_password_pref"
-        android:title="@string/pref_change_password" />
-
+        android:title="@string/change_password" />
 
     <Preference
         android:key="notifications_pref"
-        android:title="@string/pref_notifications"/>
+        android:title="@string/notifications"/>
 
     <Preference
         android:key="logout_pref"
-        android:title="@string/pref_logout"/>
+        android:title="@string/logout"/>
 </PreferenceScreen>

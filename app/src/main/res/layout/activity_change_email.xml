@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.michiganhackers.photoassassin.Settings.ChangeEmailActivity"
+    android:id="@+id/coordinator_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" >
+
+            <Button
+                style="@style/BackButton"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="-15dp"
+                android:onClick="onBackButtonClick" />
+
+            <TextView
+                style="@style/PageTitle"
+                android:layout_centerHorizontal="true"
+                android:text="@string/change_email"
+                android:textSize="64sp" />
+
+        </RelativeLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_new_email"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="75dp"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/whiteSixtyPercentOpacity"
+            app:errorTextAppearance="@style/ErrorTextAppearance"
+            app:hintTextAppearance="@style/HintTextAppearance"
+            app:hintTextColor="@color/whiteSixtyPercentOpacity">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_text_new_email"
+                style="@style/TransparentWhiteEditText"
+                android:hint="@string/new_email"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_confirm_email"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/whiteSixtyPercentOpacity"
+            app:errorTextAppearance="@style/ErrorTextAppearance"
+            app:hintTextAppearance="@style/HintTextAppearance"
+            app:hintTextColor="@color/whiteSixtyPercentOpacity">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_text_confirm_email"
+                style="@style/TransparentWhiteEditText"
+                android:hint="@string/confirm_new_email"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TransparentWhiteBorderButton"
+            android:text="@string/submit"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="175dp"/>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
