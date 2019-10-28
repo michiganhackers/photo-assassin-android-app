@@ -27,6 +27,18 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".Settings.ChangePasswordActivity">
+            <intent-filter>
+                <action android:name="org.michiganhackers.photoassassin.Settings.ChangePasswordActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Settings.NotificationsActivity">
+            <intent-filter>
+                <action android:name="org.michiganhackers.photoassassin.Settings.NotificationsActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".LoginPages.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

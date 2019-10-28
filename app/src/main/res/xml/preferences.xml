@@ -12,11 +12,17 @@
 
     <Preference
         android:key="change_password_pref"
-        android:title="@string/change_password" />
+        android:title="@string/change_password" >
+    <intent
+       android:action="org.michiganhackers.photoassassin.Settings.ChangePasswordActivity" />
+    </Preference>
 
     <Preference
         android:key="notifications_pref"
-        android:title="@string/notifications"/>
+        android:title="@string/notifications">
+    <intent
+        android:action="org.michiganhackers.photoassassin.Settings.NotificationsActivity" />
+    </Preference>
 
     <Preference
         android:key="logout_pref"

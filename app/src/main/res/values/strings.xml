@@ -71,4 +71,11 @@
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
+    <string name="turn_all_notifications">Turn all notifications on/off</string>
+    <string name="receive_notifications_when">Receive notifications when:</string>
+    <string name="pending_vote">You have a pending vote</string>
+    <string name="someone_eliminated">Someone is eliminated</string>
+    <string name="you_are_eliminated">You are eliminated</string>
+    <string name="voting_results">Voting results are in</string>
+    <string name="when_invited">When you are invited</string>
 </resources>
