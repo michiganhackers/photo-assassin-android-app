@@ -60,4 +60,6 @@
     <string name="magnifying_glass">magnifying glass</string>
     <string name="display_name_doesnt_exist">display name doesn\'t exist</string>
     <string name="already_viewing_this_profile">you\'re already viewing this profile</string>
+    <string name="default_notification_channel_id">default_channel</string>
+    <string name="default_notification_channel_name">Default</string>
 </resources>

@@ -43,7 +43,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private FirebaseAuth auth;
     private final String TAG = getClass().getCanonicalName();
-    private ServiceLoginHandler serviceLoginHandler;
+    private LoginHandler loginHandler;
     private ProgressBar progressBar;
 
     @Override
@@ -54,9 +54,10 @@ public class RegistrationActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         coordinatorLayout = findViewById(R.id.coordinator_layout);
 
-        ServiceLoginHandler.Callback callback = new ServiceLoginHandler.Callback() {
+        LoginHandler.Callback callback = new LoginHandler.Callback() {
             @Override
             public void onSuccess(@NonNull Task<AuthResult> task) {
+                super.onSuccess(task);
                 if (auth.getCurrentUser() == null) {
                     Log.e(TAG, "Null user in successful registration");
                     return;
@@ -79,7 +80,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 Log.i(TAG, "login cancelled");
             }
         };
-        serviceLoginHandler = new ServiceLoginHandler(this, auth, callback);
+        loginHandler = new LoginHandler(this, auth, callback);
 
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
@@ -144,17 +145,17 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void onRegisterGoogleButtonClick(android.view.View view) {
-        serviceLoginHandler.onLoginGoogleButtonClick(view);
+        loginHandler.onLoginGoogleButtonClick();
     }
 
     public void onRegisterFacebookButtonClick(android.view.View view) {
-        serviceLoginHandler.onLoginFacebookButtonClick(view);
+        loginHandler.onLoginFacebookButtonClick();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        serviceLoginHandler.onActivityResult(requestCode, resultCode, data);
+        loginHandler.onActivityResult(requestCode, resultCode, data);
     }
 
     private void initializeUser(final String userId) {

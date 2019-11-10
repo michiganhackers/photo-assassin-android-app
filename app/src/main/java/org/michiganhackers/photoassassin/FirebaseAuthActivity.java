@@ -4,17 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.michiganhackers.photoassassin.LoginPages.LoginActivity;
-import org.michiganhackers.photoassassin.LoginPages.ServiceLoginHandler;
-import org.michiganhackers.photoassassin.LoginPages.ServiceLogoutHandler;
+import org.michiganhackers.photoassassin.LoginPages.LogoutHandler;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 // This activity will redirect the user to the login page if they are not logged in
 // Any activity that a user must be signed in to see should extend this class
@@ -22,13 +28,13 @@ public abstract class FirebaseAuthActivity extends AppCompatActivity {
     protected FirebaseAuth auth;
     protected FirebaseAuth.AuthStateListener authListener;
     private final String TAG = getClass().getCanonicalName();
-    private ServiceLogoutHandler serviceLogoutHandler;
+    private LogoutHandler logoutHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         auth = FirebaseAuth.getInstance();
-        serviceLogoutHandler = new ServiceLogoutHandler(this, auth);
+        logoutHandler = new LogoutHandler(this, auth);
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -58,7 +64,6 @@ public abstract class FirebaseAuthActivity extends AppCompatActivity {
     }
 
     protected void signOut() {
-        serviceLogoutHandler.signOut();
-        auth.signOut();
+        logoutHandler.signOut();
     }
 }

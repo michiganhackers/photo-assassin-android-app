@@ -5,12 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,12 +24,20 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.michiganhackers.photoassassin.Email;
 import org.michiganhackers.photoassassin.MainActivity;
 import org.michiganhackers.photoassassin.Password;
 import org.michiganhackers.photoassassin.R;
 import org.michiganhackers.photoassassin.Util;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private FirebaseAuth auth;
     private final String TAG = getClass().getCanonicalName();
-    private ServiceLoginHandler serviceLoginHandler;
+    private LoginHandler loginHandler;
     public static final int RESET_PASSWORD_REQUEST_CODE = 2;
     private ProgressBar progressBar;
 
@@ -45,6 +57,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        setupDefaultNotificationChannel();
+
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             Intent intent = new Intent(this, MainActivity.class);
@@ -54,31 +68,8 @@ public class LoginActivity extends AppCompatActivity {
 
         coordinatorLayout = findViewById(R.id.coordinator_layout);
 
-        ServiceLoginHandler.Callback callback = new ServiceLoginHandler.Callback() {
-            @Override
-            public void onSuccess(@NonNull Task<AuthResult> task) {
 
-                if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser()) {
-                    Log.i(TAG, "New service sign in");
-                    deleteAccountAndGotoSetupProfile();
-                } else {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onFailure(Exception exception) {
-                Snackbar.make(coordinatorLayout, R.string.login_failed, Snackbar.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancel() {
-                Log.i(TAG, "login cancelled");
-            }
-        };
-        serviceLoginHandler = new ServiceLoginHandler(this, auth, callback);
+        loginHandler = new LoginHandler(this, auth, createLoginHandlerCallback());
 
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
@@ -87,6 +78,45 @@ public class LoginActivity extends AppCompatActivity {
         passwordTextInputLayout = findViewById(R.id.text_input_layout_password);
 
         progressBar = findViewById(R.id.progress_bar);
+    }
+
+    private LoginHandler.Callback createLoginHandlerCallback() {
+        return new LoginHandler.Callback() {
+                @Override
+                public void onSuccess(@NonNull Task<AuthResult> task) {
+                    super.onSuccess(task);
+
+                    if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser()) {
+                        Log.i(TAG, "New service sign in");
+                        deleteAccountAndGotoSetupProfile();
+                    } else {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception exception) {
+                    Snackbar.make(coordinatorLayout, R.string.login_failed, Snackbar.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onCancel() {
+                    Log.i(TAG, "login cancelled");
+                }
+            };
+    }
+
+    private void setupDefaultNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId  = getString(R.string.default_notification_channel_id);
+            String channelName = getString(R.string.default_notification_channel_name);
+            NotificationManager notificationManager =
+                    getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_HIGH));
+        }
     }
 
     @Override
@@ -129,40 +159,21 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Log in
-        progressBar.setVisibility(View.VISIBLE);
-        auth.signInWithEmailAndPassword(email.getEmail(), password.getPassword())
-                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressBar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                            Log.i(TAG, "Logged in successfully");
-                        } else {
-                            Exception exception = task.getException();
-                            String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
-                            Snackbar.make(coordinatorLayout, R.string.auth_failed_login, Snackbar.LENGTH_LONG).show();
-                            Log.d(TAG, getString(R.string.auth_failed_login) + msg);
-                        }
-                    }
-                });
+        loginHandler.onLoginEmailButtonClick(email.getEmail(), password.getPassword(), progressBar);
     }
 
     public void onContinueWithGoogleButtonClick(android.view.View view) {
-        serviceLoginHandler.onLoginGoogleButtonClick(view);
+        loginHandler.onLoginGoogleButtonClick();
     }
 
     public void onContinueWithFacebookButtonClick(android.view.View view) {
-        serviceLoginHandler.onLoginFacebookButtonClick(view);
+        loginHandler.onLoginFacebookButtonClick();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        serviceLoginHandler.onActivityResult(requestCode, resultCode, data);
+        loginHandler.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RESET_PASSWORD_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -182,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        serviceLoginHandler.signOut();
+                        loginHandler.signOut();
                         Intent intent = new Intent(LoginActivity.this, SetupProfileActivity.class);
                         intent.putExtra(ACCOUNT_NOT_REGISTERED_YET, true);
                         startActivity(intent);
