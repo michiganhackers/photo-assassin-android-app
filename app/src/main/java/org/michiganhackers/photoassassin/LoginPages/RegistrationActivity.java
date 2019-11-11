@@ -54,33 +54,7 @@ public class RegistrationActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         coordinatorLayout = findViewById(R.id.coordinator_layout);
 
-        LoginHandler.Callback callback = new LoginHandler.Callback() {
-            @Override
-            public void onSuccess(@NonNull Task<AuthResult> task) {
-                super.onSuccess(task);
-                if (auth.getCurrentUser() == null) {
-                    Log.e(TAG, "Null user in successful registration");
-                    return;
-                }
-                if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser()) {
-                    initializeUser(auth.getCurrentUser().getUid());
-                }
-                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onFailure(Exception exception) {
-                Snackbar.make(coordinatorLayout, R.string.login_failed, Snackbar.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancel() {
-                Log.i(TAG, "login cancelled");
-            }
-        };
-        loginHandler = new LoginHandler(this, auth, callback);
+        loginHandler = new LoginHandler(this, auth, createLoginHandlerCallback());
 
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
@@ -89,6 +63,35 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordTextInputLayout = findViewById(R.id.text_input_layout_password);
 
         progressBar = findViewById(R.id.progress_bar);
+    }
+
+    private LoginHandler.Callback createLoginHandlerCallback() {
+        return new LoginHandler.Callback() {
+                @Override
+                public void onSuccess(@NonNull Task<AuthResult> task) {
+                    super.onSuccess(task);
+                    if (auth.getCurrentUser() == null) {
+                        Log.e(TAG, "Null user in successful registration");
+                        return;
+                    }
+                    if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser()) {
+                        initializeUser(auth.getCurrentUser().getUid());
+                    }
+                    Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailure(Exception exception) {
+                    Snackbar.make(coordinatorLayout, R.string.login_failed, Snackbar.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onCancel() {
+                    Log.i(TAG, "login cancelled");
+                }
+            };
     }
 
     @Override
