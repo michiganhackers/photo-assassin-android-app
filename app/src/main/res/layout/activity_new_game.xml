@@ -13,6 +13,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content" />
 
     <EditText
+        android:id="@+id/game_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -39,6 +41,7 @@
             android:layout_height="wrap_content" />
 
         <Spinner
+            android:id="@+id/player_limit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -46,11 +49,13 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/invite_players"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Invite Players" />
 
     <Button
+        android:id="@+id/create_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create Game" />
