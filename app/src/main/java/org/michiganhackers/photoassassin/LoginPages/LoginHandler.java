@@ -52,7 +52,7 @@ public class LoginHandler extends LogoutHandler {
     public static abstract class Callback {
         private final String TAG = getClass().getCanonicalName();
         public void onSuccess(@NonNull Task<AuthResult> task){
-            //TODO: should this be succeeding be a prerequisite to calling onSuccess?
+            //TODO: should this be a prerequisite to calling onSuccess?
             // It would make logging in slower, but it might be better to stop the login process
             // if it fails
             addFirebaseInstanceId();

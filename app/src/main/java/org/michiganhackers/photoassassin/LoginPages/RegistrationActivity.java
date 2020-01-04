@@ -21,8 +21,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.storage.UploadTask;
 
+import org.michiganhackers.photoassassin.Constants;
 import org.michiganhackers.photoassassin.Email;
 import org.michiganhackers.photoassassin.MainActivity;
 import org.michiganhackers.photoassassin.Password;
@@ -35,6 +37,7 @@ import java.util.Map;
 
 import static org.michiganhackers.photoassassin.LoginPages.SetupProfileActivity.DISPLAY_NAME;
 import static org.michiganhackers.photoassassin.LoginPages.SetupProfileActivity.PROFILE_PIC_URI;
+import static org.michiganhackers.photoassassin.LoginPages.SetupProfileActivity.USERNAME;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -67,31 +70,31 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private LoginHandler.Callback createLoginHandlerCallback() {
         return new LoginHandler.Callback() {
-                @Override
-                public void onSuccess(@NonNull Task<AuthResult> task) {
-                    super.onSuccess(task);
-                    if (auth.getCurrentUser() == null) {
-                        Log.e(TAG, "Null user in successful registration");
-                        return;
-                    }
-                    if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser()) {
-                        initializeUser(auth.getCurrentUser().getUid());
-                    }
-                    Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+            @Override
+            public void onSuccess(@NonNull Task<AuthResult> task) {
+                super.onSuccess(task);
+                if (auth.getCurrentUser() == null) {
+                    Log.e(TAG, "Null user in successful registration");
+                    return;
                 }
+                if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser()) {
+                    initializeUser(auth.getCurrentUser().getUid());
+                }
+                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
 
-                @Override
-                public void onFailure(Exception exception) {
-                    Snackbar.make(coordinatorLayout, R.string.login_failed, Snackbar.LENGTH_LONG).show();
-                }
+            @Override
+            public void onFailure(Exception exception) {
+                Snackbar.make(coordinatorLayout, R.string.login_failed, Snackbar.LENGTH_LONG).show();
+            }
 
-                @Override
-                public void onCancel() {
-                    Log.i(TAG, "login cancelled");
-                }
-            };
+            @Override
+            public void onCancel() {
+                Log.i(TAG, "login cancelled");
+            }
+        };
     }
 
     @Override
@@ -159,6 +162,7 @@ public class RegistrationActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         loginHandler.onActivityResult(requestCode, resultCode, data);
+
     }
 
     private void initializeUser(final String userId) {
@@ -171,28 +175,46 @@ public class RegistrationActivity extends AppCompatActivity {
 
         final Uri profilePicUri = getIntent().getParcelableExtra(PROFILE_PIC_URI);
         final String displayName = getIntent().getStringExtra(DISPLAY_NAME);
+        final String username = getIntent().getStringExtra(USERNAME);
 
-        User.getProfilePicRef(userId).putFile(profilePicUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        Map<String, Object> displayNameMap = new HashMap<>();
+        displayNameMap.put("displayName", displayName);
+        displayNameMap.put("username", username);
+        FirebaseFunctions.getInstance()
+                .getHttpsCallable("addUser")
+                .call(displayNameMap)
+                .addOnCompleteListener(this, new OnCompleteListener<HttpsCallableResult>() {
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Map<String, Object> displayNameMap = new HashMap<>();
-                        displayNameMap.put("displayName", displayName);
-                        FirebaseFunctions.getInstance()
-                                .getHttpsCallable("addUser")
-                                .call(displayNameMap)
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.e(TAG, "failed to add user", e);
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Failed to add user profile pic to storage", e);
+                    public void onComplete(@NonNull Task<HttpsCallableResult> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult() == null || task.getResult().getData() == null) {
+                                Log.e(TAG, "addUser cloud function didn't return result");
+                                return;
+                            }
+                            Map<String, Object> data = (Map<String,Object>) task.getResult().getData();
+                            String errorCode = (String) data.get("errorCode");
+                            if(errorCode == null){
+                                Log.e(TAG, "addUser result data doesn't contain 'errorCode' field");
+                            }
+                            else if (errorCode.equals(Constants.ErrorCode.OK)) {
+                                Log.d(TAG, "addUser returned OK");
+                                User.getProfilePicRef(userId).putFile(profilePicUri)
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e(TAG, "Failed to add user profile pic to storage", e);
+
+                                            }
+                                        });
+                            } else if (errorCode.equals(Constants.ErrorCode.DUPLICATE_USERNAME)) {
+                                Log.w(TAG, "addUser returned DUPLICATE_USERNAME");
+                                // TODO: goto registration and show snackbar
+                            } else {
+                                Log.e(TAG, "addUser returned unknown error code");
+                            }
+                        } else {
+                            Log.e(TAG, "Failed to addUser", task.getException());
+                        }
                     }
                 });
     }

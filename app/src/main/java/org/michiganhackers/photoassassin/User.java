@@ -22,6 +22,7 @@ import java.util.Map;
 public class User {
     private String id;
     private String displayName;
+    private String username;
     private String profilePicUrl;
 
     private CollectionReference currentGames;
@@ -37,6 +38,7 @@ public class User {
     public User() {
         id = null;
         displayName = null;
+        username = null;
         profilePicUrl = null;
 
         deaths = 0;
@@ -47,17 +49,8 @@ public class User {
     public User(String id) {
         this.id = id;
         displayName = null;
+        username = null;
         profilePicUrl = null;
-
-        deaths = 0;
-        kills = 0;
-        longestLifeSeconds = 0;
-    }
-
-    public User(String id, String displayName, String profilePicUrl) {
-        this.id = id;
-        this.displayName = displayName;
-        this.profilePicUrl = profilePicUrl;
 
         deaths = 0;
         kills = 0;
@@ -78,6 +71,14 @@ public class User {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getProfilePicUrl() {
