@@ -195,7 +195,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             } else if (errorCode.equals(Constants.ErrorCode.OK)) {
                                 Log.d(TAG, "addUser returned OK");
                                 User.getProfilePicRef(userId).putFile(profilePicUri)
-                                        .addOnFailureListener(new OnFailureListener() {
+                                        .addOnFailureListener(RegistrationActivity.this, new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Log.e(TAG, "Failed to add user profile pic to storage", e);
@@ -230,7 +230,7 @@ public class RegistrationActivity extends AppCompatActivity {
         final String email = emailEditText.getText().toString();
 
         auth.getCurrentUser().delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .addOnSuccessListener(this, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         loginHandler.signOut();
@@ -244,7 +244,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
+                .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, "Failed to delete account in handleDuplicateUsername", e);

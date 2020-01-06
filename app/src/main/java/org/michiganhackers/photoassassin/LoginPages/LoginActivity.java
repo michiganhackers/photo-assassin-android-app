@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         auth.getCurrentUser().delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .addOnSuccessListener(this, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         loginHandler.signOut();
@@ -199,7 +199,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
+                .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, "Failed to delete account in deleteAccountAndGotoSetupProfile", e);
