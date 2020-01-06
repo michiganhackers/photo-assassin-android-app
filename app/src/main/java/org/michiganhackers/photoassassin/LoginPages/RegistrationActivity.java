@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.michiganhackers.photoassassin.LoginPages.SetupProfileActivity.DISPLAY_NAME;
+import static org.michiganhackers.photoassassin.LoginPages.SetupProfileActivity.DUPLICATE_USERNAME;
 import static org.michiganhackers.photoassassin.LoginPages.SetupProfileActivity.PROFILE_PIC_URI;
 import static org.michiganhackers.photoassassin.LoginPages.SetupProfileActivity.USERNAME;
 
@@ -80,9 +81,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 if (task.getResult() != null && task.getResult().getAdditionalUserInfo().isNewUser()) {
                     initializeUser(auth.getCurrentUser().getUid());
                 }
-                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
             }
 
             @Override
@@ -135,10 +133,6 @@ public class RegistrationActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
                             initializeUser(auth.getCurrentUser().getUid());
-                            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            Log.i(TAG, "Account successfully created");
                         } else {
                             Exception exception = task.getException();
                             String msg = exception == null ? "" : ": " + exception.getLocalizedMessage();
@@ -206,9 +200,14 @@ public class RegistrationActivity extends AppCompatActivity {
 
                                             }
                                         });
+                                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
                             } else if (errorCode.equals(Constants.ErrorCode.DUPLICATE_USERNAME)) {
                                 Log.w(TAG, "addUser returned DUPLICATE_USERNAME");
-                                // TODO: goto registration and show snackbar
+                                Intent intent = new Intent(RegistrationActivity.this, SetupProfileActivity.class);
+                                intent.putExtra(DUPLICATE_USERNAME, true);
+                                startActivity(intent);
                             } else {
                                 Log.e(TAG, "addUser returned unknown error code");
                             }

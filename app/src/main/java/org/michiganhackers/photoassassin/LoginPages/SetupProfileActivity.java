@@ -43,6 +43,7 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
     public static final String USERNAME = "username";
     public static final String PROFILE_PIC_URI = "profile pic uri";
 
+    public static final String DUPLICATE_USERNAME = "duplicate username";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,9 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
 
         if (getIntent().getBooleanExtra(ACCOUNT_NOT_REGISTERED_YET, false)) {
             Snackbar.make(coordinatorLayout, R.string.acct_not_yet_registered_msg, Snackbar.LENGTH_LONG).show();
+        }
+        if(getIntent().getBooleanExtra(DUPLICATE_USERNAME, false)){
+            Snackbar.make(coordinatorLayout, R.string.username_taken, Snackbar.LENGTH_LONG).show();
         }
 
         if (savedInstanceState != null) {
