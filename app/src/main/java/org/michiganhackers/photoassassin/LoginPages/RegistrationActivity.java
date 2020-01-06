@@ -50,6 +50,8 @@ public class RegistrationActivity extends AppCompatActivity {
     private LoginHandler loginHandler;
     private ProgressBar progressBar;
 
+    public static final String EMAIL = "email";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.text_input_edit_text_email);
         emailTextInputLayout = findViewById(R.id.text_input_layout_email);
+        String email = getIntent().getStringExtra(EMAIL);
+        emailEditText.setText(email == null ? "" : email);
 
         passwordEditText = findViewById(R.id.text_input_edit_text_password);
         passwordTextInputLayout = findViewById(R.id.text_input_layout_password);
@@ -160,7 +164,6 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void initializeUser(final String userId) {
-
         if (userId == null) {
             Log.e(TAG, "null userId in initializeUser");
             return;
@@ -185,12 +188,11 @@ public class RegistrationActivity extends AppCompatActivity {
                                 Log.e(TAG, "addUser cloud function didn't return result");
                                 return;
                             }
-                            Map<String, Object> data = (Map<String,Object>) task.getResult().getData();
+                            Map<String, Object> data = (Map<String, Object>) task.getResult().getData();
                             String errorCode = (String) data.get("errorCode");
-                            if(errorCode == null){
+                            if (errorCode == null) {
                                 Log.e(TAG, "addUser result data doesn't contain 'errorCode' field");
-                            }
-                            else if (errorCode.equals(Constants.ErrorCode.OK)) {
+                            } else if (errorCode.equals(Constants.ErrorCode.OK)) {
                                 Log.d(TAG, "addUser returned OK");
                                 User.getProfilePicRef(userId).putFile(profilePicUri)
                                         .addOnFailureListener(new OnFailureListener() {
@@ -205,9 +207,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else if (errorCode.equals(Constants.ErrorCode.DUPLICATE_USERNAME)) {
                                 Log.w(TAG, "addUser returned DUPLICATE_USERNAME");
-                                Intent intent = new Intent(RegistrationActivity.this, SetupProfileActivity.class);
-                                intent.putExtra(DUPLICATE_USERNAME, true);
-                                startActivity(intent);
+                               handleDuplicateUsername();
                             } else {
                                 Log.e(TAG, "addUser returned unknown error code");
                             }
@@ -216,5 +216,40 @@ public class RegistrationActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void handleDuplicateUsername() {
+        if (auth.getCurrentUser() == null) {
+            Log.e(TAG, "Null user in handleDuplicateUsername");
+            return;
+        }
+
+        final Uri profilePicUri = getIntent().getParcelableExtra(PROFILE_PIC_URI);
+        final String displayName = getIntent().getStringExtra(DISPLAY_NAME);
+        final String username = getIntent().getStringExtra(USERNAME);
+        final String email = emailEditText.getText().toString();
+
+        auth.getCurrentUser().delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        loginHandler.signOut();
+                        Intent intent = new Intent(RegistrationActivity.this, SetupProfileActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra(DUPLICATE_USERNAME, true);
+                        intent.putExtra(DISPLAY_NAME, displayName);
+                        intent.putExtra(USERNAME, username);
+                        intent.putExtra(PROFILE_PIC_URI, profilePicUri);
+                        intent.putExtra(EMAIL, email);
+                        startActivity(intent);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Failed to delete account in handleDuplicateUsername", e);
+                    }
+                });
+
     }
 }

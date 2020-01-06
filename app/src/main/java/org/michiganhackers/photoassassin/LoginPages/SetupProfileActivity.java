@@ -25,6 +25,7 @@ import org.michiganhackers.photoassassin.Util;
 import java.io.File;
 
 import static org.michiganhackers.photoassassin.LoginPages.LoginActivity.ACCOUNT_NOT_REGISTERED_YET;
+import static org.michiganhackers.photoassassin.LoginPages.RegistrationActivity.EMAIL;
 
 public class SetupProfileActivity extends AppCompatActivity implements RequestImageDialog.ImageUriHandler {
 
@@ -60,8 +61,15 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
         if (getIntent().getBooleanExtra(ACCOUNT_NOT_REGISTERED_YET, false)) {
             Snackbar.make(coordinatorLayout, R.string.acct_not_yet_registered_msg, Snackbar.LENGTH_LONG).show();
         }
-        if(getIntent().getBooleanExtra(DUPLICATE_USERNAME, false)){
+        if (getIntent().getBooleanExtra(DUPLICATE_USERNAME, false)) {
             Snackbar.make(coordinatorLayout, R.string.username_taken, Snackbar.LENGTH_LONG).show();
+
+            Uri profilePicUri = getIntent().getParcelableExtra(PROFILE_PIC_URI);
+            handleImageUri(profilePicUri);
+            String displayName = getIntent().getStringExtra(DISPLAY_NAME);
+            displayNameEditText.setText(displayName);
+            String username = getIntent().getStringExtra(USERNAME);
+            usernameEditText.setText(username);
         }
 
         if (savedInstanceState != null) {
@@ -111,7 +119,7 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
         Util.setTextInputLayoutErrorReclaim(displayNameTextInputLayout, errorMsg);
         boolean errorShown = errorMsg != null;
 
-        Username username= new Username(usernameEditText.getText().toString(), this);
+        Username username = new Username(usernameEditText.getText().toString(), this);
         errorMsg = username.getError();
         Util.setTextInputLayoutErrorReclaim(usernameTextInputLayout, errorMsg);
         errorShown = errorShown || errorMsg != null;
@@ -129,6 +137,8 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
         intent.putExtra(DISPLAY_NAME, displayName.getDisplayName());
         intent.putExtra(USERNAME, username.getUsername());
         intent.putExtra(PROFILE_PIC_URI, profilePicUri);
+        String email = getIntent().getStringExtra(EMAIL);
+        intent.putExtra(EMAIL, email);
         startActivity(intent);
     }
 
