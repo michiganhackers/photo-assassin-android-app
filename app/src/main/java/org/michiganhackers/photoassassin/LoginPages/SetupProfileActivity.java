@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,9 +13,14 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.michiganhackers.photoassassin.DisplayName;
 import org.michiganhackers.photoassassin.RequestImageDialog;
@@ -114,12 +120,12 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
             return;
         }
 
-        DisplayName displayName = new DisplayName(displayNameEditText.getText().toString(), this);
+        final DisplayName displayName = new DisplayName(displayNameEditText.getText().toString(), this);
         String errorMsg = displayName.getError();
         Util.setTextInputLayoutErrorReclaim(displayNameTextInputLayout, errorMsg);
         boolean errorShown = errorMsg != null;
 
-        Username username = new Username(usernameEditText.getText().toString(), this);
+        final Username username = new Username(usernameEditText.getText().toString(), this);
         errorMsg = username.getError();
         Util.setTextInputLayoutErrorReclaim(usernameTextInputLayout, errorMsg);
         errorShown = errorShown || errorMsg != null;
@@ -133,13 +139,28 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
             return;
         }
 
-        Intent intent = new Intent(this, RegistrationActivity.class);
-        intent.putExtra(DISPLAY_NAME, displayName.getDisplayName());
-        intent.putExtra(USERNAME, username.getUsername());
-        intent.putExtra(PROFILE_PIC_URI, profilePicUri);
-        String email = getIntent().getStringExtra(EMAIL);
-        intent.putExtra(EMAIL, email);
-        startActivity(intent);
+        DocumentReference usernameRef = FirebaseFirestore.getInstance().collection("usernames").document(username.getUsername());
+        usernameRef.get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if(task.getResult() != null && task.getResult().exists()){
+                        Snackbar.make(coordinatorLayout, R.string.username_taken, Snackbar.LENGTH_LONG).show();
+                    }
+                    else{
+                        Intent intent = new Intent(SetupProfileActivity.this, RegistrationActivity.class);
+                        intent.putExtra(DISPLAY_NAME, displayName.getDisplayName());
+                        intent.putExtra(USERNAME, username.getUsername());
+                        intent.putExtra(PROFILE_PIC_URI, profilePicUri);
+                        String email = getIntent().getStringExtra(EMAIL);
+                        intent.putExtra(EMAIL, email);
+                        startActivity(intent);
+                    }
+                } else {
+                    Log.e(TAG, "Failed to get username document", task.getException());
+                }
+            }
+        });
     }
 
     @Override
@@ -157,5 +178,4 @@ public class SetupProfileActivity extends AppCompatActivity implements RequestIm
         }
         super.onSaveInstanceState(outState);
     }
-
 }
