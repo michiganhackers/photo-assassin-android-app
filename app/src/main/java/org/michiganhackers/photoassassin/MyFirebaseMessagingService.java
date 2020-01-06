@@ -14,6 +14,11 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.HashMap;
 import java.util.Map;
 
+
+//  TODO: Everything other than the sendRegistrationToServer() implementation of the
+//   MyFirebaseMessagingService class was copied from the android quickstart guide
+//   https://github.com/firebase/quickstart-android/blob/master/messaging/app/src/main/java/com/google/firebase/quickstart/fcm/java/MyFirebaseMessagingService.java
+//   The copied content isn't necessarily correct for our app, but should be useful as an example.
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
