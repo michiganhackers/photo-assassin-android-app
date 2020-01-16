@@ -84,8 +84,6 @@
     </style>
 
     <style name="TransparentWhiteEditText">
-        <item name="android:maxLines">1</item>
-        <item name="android:singleLine">true</item>
         <item name="android:background">@drawable/transparent_white_edit_text_background</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">67dp</item>

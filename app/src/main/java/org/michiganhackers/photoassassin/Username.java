@@ -25,7 +25,7 @@ public class Username {
     public String getError() {
         if (username.isEmpty()) {
             return context.getString(R.string.username_too_short_msg);
-        } else if (pattern.matcher(username).find()) { //TODO: DOESN'T WORK
+        } else if (pattern.matcher(username).find()) {
             return context.getString(R.string.invalid_characters_in_username_msg);
         } else if (username.length() < MIN_LENGTH) {
             return context.getString(R.string.username_too_short_msg);

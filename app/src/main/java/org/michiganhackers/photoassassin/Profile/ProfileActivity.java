@@ -34,6 +34,7 @@ import org.michiganhackers.photoassassin.FirebaseAuthActivity;
 import org.michiganhackers.photoassassin.R;
 import org.michiganhackers.photoassassin.RequestImageDialog;
 import org.michiganhackers.photoassassin.User;
+import org.michiganhackers.photoassassin.Username;
 import org.michiganhackers.photoassassin.Util;
 
 import java.io.File;
@@ -50,6 +51,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
     private String profileUserId;
     private boolean userCurrentlyEditingDisplayName = false;
     private EditText displayNameEditText;
+    private TextView usernameTextView;
     private ImageView profilePicImageView;
     private Uri profilePicUri;
     private RequestImageDialog requestImageDialog;
@@ -86,7 +88,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             findViewById(R.id.button_game_history_large).setVisibility(View.GONE);
             findViewById(R.id.search_bar).setVisibility(View.GONE);
             findViewById(R.id.fab_add_image).setVisibility(View.INVISIBLE);
-            findViewById(R.id.image_edit_display_name).setVisibility(View.INVISIBLE);
+            findViewById(R.id.image_edit_display_name).setVisibility(View.GONE);
             findViewById(R.id.linear_layout_add_friend_history).setVisibility(View.VISIBLE);
         }
         else
@@ -98,6 +100,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
 
     private void initViews (){
         displayNameEditText = findViewById(R.id.edit_text_display_name);
+        usernameTextView = findViewById(R.id.text_view_username);
         profilePicImageView = findViewById(R.id.image_profile_pic);
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         searchTextInputLayout = findViewById(R.id.text_input_layout_search);
@@ -155,6 +158,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
                 if (!userCurrentlyEditingDisplayName) {
                     displayNameEditText.setText(user.getDisplayName());
                 }
+                usernameTextView.setText(user.getUsername());
                 if (profilePicUri == null) {
                     Glide.with(ProfileActivity.this)
                             .load(user.getProfilePicUrl())
@@ -163,6 +167,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
                             .into(profilePicImageView);
                 }
             }
+
         };
         profileViewModel.getProfileUser().observe(this, profileUserObserver);
     }
@@ -172,7 +177,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
             @Override
             public void onChanged(String searchedUserId) {
                 if(searchedUserId.isEmpty()){
-                    Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, getString(R.string.display_name_doesnt_exist));
+                    Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, getString(R.string.username_doesnt_exist));
                 }
                 else if(searchedUserId.equals(profileUserId)){
                     Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, getString(R.string.already_viewing_this_profile));
@@ -259,13 +264,13 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
     }
 
     public void onSearchButtonClick(android.view.View view) {
-        DisplayName displayName = new DisplayName(searchTextInputEditText.getText().toString(), this);
-        String errorMsg = displayName.getError();
+        Username username = new Username(searchTextInputEditText.getText().toString(), this);
+        String errorMsg = username.getError();
         Util.setTextInputLayoutErrorReclaim(searchTextInputLayout, errorMsg);
         if(errorMsg != null){
             return;
         }
-        profileViewModel.searchUserId(displayName.getDisplayName());
+        profileViewModel.searchUserId(username.getUsername());
     }
 
     public void onAddRemoveFriendClick(android.view.View view) {
