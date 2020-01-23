@@ -17,6 +17,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class User {
@@ -27,11 +28,12 @@ public class User {
 
     private CollectionReference currentGames;
     private CollectionReference friends;
-    private CollectionReference pastGames;
+    private CollectionReference completedGames;
 
     private int deaths;
     private int kills;
     private int longestLifeSeconds;
+    private int gamesWon;
 
     private static final String TAG = "User";
 
@@ -44,6 +46,7 @@ public class User {
         deaths = 0;
         kills = 0;
         longestLifeSeconds = 0;
+        gamesWon = 0;
     }
 
     public User(String id) {
@@ -55,6 +58,7 @@ public class User {
         deaths = 0;
         kills = 0;
         longestLifeSeconds = 0;
+        gamesWon = 0;
     }
 
     public String getId() {
@@ -89,7 +93,6 @@ public class User {
         this.profilePicUrl = profilePicUrl;
     }
 
-
     public int getDeaths() {
         return deaths;
     }
@@ -106,12 +109,34 @@ public class User {
         this.kills = kills;
     }
 
+    public double getKillDeathRatio(){
+        if(kills == 0){
+            return 0;
+        }
+        if(deaths == 0){
+            return Double.POSITIVE_INFINITY;
+        }
+        return kills * 1.0 / deaths;
+    }
+
+    public String getFormattedKillDeathRatio(){
+        return String.format(Locale.getDefault(), "%.2f", getKillDeathRatio());
+    }
+
     public int getLongestLifeSeconds() {
         return longestLifeSeconds;
     }
 
     public void setLongestLifeSeconds(int longestLifeSeconds) {
         this.longestLifeSeconds = longestLifeSeconds;
+    }
+
+    public int getGamesWon() {
+        return gamesWon;
+    }
+
+    public void setGamesWon(int gamesWon) {
+        this.gamesWon = gamesWon;
     }
 
     public CollectionReference getCurrentGames() {
@@ -122,20 +147,20 @@ public class User {
         this.currentGames = currentGames;
     }
 
+    public CollectionReference getCompletedGames() {
+        return completedGames;
+    }
+
+    public void setCompletedGames(CollectionReference completedGames) {
+        this.completedGames = completedGames;
+    }
+
     public CollectionReference getFriends() {
         return friends;
     }
 
     public void setFriends(CollectionReference friends) {
         this.friends = friends;
-    }
-
-    public CollectionReference getPastGames() {
-        return pastGames;
-    }
-
-    public void setPastGames(CollectionReference pastGames) {
-        this.pastGames = pastGames;
     }
 
     public static StorageReference getProfilePicRef(String userId) {
@@ -158,8 +183,8 @@ public class User {
         return User.getUserRef(userId).collection("currentGames");
     }
 
-    public static CollectionReference getPastGamesRef(String userId) {
-        return User.getUserRef(userId).collection("pastGames");
+    public static CollectionReference getCompletedGamesRef(String userId) {
+        return User.getUserRef(userId).collection("completedGames");
     }
 
     @Override

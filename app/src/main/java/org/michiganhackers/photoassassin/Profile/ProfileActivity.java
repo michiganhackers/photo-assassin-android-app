@@ -51,7 +51,7 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
     private String profileUserId;
     private boolean userCurrentlyEditingDisplayName = false;
     private EditText displayNameEditText;
-    private TextView usernameTextView;
+    private TextView usernameTextView, gamesWonTextView, killDeathRatioTextView;
     private ImageView profilePicImageView;
     private Uri profilePicUri;
     private RequestImageDialog requestImageDialog;
@@ -101,6 +101,8 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
     private void initViews (){
         displayNameEditText = findViewById(R.id.edit_text_display_name);
         usernameTextView = findViewById(R.id.text_view_username);
+        gamesWonTextView = findViewById(R.id.text_view_num_games_won);
+        killDeathRatioTextView = findViewById(R.id.text_view_kd_ratio);
         profilePicImageView = findViewById(R.id.image_profile_pic);
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         searchTextInputLayout = findViewById(R.id.text_input_layout_search);
@@ -159,6 +161,8 @@ public class ProfileActivity extends FirebaseAuthActivity implements RequestImag
                     displayNameEditText.setText(user.getDisplayName());
                 }
                 usernameTextView.setText(user.getUsername());
+                gamesWonTextView.setText(String.valueOf(user.getGamesWon()));
+                killDeathRatioTextView.setText(user.getFormattedKillDeathRatio());
                 if (profilePicUri == null) {
                     Glide.with(ProfileActivity.this)
                             .load(user.getProfilePicUrl())

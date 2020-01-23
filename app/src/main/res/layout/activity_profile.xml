@@ -121,7 +121,7 @@
 
                     <TextView
                         style="@style/ProfileScreenStatistics"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/games_won" />
 
@@ -133,7 +133,7 @@
                     <TextView
                         android:id="@+id/text_view_num_games_won"
                         style="@style/ProfileScreenStatistics"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
@@ -150,7 +150,7 @@
 
                     <TextView
                         style="@style/ProfileScreenStatistics"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/win_percent" />
 
@@ -162,7 +162,7 @@
                     <TextView
                         android:id="@+id/text_view_percent_games_won"
                         style="@style/ProfileScreenStatistics"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
@@ -179,7 +179,7 @@
 
                     <TextView
                         style="@style/ProfileScreenStatistics"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/percentile" />
 
@@ -191,7 +191,7 @@
                     <TextView
                         android:id="@+id/text_view_percentile"
                         style="@style/ProfileScreenStatistics"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
@@ -209,7 +209,7 @@
 
                     <TextView
                         style="@style/ProfileScreenStatistics"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/kill_death_ratio" />
 
@@ -221,7 +221,7 @@
                     <TextView
                         android:id="@+id/text_view_kd_ratio"
                         style="@style/ProfileScreenStatistics"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
