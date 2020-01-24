@@ -222,17 +222,17 @@ public class ProfileViewModel extends ViewModel {
 
     }
 
-    // sets searchedUserId to the id of the user with the given displayName
-    // if the displayName doesn't exist, sets the id to the empty string
-    public void searchUserId(String displayName) {
+    // sets searchedUserId to the id of the user with the given username
+    // if the username doesn't exist, sets the id to the empty string
+    public void searchUserId(String username) {
         User.getUsersRef()
-                .whereEqualTo("displayName", displayName)
+                .whereEqualTo("username", username)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (queryDocumentSnapshots.size() > 1) {
-                            Log.e(TAG, "multiple users have same display name");
+                            Log.e(TAG, "multiple users have same username");
                         } else if (queryDocumentSnapshots.size() == 0) {
                             searchedUserId.setValue("");
                         } else {

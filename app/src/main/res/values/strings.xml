@@ -44,6 +44,9 @@
     <string name="invalid_characters_in_display_name_msg">display name can contain only alphanumeric characters, hyphens, apostrophes, and spaces</string>
     <string name="display_name_too_short_msg">display name must be at least 5 characters</string>
     <string name="display_name_too_long_msg">display name must be at most 20 characters</string>
+    <string name="invalid_characters_in_username_msg">username can contain only alphanumeric characters</string>
+    <string name="username_too_short_msg">username must be at least 5 characters</string>
+    <string name="username_too_long_msg">username must be at most 20 characters</string>
     <string name="profile_pic_required">profile picture is required</string>
     <string name="failed_send_pwd_reset_email">Failed to send password reset email!</string>
     <string name="login_failed">login failed</string>
@@ -58,6 +61,10 @@
     <string name="remove">Remove</string>
     <string name="search_user">Search User</string>
     <string name="magnifying_glass">magnifying glass</string>
-    <string name="display_name_doesnt_exist">display name doesn\'t exist</string>
+    <string name="username_doesnt_exist">username doesn\'t exist</string>
     <string name="already_viewing_this_profile">you\'re already viewing this profile</string>
+    <string name="default_notification_channel_id">default_channel</string>
+    <string name="default_notification_channel_name">Default</string>
+    <string name="username">Username</string>
+    <string name="username_taken">username already taken</string>
 </resources>

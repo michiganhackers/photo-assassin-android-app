@@ -66,7 +66,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
         auth.sendPasswordResetEmail(email.getEmail())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         progressBar.setVisibility(View.GONE);
